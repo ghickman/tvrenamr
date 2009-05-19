@@ -11,7 +11,6 @@ def getInfo(fn):
     m = re.compile("[Ss](\d{2})[Ee](\d{2})").split(fn)
     if m:
         v = m[0].split(".")
-        print v
         series = ""
         for s in v:
             series = series + s.replace(s[0:1],s[0:1].upper(),1) + " "
@@ -22,7 +21,6 @@ def getInfo(fn):
         return info
 
 def getSeriesInfo(series_name):
-    print series_name
     get_series = "GetSeries.php?seriesname="
     f = urllib.urlopen(url+get_series+series_name)
     dom = ET.fromstring(f.read())
@@ -34,8 +32,9 @@ def getSeriesInfo(series_name):
 def getEpisodeName(series_id, season, episode):
     episode_url = url+apikey+"/series/"+series_id+"/default/"+season+"/"+episode+"/en.xml"
     f = urllib.urlopen(episode_url)
-    dom = ET.fromstring(f.read())
-    return dom.find("Episode").find("EpisodeName").text
+    if f != None:
+        dom = ET.fromstring(f.read())
+        return dom.find("Episode").find("EpisodeName").text
     
 
 for fn in os.listdir(working_dir):
@@ -50,19 +49,22 @@ for fn in os.listdir(working_dir):
         
         #build filename
         new_fn = file_info[0] + " - " + file_info[1] + file_info[2] + " - " + episode + extension
-        print new_fn
+        
         
         #build new directory
         new_dir = file_info[0] + "/Season " + str(int(file_info[1])) + "/"
         try:
-            os.listdir(os.path.join(working_dir, new_dir))
+            os.listdir(os.path.join(working_dir + "/named", new_dir))
         except OSError:
-            print "doesn't exist!"
-            os.makedirs(os.path.join(working_dir, new_dir), 0755)
+            #print "doesn't exist!"
+            os.makedirs(os.path.join(working_dir + "/named", new_dir), 0755)
             
-        print new_dir
-        os.rename(os.path.join(working_dir, fn), os.path.join(working_dir + "/" +new_dir, new_fn))
-        
+        #print new_dir
+        if (os.path.exists(working_dir+"/named"+new_dir+new_fn) == True):
+            os.rename(os.path.join(working_dir, fn), os.path.join(working_dir + "/named/" +new_dir, new_fn))
+            print "Renamed: " + new_fn
+        else:
+            print "file exist"
         
         
         
