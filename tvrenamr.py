@@ -32,9 +32,12 @@ def getSeriesInfo(series_name):
 def getEpisodeName(series_id, season, episode):
     episode_url = url+apikey+"/series/"+series_id+"/default/"+season+"/"+episode+"/en.xml"
     f = urllib.urlopen(episode_url)
-    if f != None:
+    try:
         dom = ET.fromstring(f.read())
         return dom.find("Episode").find("EpisodeName").text
+    except Exception:
+        print "Episode not found: " + season + episode
+        return None
     
 
 for fn in os.listdir(working_dir):
@@ -46,6 +49,9 @@ for fn in os.listdir(working_dir):
         #print series_id
         episode = getEpisodeName(series_id, file_info[1], str(int(file_info[2])))
         #print episode
+        if episode == None:
+            continue
+        
         
         #build filename
         new_fn = file_info[0] + " - " + file_info[1] + file_info[2] + " - " + episode + extension
@@ -60,11 +66,11 @@ for fn in os.listdir(working_dir):
             os.makedirs(os.path.join(working_dir + "/named", new_dir), 0755)
             
         #print new_dir
-        if (os.path.exists(working_dir+"/named"+new_dir+new_fn) == True):
+        if (os.path.exists(working_dir+"/named"+new_dir+new_fn) == False):
             os.rename(os.path.join(working_dir, fn), os.path.join(working_dir + "/named/" +new_dir, new_fn))
             print "Renamed: " + new_fn
         else:
-            print "file exist"
+            print "file exists"
         
         
         
