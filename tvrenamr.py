@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 apikey = 'C4C424B4E9137AFD'
 url = "http://www.thetvdb.com/api/"
 working_dir = "/Users/madnashua/Projects/TvRenamr/test"
+named_dir = ""
 
 def getInfo(fn):
     m = re.compile("[Ss](\d{2})[Ee](\d{2})").split(fn)
@@ -55,7 +56,6 @@ for fn in os.listdir(working_dir):
         
         #build filename
         new_fn = file_info[0] + " - " + file_info[1] + file_info[2] + " - " + episode + extension
-        
         
         #build new directory
         new_dir = file_info[0] + "/Season " + str(int(file_info[1])) + "/"
