@@ -2,3 +2,5 @@ test/
 prototypes/
 .DS_Store
 ._*
+*.log
+*.pyc

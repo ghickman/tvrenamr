@@ -18,7 +18,7 @@ mask = IN_CREATE  # watched events -> add IN_DONT_FOLLOW to not follow symlinks
 
 class TvRenamr(ProcessEvent):
     def process_IN_CREATE(self, event):
-        logging.info('Creaing: %s', event.name)
+        logging.info('Creating: %s', event.name)
         
         extension = event.name[-4:]
         if extension == ".avi" or extension == ".mkv" or extension == ".mp4":
@@ -70,11 +70,7 @@ class TvRenamr(ProcessEvent):
             series = ""
             for s in v:
                 series = series + s.replace(s[0:1],s[0:1].upper(),1) + " "
-            series = series.strip()
-            season = str(int(m[1]))
-            episode = m[2]
-            info = [series,season,episode]
-            return info
+            return [series.strip(),str(int(m[1])),m[2]]
         else:
             logging.warning('Incorrect format for auto-renaming: %s', fn)
             return None
@@ -83,7 +79,7 @@ p = TvRenamr()
 notifier = Notifier(wm, p)
 
 wdd = wm.add_watch(working_dir, mask, rec=True) #watch this directory, with this mask, recursively
-notifier.loop(daemonize=True, pid_file='/tmp/tvrenamr.pid', force_kill=True, stdout='/tmp/stdout.txt')
+notifier.loop()#daemonize=True, pid_file='/tmp/tvrenamr.pid', force_kill=True, stdout='/tmp/stdout.txt')
         
         
         
