@@ -6,13 +6,13 @@ import xml.etree.ElementTree as ET
 
 apikey = 'C4C424B4E9137AFD'
 url = "http://www.thetvdb.com/api/"
-working_dir = "/Users/madnashua/Projects/TvRenamr/test"
+working_dir = "/home/madnashua/projects/tvrenamr/test"
 renamed_dir = ""
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='/Users/madnashua/Projects/TvRenamr/tvrenamr.log',
+                    filename='/home/madnashua/projects/tvrenamr/tvrenamr.log',
                     filemode='a')
 
 def getInfo(fn):
