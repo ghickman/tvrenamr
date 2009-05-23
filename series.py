@@ -9,15 +9,17 @@ class Series:
     name = ""
     
     def __init__(self, series_name):
-        self.name = series_name
+        self.name = series_name.lower()
         
     def getSeriesId(self):
+        logging.info('Retrieving series ID: %s', self.name)
         f = urllib.urlopen(self.url + self.get_series + self.name)
         try:
             dom = ET.fromstring(f.read())
             for series in dom.findall("Series"):
                 s = series.find("SeriesName").text
-                if s == self.name:
+                if s.lower() == self.name.lower():
+                    self.name = s
                     return series.find("seriesid").text
         except Exception:
             logging.warning('Series not found: %s', self.name)
@@ -25,6 +27,7 @@ class Series:
         
         
     def getEpisodeName(self, series_id, season, episode):
+        logging.info('Retrieving episode name for: %s', self.name)
         episode_url = self.url + self.apikey +"/series/"+ series_id +"/default/"+ season +"/"+ episode +"/en.xml"
         f = urllib.urlopen(episode_url)
         try:
