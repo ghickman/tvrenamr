@@ -28,7 +28,7 @@ class Series:
         
     def getEpisodeName(self, series_id, season, episode):
         logging.info('Retrieving episode name for: %s', self.name)
-        episode_url = self.url + self.apikey +"/series/"+ series_id +"/default/"+ season +"/"+ episode +"/en.xml"
+        episode_url = self.url + self.apikey +"/series/"+ series_id +"/default/"+ season +"/"+ str(int(episode)) +"/en.xml"
         f = urllib.urlopen(episode_url)
         try:
             dom = ET.fromstring(f.read())

@@ -1,74 +1,29 @@
-import logging
+from coretvrenamr import TvRenamr
+from optparse import OptionParser
 import os
-from pyinotify import WatchManager, Notifier, ProcessEvent, IN_CREATE, IN_MOVED_TO
-import re
-from series import Series
 
-working_dir = "/mnt/media/Downloads/complete"
-renamed_dir = ""
+parser = OptionParser()
+parser.add_option("-w", "--working", dest="working_dir", help="The working DIRECTORY to run tvrenamr in. Required!")
+parser.add_option("-r", "--renamed", dest="renamed_dir", help="The DIRECTORY to move renamed files to. Mutually exclusive to -a")
+parser.add_option("-a", "--auto", dest="auto_move", help="Automatically move renamed files to the appropriate directory under the DIRECTORY specified. Mutually exclusive to -r")
+#parser.add_option("-s", "--silent", dest="silent", help="don\'t create logs")
+(options, args) = parser.parse_args()
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='/mnt/media/Downloads/tvrenamr.log',
-                    filemode='a')
-                    
-wm = WatchManager()  # Watch Manager
-mask = IN_MOVED_TO  # watched events -> add IN_DONT_FOLLOW to not follow symlinks, IN_CREATE
+working_dir = options.working_dir
+renamed_dir = options.renamed_dir
+auto_move = options.auto_move
 
-class TvRenamr(ProcessEvent):
-    def process_IN_MOVED_TO(self, event):
-        extension = event.name[-4:]
-        if extension == ".avi" or extension == ".mkv" or extension == ".mp4":
-            file_info = self.extract_file_details(event.name)
-            if file_info != None:
-                s = Series(file_info[0])
-                series_id = s.getSeriesId()
-                if series_id != None:
-                    series = s.name
-                    episode_name = s.getEpisodeName(series_id, file_info[1], str(int(file_info[2])))
-                    if episode_name != None:
-                        #build filename
-                        new_fn = series + " - " + file_info[1] + file_info[2] + " - " + episode_name + extension
-
-                        """"
-                        NOT CURRENTLY USED
-
-                        #build new directory
-                        new_dir = file_info[0] + "/Season " + str(int(file_info[1])) + "/"
-                        try:
-                            os.listdir(os.path.join(working_dir + "/named", new_dir))
-                        except OSError:
-                            #print "doesn't exist!"
-                            os.makedirs(os.path.join(working_dir + "/named", new_dir), 0755)
-
-                        if (os.path.exists(working_dir+"/named"+new_dir+new_fn) == False):
-                            os.rename(os.path.join(working_dir, fn), os.path.join(working_dir + "/named/" +new_dir, new_fn))
-                            print "Renamed: " + new_fn
-                        else:
-                            print "file exists"
-                        """
-            
-                        #replace with exception handling
-                        if os.path.exists(working_dir+new_fn) == False:
-                            os.rename(os.path.join(working_dir, event.name), os.path.join(working_dir, new_fn))
-                            logging.info('Renamed: %s', new_fn)
-                        else:
-                            logging.error('File Exists: %s from %s', new_fn, fn)
-        
-    def extract_file_details(self, fn):
-        #sanitize input
-        fn = fn.replace("_", ".")
-        m = re.compile("[Ss](\d{2})[Ee](\d{2})").split(fn)
-        if m and len(m) > 1:
-            m[0] = m[0].replace(".", " ")
-            return [m[0].strip(),str(int(m[1])),m[2]]
-        else:
-            logging.warning('Incorrect format for auto-renaming: %s', fn)
-            return None
-
-p = TvRenamr()
-notifier = Notifier(wm, p)
-
-wdd = wm.add_watch(working_dir, mask, rec=True) #watch this directory, with this mask, recursively
-notifier.loop(daemonize=True, pid_file='/tmp/tvrenamr.pid', force_kill=True, stdout='/tmp/stdout.txt')
+tv = TvRenamr(working_dir)
+print working_dir
+for fn in os.listdir(working_dir):
+    if auto_move != None:
+        print "rename and auto move"
+        tv.rename_and_auto_move(fn, auto_move)
+    elif renamed_dir != None:
+        print "rename and move"
+        tv.rename_and_move(fn, renamed_dir)
+    elif auto_move == None and renamed_dir == None:
+        print "rename"
+        tv.rename(fn)
+    else:
+        print "incorrect options!"
