@@ -12,27 +12,20 @@ class Series:
         self.name = series_name.lower()
         
     def getSeriesId(self):
-        logging.info('Retrieving series ID: %s', self.name)
+        logging.debug('Retrieving series ID: %s', self.name)
         f = urllib.urlopen(self.url + self.get_series + self.name)
-        try:
-            dom = ET.fromstring(f.read())
-            for series in dom.findall("Series"):
-                s = series.find("SeriesName").text
-                if s.lower() == self.name.lower():
-                    self.name = s
-                    return series.find("seriesid").text
-        except Exception:
-            logging.warning('Series not found: %s', self.name)
-            return None
-        
+        dom = ET.fromstring(f.read())
+        if dom == None: raise Exception('Error retriving XML for for: '+ self.name)
+        for series in dom.findall("Series"):
+            s = series.find("SeriesName").text
+            if s.lower() == self.name.lower():
+                self.name = s
+                return series.find("seriesid").text
         
     def getEpisodeName(self, series_id, season, episode):
-        logging.info('Retrieving episode name for: %s', self.name)
+        logging.info('Retrieving episode name for: '+ self.name)
         episode_url = self.url + self.apikey +"/series/"+ series_id +"/default/"+ season +"/"+ str(int(episode)) +"/en.xml"
         f = urllib.urlopen(episode_url)
-        try:
-            dom = ET.fromstring(f.read())
-            return dom.find("Episode").find("EpisodeName").text
-        except Exception:
-            logging.warning('Episode not found: %s', self.name + " - " + season + episode)
-            return None
+        dom = ET.fromstring(f.read())
+        if dom != None: return dom.find("Episode").find("EpisodeName").text
+        else: raise Exception('Episode not found: '+ self.name + " - " + season + episode)
