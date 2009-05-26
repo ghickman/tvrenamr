@@ -11,7 +11,7 @@ class Series:
     def __init__(self, series_name):
         self.name = series_name.lower()
         
-    def getSeriesId(self):
+    def get_series_id(self):
         logging.debug('Retrieving series ID: %s', self.name)
         f = urllib.urlopen(self.url + self.get_series + self.name)
         dom = ET.fromstring(f.read())
@@ -22,7 +22,7 @@ class Series:
                 self.name = s
                 return series.find("seriesid").text
         
-    def getEpisodeName(self, series_id, season, episode):
+    def get_episode_name(self, series_id, season, episode):
         logging.info('Retrieving episode name for: '+ self.name)
         episode_url = self.url + self.apikey +"/series/"+ series_id +"/default/"+ season +"/"+ str(int(episode)) +"/en.xml"
         f = urllib.urlopen(episode_url)
