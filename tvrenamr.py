@@ -1,4 +1,4 @@
-from coretvrenamr import TvRenamr
+from tvrenamr_core import TvRenamr
 from optparse import OptionParser
 import os
 

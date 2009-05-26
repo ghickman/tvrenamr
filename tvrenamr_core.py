@@ -20,7 +20,7 @@ class TvRenamr():
         self.working_dir = working_dir
         self.logging = logging
         
-    def extract_file_details(fn, user_regex=None):
+    def extract_file_details(self, fn, user_regex=None):
         fn = fn.replace("_", ".")
         if user_regex == None: regex = "(?P<series>[\w._]+)\.s?(?P<season>[0-9]{1,2})(x|e)(?P<episode>[0-9]{1,2})"
         else: regex = user_regex.replace('%s', "(?P<season>[0-9]{1,2})").replace('%e', '(?P<episode>[0-9]{1,2})')
