@@ -40,7 +40,7 @@ class TvRenamr():
         return new_dir
     
     def rename(self, fn, regex=None):
-        f = self.extract_fn(fn, regex)
+        f = self.extract_file_info(fn, regex)
         new_fn = self.build_file_name(f)
         if os.path.exists(self.working_dir + new_fn) == False:
             os.rename(os.path.join(self.working_dir, fn), os.path.join(self.working_dir, new_fn))
@@ -48,14 +48,14 @@ class TvRenamr():
         else: raise Exception('File Exists: '+ new_fn +' from '+ fn)
         
     def rename_and_auto_move(self, fn, auto_move_dir, regex=None):
-        f = self.extract_fn(fn, regex)
+        f = self.extract_file_info(fn, regex)
         new_fn = self.build_file_name(f)
         new_dir = self.build_directory_structure(f)
         if os.path.exists(os.path.join(auto_move_dir, new_dir)) == False: os.makedirs(os.path.join(auto_move_dir, new_dir))
         os.rename(os.path.join(self.working_dir, fn), os.path.join(auto_move_dir, new_dir, new_fn))
                 
     def rename_and_move(self, fn, renamed_dir, regex=None):
-        f = self.extract_fn(fn, regex)
+        f = self.extract_file_info(fn, regex)
         new_fn = self.build_file_name(f)
         if os.path.exists(renamed_dir) == False: os.makedirs(renamed_dir)
         os.rename(os.path.join(self.working_dir, fn), os.path.join(renamed_dir, new_fn))
