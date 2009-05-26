@@ -11,7 +11,6 @@ parser.add_option("-a", "--auto", dest="auto_move", help="Automatically move ren
 working_dir = options.working_dir
 renamed_dir = options.renamed_dir
 auto_move = options.auto_move
-working_dir = "/Users/madnashua/Projects/tvrenamr/core/test"
 
 tv = TvRenamr(working_dir)
 for fn in os.listdir(working_dir):
