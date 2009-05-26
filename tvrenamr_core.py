@@ -25,13 +25,12 @@ class TvRenamr():
         if user_regex == None: regex = "(?P<series>[\w._]+)\.s?(?P<season>[0-9]{1,2})(x|e)(?P<episode>[0-9]{1,2})"
         else: regex = user_regex.replace('%s', "(?P<season>[0-9]{1,2})").replace('%e', '(?P<episode>[0-9]{1,2})')
         m = re.compile(regex).match(fn)
-        if m != None:
-            return [m.group('series'),m.group('season'),m.group('episode'),fn[-4:]]
+        if m != None: return [m.group('series').replace("."," "),str(int(m.group('season'))),m.group('episode'),fn[-4:]]
         else: raise Exception('Skipped due to unexpected format: '+ fn)
     
     def build_file_name(self, file_details):
         s = Series(file_details[0])
-        try: episode_name = s.getEpisodeName(s.getSeriesId(), file_details[1], file_details[2])
+        try: episode_name = s.get_episode_name(s.get_series_id(), file_details[1], file_details[2])
         except Exception, e: raise Exception(e)
         return s.name + " - " + file_details[1] + file_details[2] + " - " + episode_name + file_details[3]
     
