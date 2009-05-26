@@ -30,6 +30,7 @@ class TvRenamr():
     
     def build_file_name(self, fn):
         s = Series(fn[0])
+        if len(fn[2]) == 1: fn[2] = "0" + fn[2]
         try: episode_name = s.get_episode_name(s.get_series_id(), fn[1], fn[2])
         except Exception, e: raise Exception(e)
         return s.name + " - " + fn[1] + fn[2] + " - " + episode_name + fn[3]
