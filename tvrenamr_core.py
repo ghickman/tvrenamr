@@ -2,7 +2,8 @@ import logging
 from optparse import OptionParser
 import os
 import re
-from series import Series
+from thetvdb import TheTvDb
+from tvrage import TvRage
 import sys
 
 logging.basicConfig(level=logging.INFO,
@@ -18,7 +19,7 @@ class TvRenamr():
     def __init__(self, working_dir, logging=None):
         self.working_dir = working_dir
         self.logging = logging
-        
+    
     def __extract_file_info(self, fn, user_regex=None):
         if re.compile(".*?\s-\s[\d]{3,4}\s-\s.*?\."+fn[-3:]).match(fn): raise Exception('Already in correct naming format: '+ fn)
         fn = fn.replace("_", ".")
@@ -26,15 +27,18 @@ class TvRenamr():
         if user_regex == None: regex = "(?P<series>[\w._]+)\.[Ss]?(?P<season>[0-9]{1,2})([Xx]|[Ee])(?P<episode>[0-9]{1,2})"
         else: regex = user_regex.replace('%s', "(?P<season>[0-9]{1,2})").replace('%e', '(?P<episode>[0-9]{1,2})')
         m = re.compile(regex).match(fn)
-        if m != None: return [m.group('series').replace("."," "),str(int(m.group('season'))),m.group('episode'),fn[-4:]]
+        series = m.group('series').replace('.',' ')
+        if series.find('The O C') >= 0:
+            series = series.replace('The O C','The O.C.')
+        if m != None: return [series,str(int(m.group('season'))),m.group('episode'),fn[-4:]]
         else: raise Exception('Skipped due to unexpected format: '+ fn)
     
     def __build_file_name(self, fn):
-        s = Series(fn[0])
-        try: episode_name = s.get_episode_name(s.get_series_id(), fn[1], fn[2])
+        t = TvRage(fn[0])
+        try: episode_name = t.get_episode_name(fn[1], fn[2])
         except Exception, e: raise
         if len(fn[2]) == 1: fn[2] = "0" + fn[2]
-        return s.name + " - " + fn[1] + fn[2] + " - " + episode_name + fn[3]
+        return t.series + " - " + fn[1] + fn[2] + " - " + episode_name + fn[3]
     
     def __build_auto_path(self, fn, series, season, auto_move):
         path = auto_move + series + "/Season " + season + "/"
@@ -67,3 +71,4 @@ class TvRenamr():
         try:
             self.__rename_file(fn, dest_path, new_fn)
         except Exception, e: raise
+    

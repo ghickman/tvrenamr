@@ -14,7 +14,7 @@ renamed_dir = options.renamed_dir
 auto_move = options.auto_move
 logging = options.is_logging
 
-working_dir = "/Users/madnashua/Projects/tvrenamr/core/test/"
+#working_dir = "/Users/madnashua/Projects/tvrenamr/core/OC"
 
 tv = TvRenamr(working_dir)
 for fn in os.listdir(working_dir):
