@@ -11,22 +11,17 @@ class TheTvDb(TvDbs):
     
     def __init__(self, series_name):
         self.series = series_name
-        print self.series
-        print self.series.lower()
         
     def __get_series_id(self):
         logging.debug('Retrieving series ID: %s', self.series)
         #data = super(TheTvDb, self).get_url(self.url + self.get_series + self.series)
         url = self.url + self.get_series + self.series
-        print url
         try: data = urllib2.urlopen(url).read()
         except URLError: raise
         dom = ET.fromstring(data)
         if dom == None: raise Exception('Error retriving XML for for: '+ self.series)
         for name in dom.findall("Series"):
             s = name.find("SeriesName").text
-            print s
-            print s.lower()
             if s.lower() == self.series.lower():
                 self.series = s
                 return name.find("seriesid").text
