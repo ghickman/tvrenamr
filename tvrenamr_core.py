@@ -24,17 +24,17 @@ class TvRenamr():
         if re.compile(".*?\s-\s[\d]{3,4}\s-\s.*?\."+fn[-3:]).match(fn): raise Exception('Already in correct naming format: '+ fn)
         fn = fn.replace("_", ".")
         fn = fn.replace(" ", ".")
-        if user_regex == None: regex = "(?P<series>[\w._]+)\.[Ss]?(?P<season>[0-9]{1,2})([Xx]|[Ee])(?P<episode>[0-9]{1,2})"
-        else: regex = user_regex.replace('%s', "(?P<season>[0-9]{1,2})").replace('%e', '(?P<episode>[0-9]{1,2})')
+        if user_regex == None: regex = "(?P<series>[\w\s._]+)\.[Ss]?(?P<season>[\d]{1,2}?)([Xx]|[Ee])(?P<episode>[\d]{1,2})"
+        else: regex = user_regex.replace('%n', '(?P<series>[\w\s._]+)').replace('%s', "(?P<season>[0-9]{1,2}?)").replace('%e', '(?P<episode>[0-9]{1,2})')
         m = re.compile(regex).match(fn)
         series = m.group('series').replace('.',' ')
-        if series.find('The O C') >= 0:
-            series = series.replace('The O C','The O.C.')
+        if series.find('The O C') >= 0: series = series.replace('The O C','The O.C.')
+        if re.compile('[\d]{4}').match(series[-4:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
         if m != None: return [series,str(int(m.group('season'))),m.group('episode'),fn[-4:]]
         else: raise Exception('Skipped due to unexpected format: '+ fn)
     
     def __build_file_name(self, fn):
-        t = TvRage(fn[0])
+        t = TheTvDb(fn[0])
         try: episode_name = t.get_episode_name(fn[1], fn[2])
         except Exception, e: raise
         if len(fn[2]) == 1: fn[2] = "0" + fn[2]
