@@ -1,9 +1,10 @@
 import logging
 import urllib2
 import xml.etree.ElementTree as ET
-from tvdbs import TvDbs
 
-class TheTvDb(TvDbs):
+from errors import *
+
+class TheTvDb():
     series = ""
     url = 'http://www.thetvdb.com/api/'
     apikey = 'C4C424B4E9137AFD'
@@ -15,9 +16,9 @@ class TheTvDb(TvDbs):
     def __get_series_id(self):
         logging.debug('Retrieving series ID: %s', self.series)
         #data = super(TheTvDb, self).get_url(self.url + self.get_series + self.series)
-        url = self.url + self.get_series + self.series
+        url = self.url + self.get_series + urllib2.quote(self.series)
         try: data = urllib2.urlopen(url).read()
-        except URLError: raise
+        except urllib2.URLError: raise
         dom = ET.fromstring(data)
         if dom == None: raise Exception('Error retriving XML for for: '+ self.series)
         for name in dom.findall("Series"):
@@ -31,10 +32,7 @@ class TheTvDb(TvDbs):
         logging.debug('Retrieving episode name for: '+ self.series)
         episode_url = self.url + self.apikey +'/series/'+ series_id +'/default/'+ str(int(season)) +'/'+ str(int(episode)) +'/en.xml'
         try: f = urllib2.urlopen(episode_url)
-        except URLError: raise
+        except urllib2.URLError: raise
         dom = ET.fromstring(f.read())
         if dom != None: return dom.find("Episode").find("EpisodeName").text
-        else:
-            e = 'Episode not found: '+ self.series + " - " + season + episode
-            logging.error(e) 
-            raise Exception(e)
+        else: raise EpisodeNotFoundException(self.series + " - " + season + episode)
