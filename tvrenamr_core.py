@@ -21,7 +21,7 @@ class TvRenamr():
         self.logging = logging
     
     def __extract_file_info(self, fn, user_regex=None):
-        if re.compile(".*?\s-\s[\d]{3,4}\s-\s.*?\."+fn[-3:]).match(fn): raise AlreadyNamedException(fn)
+        if re.compile(".*?\s-\s[\d]{3,4}\s-\s.+?\."+fn[-3:]).match(fn): raise AlreadyNamedException(fn)
         fn = fn.replace("_", ".").replace(" ", ".")
         if user_regex == None: regex = "(?P<series>[\w\s._]+)\.[Ss]?(?P<season>[\d]{1,2}?)([Xx]|[Ee])(?P<episode>[\d]{1,2})"
         else: regex = user_regex.replace('%n', '(?P<series>[\w\s._]+)').replace('%s', "(?P<season>[0-9]{1,2}?)").replace('%e', '(?P<episode>[0-9]{1,2})')
@@ -51,7 +51,7 @@ class TvRenamr():
             if self.logging == True: logging.info('Renamed: %s', fn)
         else: raise Exception('File Exists: '+ new_fn +' from: '+fn)
     
-    def rename(self, fn, regex=None, renamed_dir=None, auto_move=False):
+    def rename(self, fn, regex=None, renamed_dir=None, auto_move=False, season=None):
         """
         """
         #stage
@@ -65,7 +65,6 @@ class TvRenamr():
         else: dest_path = os.path.join(renamed_dir, new_fn)
         
         #rename
-        try:
-            self.__rename_file(fn, dest_path, new_fn)
+        try:self.__rename_file(fn, dest_path, new_fn)
         except Exception, e: raise
     
