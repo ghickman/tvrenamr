@@ -1,3 +1,5 @@
+This software is currently undergoing heavy development.
+
 Tv Renamr provides a way for you to rename your tv show files. By default it looks at files in the format show.s0e00.foo.bar.avi 
 or show.0x00.foo.bar.avi and renames them to: "Show - 103 - Foo Bar.avi".
 
