@@ -1,0 +1,28 @@
+Tv Renamr provides a way for you to rename your tv show files. By default it looks at files in the format show.s0e00.foo.bar.avi 
+or show.0x00.foo.bar.avi and renames them to: "Show - 103 - Foo Bar.avi".
+
+Users can specify a number of options to manipulate the output filenames and where they would like the files moved to when named. 
+
+Tv Renamr is an open source project written in Python and released under the MIT license. The source code can be found at 
+http://github.com/ghickman/tvrenamr/tree/master
+
+OPTIONS
+-a or --auto - Automatically move renamed files to the appropriate directory under the directory specified. Mutually exclusive to -r
+-n or --name - Set the show name for renaming
+-r or --renamed", dest="renamed_dir", help="The directory to move renamed files to. Mutually exclusive to -a
+--regex - the regular expression to set the format of files being renamed.
+-s or --season - Sets the season to rename file(s) to.
+-w or --working - The working directory to run tvrenamr on. Required!
+
+CUSTOM REGULAR EXPRESSIONS
+When creating your own regular expression you will need to use some custom syntax to specify which parts of the filename relate to 
+information about the episode.
+
+%n - the show name.
+%s - the season number.
+%e - the episode number.
+
+NOTE: All spaces are converted to periods.
+
+KNOWN EXPRESSIONS
+- "Peep Show - 502.avi" -> %n\.-\.%s%e
