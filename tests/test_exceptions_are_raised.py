@@ -2,6 +2,9 @@ import urllib2
 
 from nose.tools import *
 
+#stub urlopen calls
+import urlopenmock
+
 from core.tvrenamr_core import TvRenamr
 from core.errors import *
 

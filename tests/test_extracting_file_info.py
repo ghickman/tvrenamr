@@ -1,5 +1,8 @@
 from nose.tools import *
 
+#stub urlopen calls
+import urlopenmock
+
 from core.tvrenamr_core import TvRenamr
 
 class TestExtractFileInfo(object):
