@@ -5,3 +5,4 @@ prototypes/
 *.log
 *.pyc
 files/
+tests/data/
