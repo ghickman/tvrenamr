@@ -17,7 +17,7 @@ renamed_dir = options.renamed_dir
 auto_move = options.auto_move
 logging = options.logging
 regex = options.regex
-#working_dir = "/Users/madnashua/Projects/tvrenamr/core/testcase"
+#working_dir = "/Users/madnashua/Projects/tvrenamr/core/tests/data/files"
 #regex = "%n\.\-\.[Ss]?%s\.E%e"
 
 tv = TvRenamr(working_dir)
@@ -39,7 +39,10 @@ for fn in os.listdir(working_dir):
     elif auto_move == None and renamed_dir == None:
         #rename
         try:
-            tv.rename(fn, regex=regex)
+            details = tv.extract_episode_details_from_file(fn, user_regex=regex)
+            name = tv.retrieve_episode_name(details[0],details[1],details[2])
+            path = tv.build_path(details,name)
+            tv.rename(fn,path)
         except Exception, e:
             print e
             continue
