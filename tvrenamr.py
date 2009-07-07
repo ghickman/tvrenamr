@@ -25,14 +25,20 @@ for fn in os.listdir(working_dir):
     if auto_move != None:
         #rename and auto move
         try:
-            tv.rename(fn, auto_move=auto_move, regex=regex)
+            details = tv.extract_episode_details_from_file(fn, user_regex=regex)
+            name = tv.retrieve_episode_name(details[0],details[1],details[2])
+            path = tv.build_path(details,name,auto_move)
+            tv.rename(fn,path)
         except Exception, e:
             print e
             continue
     elif renamed_dir != None:
         #rename and move
         try:
-            tv.rename(fn, renamed_dir, regex=regex)
+            details = tv.extract_episode_details_from_file(fn, user_regex=regex)
+            name = tv.retrieve_episode_name(details[0],details[1],details[2])
+            path = tv.build_path(details,name,renaed_dir)
+            tv.rename(fn,path)
         except Exception, e:
             print e
             continue
