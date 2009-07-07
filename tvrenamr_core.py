@@ -1,26 +1,22 @@
-import logging
 import os
 import re
 import sys
 
 from errors import *
-from thetvdb import TheTvDb
-
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='/Users/madnashua/Projects/tvrenamr/tvrenamr.log',
-                    filemode='a')
+#from thetvdb import TheTvDb
 
 class TvRenamr():
-    logging = None
     working_dir = None
     
     def __init__(self, working_dir, logging=None):
         self.working_dir = working_dir
-        self.logging = logging
     
-    def __extract_file_info(self, fn, user_regex=None):
+    def extract_episode_details_from_file(self, fn, user_regex=None):
+        """
+        Looks at the file given and extracts from it the show title, it's season number and episode number using regular expression ninja skills. The 
+        default formats accepted are: series.0x00.xxx or series.s0e00.xxx
+        A user can specify their own regular expression for a format not already covered.
+        """
         if re.compile(".*?\s-\s[\d]{3,4}\s-\s.+?\."+fn[-3:]).match(fn): raise AlreadyNamedException(fn)
         fn = fn.replace("_", ".").replace(" ", ".")
         if user_regex == None: regex = "(?P<series>[\w\s._]+)\.[Ss]?(?P<season>[\d]{1,2}?)([Xx]|[Ee])(?P<episode>[\d]{1,2})"
@@ -30,41 +26,34 @@ class TvRenamr():
             series = m.group('series').replace('.',' ')
             if series.find('The O C') >= 0: series = series.replace('The O C','The O.C.')
             if re.compile('\s{1}[\d]{4}').match(series[-5:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
-            return [series,str(int(m.group('season'))),m.group('episode'),fn[-4:]]
+            return [series,m.group('season'),m.group('episode'),fn[-4:]]
         else: raise UnexpectedFormatException(fn)
     
-    def __build_file_name(self, fn):
-        t = TheTvDb(fn[0])
-        try: episode_name = t.get_episode_name(fn[1], fn[2])
-        except Exception, e: raise
-        if len(fn[2]) == 1: fn[2] = "0" + fn[2]
-        return t.series + " - " + fn[1] + fn[2] + " - " + episode_name + fn[3]
+    def retrieve_episode_name(self, series, season, episode, library=None):
+        """
+        Retrieves the name of a given episode. The series name, season and episode numbers must be specified and the library to get the episode's name
+        can be specified by the user.
+        """
+        if library == 'tvrage': from tvrage import TvRage as library
+        else: from thetvdb import TheTvDb as library
+        lib = library(series)
+        return lib.get_episode_name(season,episode)
     
-    def __build_auto_path(self, fn, series, season, auto_move):
-        path = auto_move + series + "/Season " + season + "/"
-        if os.path.exists(new_dir) == False: os.makedirs(new_dir)
-        return path
+    def build_path(self, details, name, renamed_dir=None, auto_move=None):
+        """
+        Builds the new path for the file to be renamed to, by default this is the working directory. Users can specify a directoy to move files to 
+        once renamed using the renamed_dir option. The auto_move option can be used to specify a top level directory where files will be placed in
+        season and series folders, i.e. series -> season 1 -> episodes
+        """
+        if len(details[2]) == 1: details[2] = "0"+ details[2]
+        new_fn = details[0] +" - "+ str(int(details[1])) + details[2] +" - "+ name + details[3]
+        if auto_move != None: renamed_dir = auto_move + details[0] +"/Season "+ str(int(details[1])) +"/"+ new_fn
+        elif renamed_dir == None: renamed_dir = self.working_dir
+        return os.path.join(renamed_dir, new_fn)
     
-    def __rename_file(self, fn, dest, new_fn):
-        if os.path.exists(dest) == False:
-            os.rename(os.path.join(self.working_dir, fn), dest)
-            if self.logging == True: logging.info('Renamed: %s', fn)
-        else: raise Exception('File Exists: '+ new_fn +' from: '+fn)
-    
-    def rename(self, fn, regex=None, renamed_dir=None, auto_move=False, season=None):
+    def rename(self, fn, new_fn):
         """
         """
-        #stage
-        try: f = self.__extract_file_info(fn,regex)
-        except Exception, e: raise
-        new_fn = self.__build_file_name(f)
-        
-        #build new path
-        if renamed_dir == None: renamed_dir = self.working_dir
-        if auto_move != False: dest_path = self.__build_auto_path(new_fn, f[0], f[1], renamed_dir, auto_move)
-        else: dest_path = os.path.join(renamed_dir, new_fn)
-        
-        #rename
-        try:self.__rename_file(fn, dest_path, new_fn)
-        except Exception, e: raise
+        if os.path.exists(new_fn) == False: os.rename(os.path.join(self.working_dir, fn), new_fn)
+        else: raise EpisodeAlreadyExistsInFolderException(fn,new_fn)
     
