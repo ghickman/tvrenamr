@@ -14,8 +14,6 @@ class TheTvDb():
         self.series = series_name
         
     def __get_series_id(self):
-        logging.debug('Retrieving series ID: %s', self.series)
-        #data = super(TheTvDb, self).get_url(self.url + self.get_series + self.series)
         url = self.url + self.get_series + urllib2.quote(self.series)
         try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise
@@ -29,7 +27,6 @@ class TheTvDb():
         
     def get_episode_name(self, season, episode):
         series_id = self.__get_series_id()
-        logging.debug('Retrieving episode name for: '+ self.series)
         episode_url = self.url + self.apikey +'/series/'+ series_id +'/default/'+ str(int(season)) +'/'+ str(int(episode)) +'/en.xml'
         try: f = urllib2.urlopen(episode_url)
         except urllib2.URLError: raise
