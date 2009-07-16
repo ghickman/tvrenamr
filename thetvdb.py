@@ -24,12 +24,13 @@ class TheTvDb():
             if s.lower() == self.series.lower():
                 self.series = s
                 return name.find("seriesid").text
+            else: raise ShowNotFoundException(self.series)
         
     def get_episode_name(self, season, episode):
         series_id = self.__get_series_id()
         episode_url = self.url + self.apikey +'/series/'+ series_id +'/default/'+ str(int(season)) +'/'+ str(int(episode)) +'/en.xml'
         try: f = urllib2.urlopen(episode_url)
-        except urllib2.URLError: raise
+        except urllib2.URLError: raise EpisodeNotFoundException(season+episode)
         dom = ET.fromstring(f.read())
         if dom != None: return dom.find("Episode").find("EpisodeName").text
         else: raise EpisodeNotFoundException(self.series + " - " + season + episode)
