@@ -3,7 +3,6 @@ import re
 import sys
 
 from errors import *
-#from thetvdb import TheTvDb
 
 class TvRenamr():
     working_dir = None
