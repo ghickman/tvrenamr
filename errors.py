@@ -26,3 +26,16 @@ class EpisodeAlreadyExistsInFolderException(Exception):
         msg = "An episode called \'"+fn+"\' already exists in the current folder"
         print msg
     
+class ShowNotFoundException(Exception):
+    """
+    """
+    def __init__(self,show):
+        msg = show+" could not be found"
+        print msg
+    
+class EpisodeNotFoundException(Exception):
+    """
+    """
+    def __init__(self,episode):
+        msg = episode+" could not be found"
+        print msg
