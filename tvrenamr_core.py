@@ -21,7 +21,6 @@ class TvRenamr():
         m = re.compile(regex).match(fn)
         if m != None:
             series = m.group('series').replace('.',' ')
-            if series.find('The O C') >= 0: series = series.replace('The O C','The O.C.')
             if re.compile('\s{1}[\d]{4}').match(series[-5:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
             return [series,m.group('season'),m.group('episode'),fn[-4:]]
         else: raise UnexpectedFormatException(fn)
