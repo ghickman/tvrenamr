@@ -11,10 +11,13 @@ http://github.com/ghickman/tvrenamr/tree/master
 OPTIONS
 -a or --auto - Automatically move renamed files to the appropriate directory under the directory specified. Mutually exclusive to -r
 -n or --name - Set the show name for renaming
--r or --renamed", dest="renamed_dir", help="The directory to move renamed files to. Mutually exclusive to -a
+-r or --renamed - The directory to move renamed files to. Mutually exclusive to -a
 --regex - the regular expression to set the format of files being renamed.
 -s or --season - Sets the season to rename file(s) to.
--w or --working - The working directory to run tvrenamr on. Required!
+-w or --working - The working directory or file to run tvrenamr on. Required.
+(Future)
+-d or --depth - Sets the maximum depth to look through folders.
+-o or --output - Sets the output format for files.
 
 CUSTOM REGULAR EXPRESSIONS
 When creating your own regular expression you will need to use some custom syntax to specify which parts of the filename relate to 
