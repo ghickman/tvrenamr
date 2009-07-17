@@ -7,7 +7,7 @@ from errors import *
 class TvRenamr():
     working_dir = None
     
-    def __init__(self, working_dir, logging=None):
+    def __init__(self, working_dir):
         self.working_dir = working_dir
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
