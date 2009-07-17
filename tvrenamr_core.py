@@ -1,6 +1,4 @@
-import os
-import re
-import sys
+import os, re, sys
 
 from errors import *
 
