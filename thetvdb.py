@@ -32,5 +32,5 @@ class TheTvDb():
         try: f = urllib2.urlopen(episode_url)
         except urllib2.URLError: raise EpisodeNotFoundException(season+episode)
         dom = ET.fromstring(f.read())
-        if dom != None: return dom.find("Episode").find("EpisodeName").text
+        if dom != None: return [self.series, dom.find("Episode").find("EpisodeName").text]
         else: raise EpisodeNotFoundException(self.series + " - " + season + episode)

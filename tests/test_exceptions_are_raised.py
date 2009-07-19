@@ -26,6 +26,6 @@ class TestExceptionsAreRaised(object):
     
     def test_episode_already_exists_in_folder_exception_is_raised_when_new_file_name_already_exists_in_folder(self):
         details = self.tv.extract_episode_details_from_file('chuck.s02e05.avi')
-        name = self.tv.retrieve_episode_name(details[0],details[1],details[2])
-        path = self.tv.build_path(details, name)
+        names = self.tv.retrieve_episode_name(details[0],details[1],details[2])
+        path = self.tv.build_path(details, series_name=names[0], episode_name=names[1])
         assert_raises(EpisodeAlreadyExistsInFolderException, self.tv.rename, 'chuck.s02e05.avi', path)
