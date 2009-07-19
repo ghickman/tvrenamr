@@ -18,10 +18,9 @@ def script_rename(working_dir, fn):
     try:
         details = tv.extract_episode_details_from_file(fn, user_regex=options.regex)
         print details
+        if options.name: details[0]=options.name
         names = tv.retrieve_episode_name(details[0],details[1],details[2])
-        if options.name: series_name=options.name
-        else: series_name=names[0]
-        path = tv.build_path(details, series_name=series_name, episode_name=names[1], renamed_dir=options.renamed_dir, auto_move=options.auto_move)
+        path = tv.build_path(details, series_name=names[0], episode_name=names[1], renamed_dir=options.renamed_dir, auto_move=options.auto_move)
         tv.rename(fn,path)
     except Exception, e: print e
 
