@@ -12,13 +12,16 @@ parser.add_option("-s", "--season", dest="season")
 parser.add_option("-w", "--working", dest="working_dir", help="The working directory to run tvrenamr in. Required!")
 (options, args) = parser.parse_args()
 
-#options.working_dir = "/Users/madnashua/Projects/tvrenamr/core/testcase/scrubs.s03e05.avi"
+options.working_dir = "/Users/madnashua/Projects/tvrenamr/core/testcase/"
 def script_rename(working_dir, fn):
     tv = TvRenamr(working_dir)
     try:
         details = tv.extract_episode_details_from_file(fn, user_regex=options.regex)
-        name = tv.retrieve_episode_name(details[0],details[1],details[2])
-        path = tv.build_path(details, name, renamed_dir=options.renamed_dir, auto_move=options.auto_move)
+        print details
+        names = tv.retrieve_episode_name(details[0],details[1],details[2])
+        if options.name: series_name=options.name
+        else: series_name=names[0]
+        path = tv.build_path(details, series_name=series_name, episode_name=names[1], renamed_dir=options.renamed_dir, auto_move=options.auto_move)
         tv.rename(fn,path)
     except Exception, e: print e
 
