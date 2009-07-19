@@ -35,14 +35,14 @@ class TvRenamr():
         lib = library(series)
         return lib.get_episode_name(season,episode)
     
-    def build_path(self, details, name, renamed_dir=None, auto_move=None):
+    def build_path(self, details, series_name, episode_name, renamed_dir=None, auto_move=None):
         """
         Builds the new path for the file to be renamed to, by default this is the working directory. Users can specify a directoy to move files to 
         once renamed using the renamed_dir option. The auto_move option can be used to specify a top level directory where files will be placed in
         season and series folders, i.e. series -> season 1 -> episodes
         """
         if len(details[2]) == 1: details[2] = "0"+ details[2]
-        new_fn = details[0] +" - "+ str(int(details[1])) + details[2] +" - "+ name + details[3]
+        new_fn = series_name +" - "+ str(int(details[1])) + details[2] +" - "+ episode_name + details[3]
         if auto_move != None: renamed_dir = auto_move + details[0] +"/Season "+ str(int(details[1])) +"/"+ new_fn
         elif renamed_dir == None: renamed_dir = self.working_dir
         return os.path.join(renamed_dir, new_fn)
