@@ -12,7 +12,7 @@ parser.add_option("-s", "--season", dest="season")
 parser.add_option("-w", "--working", dest="working_dir", help="The working directory to run tvrenamr in. Required!")
 (options, args) = parser.parse_args()
 
-options.working_dir = "/Users/madnashua/Projects/tvrenamr/core/testcase/"
+#options.working_dir = "/Users/madnashua/Projects/tvrenamr/core/testcase/"
 def script_rename(working_dir, fn):
     tv = TvRenamr(working_dir)
     try:
