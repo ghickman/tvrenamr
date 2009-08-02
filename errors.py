@@ -1,5 +1,6 @@
 class AlreadyNamedException(Exception):
     """
+    Raised when the format of the file being passed in is the same as the output format
     """
     def __init__(self,fn):
         msg = "Already in correct naming format: "+fn
