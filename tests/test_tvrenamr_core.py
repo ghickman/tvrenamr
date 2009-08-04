@@ -42,3 +42,16 @@ class TestTvrenamrCore(object):
         names = self.tv.retrieve_episode_name(details[0],details[1],details[2])
         path = self.tv.build_path(details, series_name=names[0], episode_name=names[1])
         assert_equal('tests/data/files/Stargate SG-1 - 1010 - Quest (1).avi', path)
+    
+    def test_using_auto_move_returns_the_correct_path_based_on_the_episode(self):
+        details = self.tv.extract_episode_details_from_file('true.blood.0205.avi')
+        names = self.tv.retrieve_episode_name(details[0],details[1],details[2])
+        path = self.tv.build_path(details, series_name=names[0], episode_name=names[1], auto_move='tests/data/files/media')
+        print path
+        assert_equal(path, 'tests/data/files/media/True Blood/Season 2/True Blood - 205 - Never Let Me Go.avi')
+    
+    def test_using_auto_move_renames_the_file_correctly(self):
+        pass
+    
+    def test_using_auto_move_moves_the_file_to_the_correct_folder(self):
+        pass

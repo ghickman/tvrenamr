@@ -23,7 +23,7 @@ class TvRenamr():
         m = re.compile(regex).match(fn)
         if m != None:
             series = m.group('series').replace('.',' ')
-            if re.compile('\s{1}[\d]{4}').match(series[-5:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
+            #if re.compile('\s{1}[\d]{4}').match(series[-5:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
             return [series,m.group('season'),m.group('episode'),fn[-4:]]
         else: raise UnexpectedFormatException(fn)
     
@@ -41,11 +41,12 @@ class TvRenamr():
         """
         Builds the new path for the file to be renamed to, by default this is the working directory. Users can specify a directory to move files to 
         once renamed using the renamed_dir option. The auto_move option can be used to specify a top level directory where files will be placed in
-        season and series folders, i.e. series -> season 1 -> episodes
+        season and series folders, i.e. series/season 1/episodes
         """
         if len(details[2]) == 1: details[2] = "0"+ details[2]
         new_fn = series_name +" - "+ str(int(details[1])) + details[2] +" - "+ episode_name + details[3]
-        if auto_move != None: renamed_dir = auto_move + details[0] +"/Season "+ str(int(details[1])) +"/"+ new_fn
+        if auto_move != None: renamed_dir = self.__build_auto_move_path(auto_move, series_name, details[1])
+            
         elif renamed_dir == None: renamed_dir = self.working_dir
         return os.path.join(renamed_dir, new_fn)
     
@@ -60,6 +61,14 @@ class TvRenamr():
     def rename(self, fn, new_fn):
         """
         """
-        if os.path.exists(new_fn) == False: os.rename(os.path.join(self.working_dir, fn), new_fn)
+        if not os.path.exists(new_fn): os.rename(os.path.join(self.working_dir, fn), new_fn)
         else: raise EpisodeAlreadyExistsInFolderException(fn,new_fn)
+    
+    def __build_auto_move_path(self, auto_move_start_path, series_name, season_number):
+        """
+        """
+        if auto_move_start_path[-1:] != '/': auto_move_start_path = auto_move_start_path +'/'
+        renamed_dir = auto_move_start_path + series_name +'/Season '+ str(int(season_number)) +'/'
+        if not os.path.exists(renamed_dir): os.makedirs(renamed_dir)
+        return renamed_dir
     
