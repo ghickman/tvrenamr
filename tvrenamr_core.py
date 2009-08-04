@@ -66,9 +66,10 @@ class TvRenamr():
     
     def __build_auto_move_path(self, auto_move_start_path, series_name, season_number):
         """
+        Constructs a directory path using the series name and season number of an episode.
         """
         if auto_move_start_path[-1:] != '/': auto_move_start_path = auto_move_start_path +'/'
-        renamed_dir = auto_move_start_path + series_name +'/Season '+ str(int(season_number)) +'/'
-        if not os.path.exists(renamed_dir): os.makedirs(renamed_dir)
-        return renamed_dir
+        path = auto_move_start_path + series_name +'/Season '+ str(int(season_number)) +'/'
+        if not os.path.exists(path): os.makedirs(path)
+        return path
     
