@@ -10,7 +10,6 @@ class TestExtractFileInfo(object):
     def setup(self):
         self.tv = TvRenamr("tests/data/files")
     
-    
     def test_extracted_season_is_equal_to_season_from_file_format_s0e00(self):
         results = self.tv.extract_episode_details_from_file("chuck.s2e06.avi")
         assert_equal(results[1], '2')
