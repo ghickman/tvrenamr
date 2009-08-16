@@ -37,31 +37,39 @@ class TvRenamr():
         lib = library(series)
         return lib.get_episode_name(season,episode)
     
-    def build_path(self, details, series_name, episode_name, renamed_dir=None, auto_move=None):
+    def format_output(self, user_regex):
+        pass
+    
+    def build_path(self, series, season, episode, episode_name, extension, renamed_dir=None, auto_move=None):
         """
         Builds the new path for the file to be renamed to, by default this is the working directory. Users can specify a directory to move files to 
         once renamed using the renamed_dir option. The auto_move option can be used to specify a top level directory where files will be placed in
         season and series folders, i.e. series/season 1/episodes
         """
-        if len(details[2]) == 1: details[2] = "0"+ details[2]
-        new_fn = series_name +" - "+ str(int(details[1])) + details[2] +" - "+ episode_name + details[3]
-        if auto_move != None: renamed_dir = self.__build_auto_move_path(auto_move, series_name, details[1])
+        if len(episode) == 1: episode = '0'+ episode
+        new_fn = series +" - "+ str(int(season)) + episode +" - "+ episode_name + extension
+        if auto_move != None: renamed_dir = self.__build_auto_move_path(auto_move, series, season)
             
         elif renamed_dir == None: renamed_dir = self.working_dir
         return os.path.join(renamed_dir, new_fn)
     
-    def clean_names(self, fn):
+    def clean_names(self, fn, character_to_replace=':', replacement_character=' -'):
         """
-        Cleans the filename passed in, making it be safe for all file systems. Also allows the user to specify the new characters to be used.
+        Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify the new characters to be used.
         """
         print fn
-        fn.replace(':',' -')
+        fn.replace(character_to_replace,replacement_character)
         return fn
     
     def rename(self, fn, new_fn):
         """
+        Renames the file passed in to the new filename path passed in and returns the new filename
         """
-        if not os.path.exists(new_fn): os.rename(os.path.join(self.working_dir, fn), new_fn)
+        if not os.path.exists(new_fn):
+            os.rename(os.path.join(self.working_dir, fn), new_fn)
+            renamed = os.path.split(new_fn)
+            print renamed
+            return renamed[1]
         else: raise EpisodeAlreadyExistsInFolderException(fn,new_fn)
     
     def __build_auto_move_path(self, auto_move_start_path, series_name, season_number):
