@@ -37,8 +37,13 @@ class TvRenamr():
         lib = library(series)
         return lib.get_episode_name(season,episode)
     
-    def format_output(self, user_regex):
+    def format_output(self, show_name, user_regex=None):
         pass
+    
+    def set_position_of_the_to_the_end_of_a_shows_name(self, show_name):
+        if not(show_name.startswith('The')): raise Exception
+        return show_name[4:]+', The'
+
     
     def build_path(self, series, season, episode, episode_name, extension, renamed_dir=None, auto_move=None):
         """
@@ -68,7 +73,6 @@ class TvRenamr():
         if not os.path.exists(new_fn):
             os.rename(os.path.join(self.working_dir, fn), new_fn)
             renamed = os.path.split(new_fn)
-            print renamed
             return renamed[1]
         else: raise EpisodeAlreadyExistsInFolderException(fn,new_fn)
     
