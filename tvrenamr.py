@@ -10,7 +10,7 @@ parser.add_option('-n', '--name', dest='name', help='Set the show name for renam
 parser.add_option('-r', "--renamed", dest='renamed_dir', help='The directory to move renamed files to. Mutually exclusive to -a')
 parser.add_option('--regex', dest='regex', help='The regular expression to set the format of files being renamed. Use %n to specify the show name, %s for the season number and %e for the episode number. All spaces are converted to periods before the regex is run')
 parser.add_option('-s', '--season', dest='season', help='Set the season number.')
-parser.add_option('-t', '--the', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
+parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
 parser.add_option('-w', '--working', dest='working_dir', help='The working directory to run tvrenamr in. Required!')
 (options, args) = parser.parse_args()
 
