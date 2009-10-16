@@ -27,7 +27,7 @@ def script_rename(working_dir, fn):
         if options.season: details[1]=options.season
         if options.episode: details[2]=options.episode
         names = tv.retrieve_episode_name(details[0],details[1],details[2])
-        if options.the: names[0] = tv.set_position_of_the_to_the_end_of_a_shows_name(names[0])
+        if options.the: names[0] = tv.set_position_of_leading_the_to_end_of_show_name(names[0])
         path = tv.build_path(series=names[0], season=details[1], episode=details[2], episode_name=names[1], extension=details[3], renamed_dir=options.renamed_dir, auto_move=options.auto_move)
         print path
         tv.rename(fn,path)

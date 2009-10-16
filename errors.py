@@ -40,3 +40,10 @@ class EpisodeNotFoundException(Exception):
     def __init__(self,episode):
         msg = episode+" could not be found"
         print msg
+
+class NoLeadingTheException(Exception):
+    """
+    """
+    def __init__(self,show):
+        msg = show+" has no leading the in its name"
+        print msg

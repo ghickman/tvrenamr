@@ -36,7 +36,7 @@ class TvRenamr():
         try:
             for show in [line.strip().split(' => ') for line in f.input(exceptions_file) if not line.startswith('#')]:
                 if show[0] == show_name: return show[1]
-        except: raise Exception
+        except: raise Exception #needs to be an info log to say the show wasn't found in the file, continuing with regex'd name
     
     def retrieve_episode_name(self, series, season, episode, library=None):
         """
@@ -48,8 +48,8 @@ class TvRenamr():
         lib = library(series)
         return lib.get_episode_name(season,episode)
     
-    def set_position_of_the_to_the_end_of_a_shows_name(self, show_name):
-        if not(show_name.startswith('The ')): raise Exception
+    def set_position_of_leading_the_to_end_of_show_name(self, show_name):
+        if not(show_name.startswith('The ')): raise NoLeadingTheException(show_name)
         return show_name[4:]+', The'
     
     def remove_part_from_multiple_episodes(self, show_name):

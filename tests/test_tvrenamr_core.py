@@ -47,11 +47,11 @@ class TestTvrenamrCore(object):
         names = self.tv.retrieve_episode_name(series=details[0], season=details[1], episode='9')
         assert_equal('Chuck Versus the Imported Hard Salami', names[1])
     
-    def test_setting_the_position_of_the_variable_to_true_places_a_shows_the_at_the_end_of_the_file_name(self):
+    def test_setting_the_position_of_a_shows_leading_the_to_the_end_of_the_file_name(self):
         fn = 'The.Big.Bang.Theory.S03E01.HDTV.XviD-NoTV.avi'
         details = self.tv.extract_episode_details_from_file(fn)
         names = self.tv.retrieve_episode_name(series=details[0], season=details[1], episode=details[2])
-        names[0] = self.tv.set_position_of_the_to_the_end_of_a_shows_name(names[0])
+        names[0] = self.tv.set_position_of_leading_the_to_end_of_show_name(names[0])
         path = self.tv.build_path(series=names[0], season=details[1], episode=details[2], episode_name=names[1], extension=details[3])
         self.tv.rename(fn, path)
         assert_true(os.path.isfile(os.path.join(self.working, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
@@ -70,6 +70,7 @@ class TestTvrenamrCore(object):
     def test_replacing_a_show_name_from_the_exceptions_file_returns_the_correct_show_name(self):
         fn = 'american.dad.s2e08.foo.bar.avi'
         details = self.tv.extract_episode_details_from_file(fn)
+        print details
         show_name = self.tv.convert_show_names_using_exceptions_file('tests/exceptions.txt', details[0])
         assert_equal(show_name, 'american dad!')
     

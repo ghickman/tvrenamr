@@ -38,3 +38,8 @@ class TestExceptionsAreRaised(object):
         path = self.tv.build_path(series=names[0], season=details[1], episode=details[2], episode_name=names[1], extension=details[3])
         assert_raises(EpisodeAlreadyExistsInFolderException, self.tv.rename, fn, path)
     
+    def test_no_leading_the_exception_is_raised_when_set_leading_the_to_end_of_show_name_method_is_called_on_a_show_with_no_leading_the(self):
+        fn = 'chuck.s02e05.avi'
+        details = self.tv.extract_episode_details_from_file(fn)
+        names = self.tv.retrieve_episode_name(details[0], details[1], details[2])
+        assert_raises(NoLeadingTheException, self.tv.set_position_of_leading_the_to_end_of_show_name, names[0])
