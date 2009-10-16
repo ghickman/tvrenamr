@@ -30,13 +30,12 @@ class TvRenamr():
         """
         Converts a show name to a new name.
         """
-        print show_name
-        print exceptions_file
+        # print show_name
+        # print exceptions_file
         import fileinput as f
         try:
             for show in [line.strip().split(' => ') for line in f.input(exceptions_file) if not line.startswith('#')]:
-                print show
-                if show[0] is show_name: return show[1]
+                if show[0] == show_name: return show[1]
         except: raise Exception
     
     def retrieve_episode_name(self, series, season, episode, library=None):
