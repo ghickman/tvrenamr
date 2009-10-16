@@ -17,15 +17,27 @@ class TvRenamr():
         #if re.compile(".*?\s-\s[\d]{3,4}\s-\s.+?\."+fn[-3:]).match(fn): raise AlreadyNamedException(fn)
         fn = fn.replace("_", ".").replace(" ", ".")
         print fn
-        if user_regex == None: regex = "(?P<series>[\w\s._-]+)\.[Ss]?(?P<season>[\d]{1,2})([Xx]|[Ee]|)(?P<episode>[\d]{2})"
-        else: regex = user_regex.replace('%n', '(?P<series>[\w\s._-]+)').replace('%s', "(?P<season>[0-9]{1,2})").replace('%e', '(?P<episode>[0-9]{2})')
+        regex = self.__build_regex(user_regex)
         print regex 
         m = re.compile(regex).match(fn)
-        if m != None:
+        if m is not None:
             series = m.group('series').replace('.',' ')
             #if re.compile('\s{1}[\d]{4}').match(series[-5:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
             return [series,m.group('season'),m.group('episode'),fn[-4:]]
         else: raise UnexpectedFormatException(fn)
+    
+    def convert_show_names_using_exceptions_file(self, exceptions_file, show_name):
+        """
+        Converts a show name to a new name.
+        """
+        print show_name
+        print exceptions_file
+        import fileinput as f
+        try:
+            for show in [line.strip().split(' => ') for line in f.input(exceptions_file) if not line.startswith('#')]:
+                print show
+                if show[0] is show_name: return show[1]
+        except: raise Exception
     
     def retrieve_episode_name(self, series, season, episode, library=None):
         """
@@ -37,13 +49,15 @@ class TvRenamr():
         lib = library(series)
         return lib.get_episode_name(season,episode)
     
+    def set_position_of_the_to_the_end_of_a_shows_name(self, show_name):
+        if not(show_name.startswith('The ')): raise Exception
+        return show_name[4:]+', The'
+    
+    def remove_part_from_multiple_episodes(self, show_name):
+        return show_name.replace('(Part ','(')
+    
     def format_output(self, show_name, user_regex=None):
         pass
-    
-    def set_position_of_the_to_the_end_of_a_shows_name(self, show_name):
-        if not(show_name.startswith('The')): raise Exception
-        return show_name[4:]+', The'
-
     
     def build_path(self, series, season, episode, episode_name, extension, renamed_dir=None, auto_move=None):
         """
@@ -53,9 +67,9 @@ class TvRenamr():
         """
         if len(episode) == 1: episode = '0'+ episode
         new_fn = series +" - "+ str(int(season)) + episode +" - "+ episode_name + extension
-        if auto_move != None: renamed_dir = self.__build_auto_move_path(auto_move, series, season)
+        if auto_move is not None: renamed_dir = self.__build_auto_move_path(auto_move, series, season)
             
-        elif renamed_dir == None: renamed_dir = self.working_dir
+        elif renamed_dir is None: renamed_dir = self.working_dir
         return os.path.join(renamed_dir, new_fn)
     
     def clean_names(self, fn, character_to_replace=':', replacement_character=' -'):
@@ -63,8 +77,7 @@ class TvRenamr():
         Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify the new characters to be used.
         """
         print fn
-        fn.replace(character_to_replace,replacement_character)
-        return fn
+        return fn.replace(character_to_replace, replacement_character)
     
     def rename(self, fn, new_fn):
         """
@@ -75,6 +88,28 @@ class TvRenamr():
             renamed = os.path.split(new_fn)
             return renamed[1]
         else: raise EpisodeAlreadyExistsInFolderException(fn,new_fn)
+    
+    def __build_regex(self, regex=None):
+        """
+        Builds the regular expression to extract the files details.
+        """
+        series = '(?P<series>[\w\s.,_-]+)'
+        season = '(?P<season>[\d]{1,2})'
+        episode = '(?P<episode>[\d]{2})'
+        
+        if regex is None: return series+'\.[Ss]?'+season+'([Xx]|[Ee]|)'+episode
+        
+        regex = regex.replace('%n', series)
+        if regex.find('%s{') is not -1:  # %s{n}
+            r = regex.split('%s{')[1][:1]
+            regex = regex.replace('%s{'+r+'}', season.replace('1,2', r))
+        if regex.find('%e{') is not -1: # %e{n}
+            r = regex.split('%e{')[1][:1]
+            regex = regex.replace('%e{'+r+'}', episode.replace('2', r))
+        if regex.find('%s') is not -1: regex = regex.replace('%s', season) # %s
+        if regex.find('%e') is not -1: regex = regex.replace('%e', episode) # %e
+        return regex
+        if regex.find('%s') is -1 or regex.find('%e') is -1: raise Exception # no correct syntax found
     
     def __build_auto_move_path(self, auto_move_start_path, series_name, season_number):
         """
