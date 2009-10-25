@@ -8,7 +8,7 @@ parser.add_option('-a', '--auto', action='store_true', dest='organise', help='Au
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file')
 parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming')
 parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed')
-parser.add_option('-r', "--renamed", dest='renamed_dir', help='The directory to move renamed files to. Mutually exclusive to -a')
+parser.add_option('-r', "--renamed", dest='renamed', help='The directory to move renamed files to, if not specified the working directory is used')
 parser.add_option('--regex', dest='regex', help='The regular expression to set the format of files being renamed. Use %n to specify the show name, %s for the season number and %e for the episode number. All spaces are converted to periods before the regex is run')
 parser.add_option('-s', '--season', dest='season', help='Set the season number.')
 parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
