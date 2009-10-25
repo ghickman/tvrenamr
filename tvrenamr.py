@@ -4,7 +4,7 @@ from optparse import OptionParser
 from core.core import TvRenamr
 
 parser = OptionParser()
-parser.add_option('-a', '--auto', dest='auto_move', help='Automatically move renamed files to the appropriate directory under the directory specified. Mutually exclusive to -r')
+parser.add_option('-a', '--auto', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified in renamed and organise them appropriated according to their show name and season number')
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file')
 parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming')
 parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed')
