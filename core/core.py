@@ -95,7 +95,7 @@ class TvRenamr():
         # build new episode title
         pass
     
-    def build_path(self, series, season, episode, title, extension, format=None, renamed_dir=None, auto_move=None, ):
+    def build_path(self, series, season, episode, title, extension, format=None, renamed_dir=None, organise=False):
         """
         Set the output format for the file name of a renamed show. By default the format is: 
         Show Name - Season NumberEpisode Number - Episode Title.format.
@@ -118,11 +118,13 @@ class TvRenamr():
         formatted = format.replace('%n', series.replace(series[:1], series[:1].upper(), 1)).replace('%s', str(int(season))).replace('%e', episode).replace('%t', title)
         self.path.info('Destination file: '+formatted)
         
-        if auto_move is not None: renamed_dir = self.__build_auto_move_path(auto_move, series, season)
-        elif renamed_dir is None: renamed_dir = self.working_dir
+        if renamed_dir is None: renamed = self.working_dir
+        else: renamed = renamed_dir
         
-        self.path.debug('Destination directory: '+renamed_dir)
-        return os.path.join(renamed_dir, formatted+extension)
+        if organise is True: renamed = self.__build_organise_path(renamed, series, season)
+        
+        self.path.debug('Destination directory: '+renamed)
+        return os.path.join(renamed, formatted+extension)
     
     def clean_names(self, fn, character_to_replace=':', replacement_character=' -'):
         """
@@ -198,12 +200,12 @@ class TvRenamr():
         
         return regex
     
-    def __build_auto_move_path(self, auto_move_start_path, series_name, season_number):
+    def __build_organise_path(self, start_path, series_name, season_number):
         """
         Constructs a directory path using the series name and season number of an episode.
         """
-        if auto_move_start_path[-1:] != '/': auto_move_start_path = auto_move_start_path +'/'
-        path = auto_move_start_path + series_name +'/Season '+ str(int(season_number)) +'/'
+        if start_path[-1:] != '/': start_path = start_path +'/'
+        path = start_path + series_name +'/Season '+ str(int(season_number)) +'/'
         if not os.path.exists(path):
             os.makedirs(path)
             self.log.debug('Directories created for path: '+path)
