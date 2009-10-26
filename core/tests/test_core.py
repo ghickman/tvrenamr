@@ -92,8 +92,8 @@ class TestCore(object):
     def test_replacing_a_show_name_from_the_exceptions_file_renames_a_file_correctly(self):
         fn = 'american.dad.s2e08.foo.bar.avi'
         credentials = self.tv.extract_episode_details_from_file(fn)
-        show_name = self.tv.convert_show_names_using_exceptions_file('exceptions.txt', credentials['series'])
-        title = self.tv.retrieve_episode_name(series=show_name, season=credentials['season'], episode=credentials['episode'])
+        credentials['series'] = self.tv.convert_show_names_using_exceptions_file('exceptions.txt', credentials['series'])
+        title = self.tv.retrieve_episode_name(series=credentials['series'], season=credentials['season'], episode=credentials['episode'])
         credentials['series'] = title['series']
         credentials['title'] = title['title']
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
