@@ -18,7 +18,18 @@ parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the 
 #options.name = ''
 # options.regex = '%s.[S%sE%e'
 
-def script_rename(working_dir, fn):
+def __determine_type(path):
+    if os.path.isdir(path):
+        for each_tuple in os.walk(path):
+            for fname in each_tuple[2]: return {'directory': each_tuple[0], 'filename': fname}
+    elif os.path.isfile(path):
+        working = os.path.split(path)
+        return {'directory': working[0], 'filename': working[1]}
+
+def rename(path):
+    details = determine_type(path)
+    filename = details['filename']
+    working_dir = details['directory']
     tv = TvRenamr(working_dir, 'debug')
     try:
         credentials = tv.extract_episode_details_from_file(fn, user_regex=options.regex)
@@ -29,14 +40,11 @@ def script_rename(working_dir, fn):
         if options.the: credentials['series'] = tv.set_position_of_leading_the_to_end_of_show_name(title['series'])
         else: credentials['series'] = title['series']
         credentials['title'] = title['title']
-        path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed_dir, auto_move=options.auto_move, format=None)
+        path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
         tv.rename(fn,path)
     except Exception, e: print e
 
-if os.path.isdir(options.working_dir):
-    for each_tuple in os.walk(options.working_dir):
-        for fname in each_tuple[2]:
-            script_rename(each_tuple[0], fname)
-elif os.path.isfile(options.working_dir):
-    working = os.path.split(options.working_dir)
-    script_rename(working[0], working[1])
+if __name__=="__main__":
+    if len(args) is not 1: parser.error('wrong number of arguments')
+    rename(args[0])
+else: print 'This script is only designed to be run standalone'
