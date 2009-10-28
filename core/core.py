@@ -17,7 +17,8 @@ class TvRenamr():
         level = self.__set_log_level(log_level)
         fh.setLevel(level)
         
-        fm = logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+        log_format = ['%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s', '%Y-%m-%d %H:%M']
+        fm = logging.Formatter(log_format)
         fh.setFormatter(fm)
         
         self.log.addHandler(fh)
