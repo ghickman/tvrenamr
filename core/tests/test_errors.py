@@ -45,7 +45,7 @@ class TestExceptionsAreRaised(object):
         credentials = self.tv.extract_episode_details_from_file(fn)
         title = self.tv.retrieve_episode_name(credentials['series'], credentials['season'], credentials['episode'])
         credentials['series'] = title['series']
-        assert_raises(NoLeadingTheException, self.tv.set_position_of_leading_the_to_end_of_show_name, credentials['series'])
+        assert_raises(NoLeadingTheException, self.tv.set_position_of_leading_the_to_end_of_series_name, credentials['series'])
     
     def test_incorrect_custom_regular_expression_syntax_exception_is_raised_when_any_of_the_custom_regular_expression_string_is_missing_the_defined_three_syntax_snippets(self):
         fn = 'chuck.s02e05.avi'

@@ -26,7 +26,7 @@ class WatchFolder(ProcessEvent):
         #         try:
         #             credentials = tv.extract_episode_details_from_file(pathname[1])
         #             title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
-        #             credentials['series'] = tv.set_position_of_leading_the_to_end_of_show_name(title['series'])
+        #             credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
         #             credentials['title'] = title['title']
         #             print credentials
         #             path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], auto_move=renamed_dir)

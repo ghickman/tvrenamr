@@ -65,7 +65,7 @@ class TestAutoMoving(object):
         credentials = self.tv.extract_episode_details_from_file(fn)
         title = self.tv.retrieve_episode_name(series=credentials['series'], season=credentials['season'], episode=credentials['episode'])
         credentials['title'] = title['title']
-        credentials['series'] = self.tv.set_position_of_leading_the_to_end_of_show_name(title['series'])
+        credentials['series'] = self.tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], organise=self.organise, renamed_dir=self.organised)
         self.tv.rename(fn, path)
         assert_true(os.path.isdir(os.path.join(self.organised, 'Big Bang Theory, The/Season 3')))

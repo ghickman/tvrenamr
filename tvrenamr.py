@@ -37,7 +37,7 @@ def rename(path):
         if options.season: credentials['season']=options.season
         if options.episode: credentials['episode']=options.episode
         title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
-        if options.the: credentials['series'] = tv.set_position_of_leading_the_to_end_of_show_name(title['series'])
+        if options.the: credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
         else: credentials['series'] = title['series']
         credentials['title'] = title['title']
         path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)

@@ -65,7 +65,7 @@ class TestCore(object):
         fn = 'The.Big.Bang.Theory.S03E01.HDTV.XviD-NoTV.avi'
         credentials = self.tv.extract_episode_details_from_file(fn)
         title = self.tv.retrieve_episode_name(series=credentials['series'], season=credentials['season'], episode=credentials['episode'])
-        credentials['series'] = self.tv.set_position_of_leading_the_to_end_of_show_name(title['series'])
+        credentials['series'] = self.tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
         credentials['title'] = title['title']
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
         test = self.tv.rename(fn, path)

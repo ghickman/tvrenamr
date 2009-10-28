@@ -72,9 +72,8 @@ class TvRenamr():
         self.log.info('Retrieved: '+name['title'])
         return name
     
-    def set_position_of_leading_the_to_end_of_show_name(self, show_name):
-        """
-        """
+    def set_position_of_leading_the_to_end_of_series_name(self, show_name):
+        """Moves the leading the of a series name to the end of the series name."""
         if not(show_name.startswith('The ')): raise NoLeadingTheException(show_name)
         self.log.debug('Moving the leading \'The\' to end of: '+show_name)
         return show_name[4:]+', The'
