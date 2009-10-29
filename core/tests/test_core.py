@@ -86,13 +86,13 @@ class TestCore(object):
     def test_replacing_a_show_name_from_the_exceptions_file_returns_the_correct_show_name(self):
         fn = 'american.dad.s2e08.foo.bar.avi'
         credentials = self.tv.extract_episode_details_from_file(fn)
-        show_name = self.tv.convert_show_names_using_exceptions_file('exceptions.txt', credentials['series'])
+        show_name = self.tv.convert_show_names_using_exceptions_file('tests/exceptions.txt', credentials['series'])
         assert_equal(show_name, 'american dad!')
     
     def test_replacing_a_show_name_from_the_exceptions_file_renames_a_file_correctly(self):
         fn = 'american.dad.s2e08.foo.bar.avi'
         credentials = self.tv.extract_episode_details_from_file(fn)
-        credentials['series'] = self.tv.convert_show_names_using_exceptions_file('exceptions.txt', credentials['series'])
+        credentials['series'] = self.tv.convert_show_names_using_exceptions_file('tests/exceptions.txt', credentials['series'])
         title = self.tv.retrieve_episode_name(series=credentials['series'], season=credentials['season'], episode=credentials['episode'])
         credentials['series'] = title['series']
         credentials['title'] = title['title']
