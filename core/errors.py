@@ -15,7 +15,7 @@ class EpisodeAlreadyExistsInFolderException(Exception):
     """
     def __init__(self,fn,new_fn):
         log = logging.getLogger('tvrenamr.errors.EpisodeAlreadyExistsInFolderException')
-        msg = "An episode called \'"+fn+"\' already exists in the current folder"
+        msg = "This episode already exists in the specified destination: %s" %new_fn
         log.error(msg)
         print msg
     
