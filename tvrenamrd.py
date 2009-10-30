@@ -26,7 +26,7 @@ class WatchFolder(ProcessEvent):
         tv = TvRenamr(pathname[0], 'debug')
         try:
             credentials = tv.extract_episode_details_from_file(pathname[1])
-            if options.exceptions is not None: credentials['series'] = tv.convert_show_names_using_exceptions_file(credentials['series'])
+            if options.exceptions is not None: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
             title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
             credentials['series'] = title['series']
             if options.the:
