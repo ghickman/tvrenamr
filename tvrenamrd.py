@@ -45,7 +45,7 @@ if __name__=="__main__":
     parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
     parser.add_option('-x', '--exceptions', dest='exceptions', help='Set the location of the exceptions file')
     (options, args) = parser.parse_args()
-    if len(args) is not 1: parser.error('wrong number of arguments')
+    if args is None: parser.error('You must specify a file or directory')
     
     # working_dir = "/opt/tvrenamr/working"
     working_dir = args[0]
