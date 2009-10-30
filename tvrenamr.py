@@ -23,7 +23,7 @@ def __determine_type(path):
         return {'directory': working[0], 'filename': working[1]}
 
 def rename(path):
-    details = determine_type(path)
+    details = __determine_type(path)
     filename = details['filename']
     working_dir = details['directory']
     tv = TvRenamr(working_dir, 'debug')
