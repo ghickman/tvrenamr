@@ -10,7 +10,7 @@ def urlopen_stub(url, data=None):
         key = md5(url.get_full_url()).hexdigest()
     else:
         key = md5(url).hexdigest()
-    data_file = os.path.join(os.path.dirname(__file__), 'data', "%s.xml" % key)
+    data_file = os.path.join(os.path.dirname(__file__), 'cache', "%s.xml" % key)
     try:
         f = open(data_file)
     except IOError:
