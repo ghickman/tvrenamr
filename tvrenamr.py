@@ -28,7 +28,7 @@ def rename(path):
     working_dir = details['directory']
     tv = TvRenamr(working_dir, 'debug')
     try:
-        credentials = tv.extract_episode_details_from_file(fn, user_regex=options.regex)
+        credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
         if options.name: credentials['series']=options.name
         if options.season: credentials['season']=options.season
         if options.episode: credentials['episode']=options.episode
@@ -37,10 +37,10 @@ def rename(path):
         else: credentials['series'] = title['series']
         credentials['title'] = title['title']
         path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
-        tv.rename(fn,path)
+        tv.rename(filename,path)
     except Exception, e: print e
 
 if __name__=="__main__":
-    if len(args) is not 1: parser.error('wrong number of arguments')
+    if args[0] is None: parser.error('You must specify a file or directory')
     rename(args[0])
 else: print 'This script is only designed to be run standalone'
