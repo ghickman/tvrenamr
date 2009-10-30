@@ -10,7 +10,7 @@ from core.errors import *
 class TestTheTvDb(object):
     
     def setup(self):
-        self.tv = TvRenamr("tests/data/files/", log_level='critical')
+        self.tv = TvRenamr("test/data/files/", log_level='critical')
     
     def test_searching_the_tv_db_with_an_ambiguous_name_returns_the_correct_show(self):
         assert_equal(self.tv.retrieve_episode_name('the o.c.', '03', '04')['series'], 'The O.C.')

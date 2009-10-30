@@ -9,7 +9,7 @@ class TestCore(object):
     working = 'tests/data/working'
     
     def setUp(self):
-        files = 'tests/data/files'
+        files = 'test/data/files'
         self.tv = TvRenamr(self.working, log_level='debug')
         for fn in os.listdir(files): shutil.copy(os.path.join(files, fn), os.path.join(self.working, fn))
     

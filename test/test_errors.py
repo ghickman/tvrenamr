@@ -11,13 +11,13 @@ from core.errors import *
 class TestExceptionsAreRaised(object):
     
     def setUp(self):
-        files = 'tests/data/files'
-        working = 'tests/data/working'
+        files = 'test/data/files'
+        working = 'test/data/working'
         self.tv = TvRenamr(working, log_level='critical')
         for fn in os.listdir(files): shutil.copy(os.path.join(files, fn), os.path.join(working, fn))
     
     def tearDown(self):
-        working = 'tests/data/working'
+        working = 'test/data/working'
         for fn in os.listdir(working): os.remove(os.path.join(working,fn))
     
     def test_already_named_exception_should_be_raised_when_file_already_named_correctly(self):
