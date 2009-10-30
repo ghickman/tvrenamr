@@ -47,9 +47,7 @@ if __name__=="__main__":
     (options, args) = parser.parse_args()
     if args is None: parser.error('You must specify a file or directory')
     
-    # working_dir = "/opt/tvrenamr/working"
     working_dir = args[0]
-    # options.renamed = "/opt/tvrenamr/TV"
     
     wm = WatchManager()
     p = WatchFolder()
