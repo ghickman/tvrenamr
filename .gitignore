@@ -4,6 +4,7 @@ prototypes/
 ._*
 *.log
 *.pyc
-files/
-tests/data/
+test/files/
+test/data/
+test/cache
 .com*
