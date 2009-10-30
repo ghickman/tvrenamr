@@ -14,10 +14,6 @@ parser.add_option('-s', '--season', dest='season', help='Set the season number.'
 parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
 (options, args) = parser.parse_args()
 
-# options.working_dir = '/Volumes/Media/TV/Scrubs/Season\ 4/Scrubs\ \[S4E16\]\ My\ Quarantine.avi'
-#options.name = ''
-# options.regex = '%s.[S%sE%e'
-
 def __determine_type(path):
     if os.path.isdir(path):
         for each_tuple in os.walk(path):
