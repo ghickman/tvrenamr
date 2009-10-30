@@ -16,8 +16,8 @@ parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the 
 
 def __determine_type(path):
     if os.path.isdir(path):
-        for each_tuple in os.walk(path):
-            for fname in each_tuple[2]: return {'directory': each_tuple[0], 'filename': fname}
+        for root, dirs, files in os.walk(path):
+            for fname in files: return {'directory': root, 'filename': fname}
     elif os.path.isfile(path):
         working = os.path.split(path)
         return {'directory': working[0], 'filename': working[1]}
