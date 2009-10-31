@@ -6,7 +6,7 @@ import urlopenmock
 from core.core import TvRenamr
 from core.lib.tvrage import TvRage
 
-class TestTheTvDb(object):
+class TestTvRage(object):
     
     def setup(self):
         self.tv = TvRenamr("test/data/files/", log_level='critical')

@@ -5,8 +5,8 @@ from nose.tools import *
 import urlopenmock #stub urlopen calls
 from core.core import TvRenamr
 
-class TestCore(object):
-    working = 'tests/data/working'
+class TestLogging(object):
+    working = 'test/data/working'
     
     def setUp(self):
         files = 'test/data/files'
