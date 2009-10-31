@@ -16,29 +16,32 @@ parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the 
 
 def __determine_type(path):
     if os.path.isdir(path):
+        filelist = []
         for root, dirs, files in os.walk(path):
-            for fname in files: return {'directory': root, 'filename': fname}
+            for fname in files: filelist.append({'directory': root, 'filename': fname})
+        return filelist
     elif os.path.isfile(path):
         working = os.path.split(path)
-        return {'directory': working[0], 'filename': working[1]}
+        return [{'directory': working[0], 'filename': working[1]}]
 
 def rename(path):
     details = __determine_type(path)
-    filename = details['filename']
-    working_dir = details['directory']
-    tv = TvRenamr(working_dir, 'debug')
-    try:
-        credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
-        if options.name: credentials['series']=options.name
-        if options.season: credentials['season']=options.season
-        if options.episode: credentials['episode']=options.episode
-        title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
-        if options.the: credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
-        else: credentials['series'] = title['series']
-        credentials['title'] = title['title']
-        path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
-        tv.rename(filename,path)
-    except Exception, e: print e
+    for show in details:
+        filename = show['filename']
+        working_dir = show['directory']
+        tv = TvRenamr(working_dir, 'debug')
+        try:
+            credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
+            if options.name: credentials['series']=options.name
+            if options.season: credentials['season']=options.season
+            if options.episode: credentials['episode']=options.episode
+            title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
+            if options.the: credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
+            else: credentials['series'] = title['series']
+            credentials['title'] = title['title']
+            path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
+            tv.rename(filename,path)
+        except Exception, e: print e
 
 if __name__=="__main__":
     if args[0] is None: parser.error('You must specify a file or directory')
