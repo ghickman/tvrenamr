@@ -6,24 +6,11 @@ import sys
 
 from errors import *
 
+log = logging.getLogger('Core')
+
 class TvRenamr():
     def __init__(self, working_dir, log_level='debug'):
         self.working_dir = working_dir
-        self.log = logging.getLogger('tvrenamr')
-        self.regex = logging.getLogger('tvrenamr.regex')
-        self.path = logging.getLogger('tvrenamr.path')
-        
-        fh = logging.FileHandler("tvrenamr.log")
-        level = self.__set_log_level(log_level)
-        fh.setLevel(level)
-        
-        log_format = ['%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s', '%Y-%m-%d %H:%M']
-        fm = logging.Formatter(*log_format)
-        fh.setFormatter(fm)
-        
-        self.log.addHandler(fh)
-        self.regex.addHandler(fh)
-        self.path.addHandler(fh)
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
         """
@@ -34,9 +21,9 @@ class TvRenamr():
         """
         #if re.compile(".*?\s-\s[\d]{3,4}\s-\s.+?\."+fn[-3:]).match(fn): raise AlreadyNamedException(fn)
         fn = fn.replace("_", ".").replace(" ", ".")
-        self.log.info('Renaming file: '+fn)
+        log.info('Renaming file: '+fn)
         regex = self.__build_regex(user_regex)
-        self.regex.info('Renaming using: '+regex)
+        log.info('Renaming using: '+regex)
         m = re.compile(regex).match(fn)
         if m is not None:
             series = m.group('series').replace('.',' ')
@@ -51,9 +38,9 @@ class TvRenamr():
         """
         for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
             if show[0] == show_name:
-                self.log.debug('Replacing '+show_name+' with '+show[1])
+                log.debug('Replacing '+show_name+' with '+show[1])
                 return show[1]
-            else: self.log.warning(show_name+' wasn\'t found in the exceptions file')
+            else: log.warning(show_name+' wasn\'t found in the exceptions file')
     
     def retrieve_episode_name(self, series, season, episode, library=None):
         """
@@ -63,19 +50,19 @@ class TvRenamr():
         """
         if library == 'tvrage':
             from lib.tvrage import TvRage as library
-            self.log.debug('Opening TvRage library')
+            log.debug('Opening TvRage library')
         else: 
             from lib.thetvdb import TheTvDb as library
-            self.log.debug('Opening TheTvDb library')
+            log.debug('Opening TheTvDb library')
         lib = library(series)
         name = lib.get_episode_name(season,episode)
-        self.log.info('Retrieved: '+name['title'])
+        log.info('Retrieved: '+name['title'])
         return name
     
     def set_position_of_leading_the_to_end_of_series_name(self, show_name):
         """Moves the leading the of a series name to the end of the series name."""
         if not(show_name.startswith('The ')): raise NoLeadingTheException(show_name)
-        self.log.debug('Moving the leading \'The\' to end of: '+show_name)
+        log.debug('Moving the leading \'The\' to end of: '+show_name)
         return show_name[4:]+', The'
     
     def remove_part_from_multiple_episodes(self, show_name):
@@ -83,7 +70,7 @@ class TvRenamr():
         In episode titles of multiple part episodes that use the format (Part n) remove the 'Part ' section so
         the format is (n)
         """
-        self.log.debug('Removing Part from episode name')
+        log.debug('Removing Part from episode name')
         return show_name.replace('(Part ','(')
     
     def set_format_for_multiple_part_episodes(self, show_name, format):
@@ -116,14 +103,14 @@ class TvRenamr():
         
         if len(episode) == 1: episode = '0'+ episode
         formatted = format.replace('%n', series.replace(series[:1], series[:1].upper(), 1)).replace('%s', str(int(season))).replace('%e', episode).replace('%t', title)
-        self.path.info('Destination file: '+formatted)
+        log.info('Destination file: '+formatted)
         
         if renamed_dir is None: renamed = self.working_dir
         else: renamed = renamed_dir
         
         if organise is True: renamed = self.__build_organise_path(renamed, series, season)
         
-        self.path.debug('Destination directory: '+renamed)
+        log.debug('Destination directory: '+renamed)
         return os.path.join(renamed, formatted+extension)
     
     def clean_names(self, fn, character_to_replace=':', replacement_character=' -'):
@@ -139,10 +126,10 @@ class TvRenamr():
         Renames the file passed in to the new filename path passed in and returns the new filename
         """
         if not os.path.exists(new_fn):
-            self.log.info('Beginning rename')
+            log.info('Beginning rename')
             os.rename(os.path.join(self.working_dir, fn), new_fn)
             renamed = os.path.split(new_fn)
-            self.log.debug('Renamed '+fn+' to '+renamed[1])
+            log.debug('Renamed '+fn+' to '+renamed[1])
             return renamed[1]
         else: raise EpisodeAlreadyExistsInFolderException(fn,new_fn)
     
@@ -173,30 +160,30 @@ class TvRenamr():
         # season number
         # %s{n}
         if regex.find('%s{') is not -1:
-            self.regex.debug('User set season digit number found')
+            log.debug('User set season digit number found')
             r = regex.split('%s{')[1][:1]
-            self.regex.debug('User specified '+r+' season digits')
+            log.debug('User specified '+r+' season digits')
             regex = regex.replace('%s{'+r+'}', season.replace('1,2', r))
-            self.regex.debug('Season regex set: '+regex)
+            log.debug('Season regex set: '+regex)
         
         # %s
         if regex.find('%s') is not -1:
             regex = regex.replace('%s', season)
-            self.regex.debug('Season regex set: '+regex)
+            log.debug('Season regex set: '+regex)
         
         # episode number
         # %e{n}
         if regex.find('%e{') is not -1:
-            self.regex.debug('User set episode digit number found')
+            log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
-            self.regex.debug('User specified '+r+' episode digits')
+            log.debug('User specified '+r+' episode digits')
             regex = regex.replace('%e{'+r+'}', episode.replace('2', r))
-            self.regex.debug('Episode regex set: '+regex)
+            log.debug('Episode regex set: '+regex)
         
         # %e
         if regex.find('%e') is not -1:
             regex = regex.replace('%e', episode)
-            self.regex.debug('Episode regex set: '+regex)
+            log.debug('Episode regex set: '+regex)
         
         return regex
     
@@ -208,6 +195,6 @@ class TvRenamr():
         path = start_path + series_name +'/Season '+ str(int(season_number)) +'/'
         if not os.path.exists(path):
             os.makedirs(path)
-            self.log.debug('Directories created for path: '+path)
+            log.debug('Directories created for path: '+path)
         return path
     
