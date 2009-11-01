@@ -1,7 +1,10 @@
+#!/usr/bin/python
+
 import os
 from optparse import OptionParser
 
 from core.core import TvRenamr
+import core
 
 parser = OptionParser()
 parser.add_option('-a', '--auto', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified in renamed and organise them appropriated according to their show name and season number')
@@ -12,6 +15,7 @@ parser.add_option('-r', "--renamed", dest='renamed', help='The directory to move
 parser.add_option('--regex', dest='regex', help='The regular expression to set the format of files being renamed. Use %n to specify the show name, %s for the season number and %e for the episode number. All spaces are converted to periods before the regex is run')
 parser.add_option('-s', '--season', dest='season', help='Set the season number.')
 parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
+parser.add_option('-x', '--exceptions', dest='exceptions', help='Specify an exceptions file')
 (options, args) = parser.parse_args()
 
 def __determine_type(path):
@@ -32,6 +36,7 @@ def rename(path):
         tv = TvRenamr(working_dir, 'debug')
         try:
             credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
+            if options.exceptions: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
             if options.name: credentials['series']=options.name
             if options.season: credentials['season']=options.season
             if options.episode: credentials['episode']=options.episode
