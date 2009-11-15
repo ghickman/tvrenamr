@@ -57,15 +57,19 @@ def rename(path):
     for show in details:
         filename = show['filename']
         working_dir = show['directory']
-        tv = TvRenamr(working_dir, 'debug')
+        tv = TvRenamr(working_dir, options.log)
         try:
             credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
-            if options.exceptions: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
+            if options.exceptions:
+                try: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
+                except ShowNotInExceptionsList: pass
             if options.name: credentials['series']=options.name
             if options.season: credentials['season']=options.season
             if options.episode: credentials['episode']=options.episode
             title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
-            if options.the: credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
+            if options.the:
+                try: credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
+                except NoLeadingTheException: pass
             else: credentials['series'] = title['series']
             credentials['title'] = title['title']
             path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
