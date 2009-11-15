@@ -8,7 +8,7 @@ from core.core import TvRenamr
 class TestExtractFileInfo(object):
     
     def setup(self):
-        self.tv = TvRenamr("test/data/files", log_level='critical')
+        self.tv = TvRenamr("tests/data/files", log_level='critical')
     
     def test_extracting_season_season_from_file_format_s0e00(self):
         credentials = self.tv.extract_episode_details_from_file("chuck.s2e06.avi")

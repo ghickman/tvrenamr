@@ -6,10 +6,10 @@ import urlopenmock #stub urlopen calls
 from core.core import TvRenamr
 
 class TestLogging(object):
-    working = 'test/data/working'
+    working = 'tests/data/working'
     
     def setUp(self):
-        files = 'test/data/files'
+        files = 'tests/data/files'
         self.tv = TvRenamr(self.working, log_level='debug')
         for fn in os.listdir(files): shutil.copy(os.path.join(files, fn), os.path.join(self.working, fn))
     
