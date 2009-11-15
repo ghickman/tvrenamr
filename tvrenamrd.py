@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import logging
 import os
 from pyinotify import WatchManager, Notifier, ProcessEvent, IN_CREATE, IN_MOVED_TO, IN_ISDIR
@@ -5,12 +7,13 @@ from core.core import TvRenamr
 from core.errors import *
 from optparse import OptionParser
 
+log = logging.getLogger('daemon')
+
 class WatchFolder(ProcessEvent):
-    def __init__(self):
-        self.log = logging.getLogger('tvrenamr.daemon')
+    def __init__(self): 
     
     def process_IN_MOVED_TO(self, event):
-        self.log.debug('MOVED: '+event.pathname)
+        log.debug('MOVED: '+event.pathname)
         if not event.name.startswith('.'):
             if event.dir:
                 for each_tuple in os.walk(event.pathname):
@@ -19,14 +22,16 @@ class WatchFolder(ProcessEvent):
             else: self.__rename(os.path.split(event.pathname))
     
     def process_IN_CREATE(self, event):
-        self.log.debug('CREATE: '+event.pathname)
+        log.debug('CREATE: '+event.pathname)
         if not event.name.startswith('.') and not event.dir: self.__rename(os.path.split(event.pathname))
     
     def __rename(self, pathname):
         tv = TvRenamr(pathname[0], 'debug')
         try:
             credentials = tv.extract_episode_details_from_file(pathname[1])
-            if options.exceptions is not None: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
+            if options.exceptions is not None:
+                try: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
+                except Exception: pass
             title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
             credentials['series'] = title['series']
             if options.the:
@@ -35,7 +40,7 @@ class WatchFolder(ProcessEvent):
             credentials['title'] = title['title']
             path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
             tv.rename(pathname[1],path)
-        except Exception, e: print e
+        except Exception: pass
 
 if __name__=="__main__":
     parser = OptionParser()
@@ -55,5 +60,5 @@ if __name__=="__main__":
 
     mask = IN_MOVED_TO | IN_CREATE  # watched events -> add IN_DONT_FOLLOW to not follow symlinks, and IN_CREATE to watch created files
     wdd = wm.add_watch(working_dir, mask, rec=True, auto_add=True) #watch this directory, with mask(s), recursively
-    notifier.loop()#daemonize=True, pid_file='/opt/tvrenamr/tvrenamrd.pid', force_kill=True, stdout='/opt/tvrenamr/stdout.txt')
+    notifier.loop()#daemonize=True, pid_file=os.path.join(os.path.dirname(__file__), tvrenamrd.pid), force_kill=True, stdout='/opt/tvrenamr/stdout.txt')
 else: print 'This script is only designed to be run standalone'
