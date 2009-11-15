@@ -4,6 +4,7 @@ import os
 from optparse import OptionParser
 
 from core.core import TvRenamr
+from core.errors import *
 import core
 
 parser = OptionParser()
