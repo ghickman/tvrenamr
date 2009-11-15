@@ -83,20 +83,6 @@ def flush_logging():
             console.handle(record)
     _mem_handler.flush()
 
-def main():
-    initialize_logging()
-    log.debug('initilise logging')
-    # 
-    # try:
-    #     manager = Manager(options)
-    # except IOError, e:
-    #     # failed to load config
-    #     log.critical(e.message)
-    #     flush_logging()
-    #     sys.exit(1)
-    #     
-    # manager.acquire_lock()
-    # 
-    start_logging(os.path.join(os.path.dirname(__file__), 'flexget.log'), logging.DEBUG)
-
-main()
+initialize_logging()
+log.debug('initilise logging')
+start_logging(os.path.join(os.path.dirname(__file__), 'tvrenamr.log'), logging.INFO)
