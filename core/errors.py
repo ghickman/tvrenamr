@@ -44,12 +44,14 @@ class OutputFormatMissingSyntaxException(Exception):
         print msg
 
 class ShowNotFoundException(Exception):
-    """
-    """
+    """"""
     def __init__(self,show):
-        msg = show+" could not be found"
-        log.error(msg)
-        print msg
+        log.error('%s could not be found' % show)
+
+class ShowNotInExceptionsList(Exception):
+    """The specified show wasn't found in the exceptions list"""
+    def __init__(self,show):
+        log.debug('%s is not in the Exceptions list' % show)
 
 class NoLeadingTheException(Exception):
     """
