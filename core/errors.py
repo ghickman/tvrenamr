@@ -22,10 +22,8 @@ class EpisodeAlreadyExistsInFolderException(Exception):
 class EpisodeNotFoundException(Exception):
     """
     """
-    def __init__(self,episode):
-        msg = episode+" could not be found"
-        log.error(msg)
-        print msg
+    def __init__(self,series,season,episode):
+        log.error('%s - %s%s could not be found' % (series, season, episode))
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
     def __init__(self,string):
