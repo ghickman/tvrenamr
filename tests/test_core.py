@@ -12,7 +12,7 @@ class TestCore(object):
     
     def setUp(self):
         files = 'tests/data/files'
-        self.tv = TvRenamr(self.working, log_level='critical')
+        self.tv = TvRenamr(self.working, log_level='debug')
         for fn in os.listdir(files): shutil.copy(os.path.join(files, fn), os.path.join(self.working, fn))
     
     def tearDown(self):
@@ -29,7 +29,7 @@ class TestCore(object):
         credentials['title'] = title['title']
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
         self.tv.rename(fn, path)
-        assert_true(os.path.isfile(os.path.join(self.working, 'Avatar: The Last Airbender - 108 - Winter Solstice (2): Avatar Roku.avi')))
+        assert_true(os.path.isfile(os.path.join(self.working, 'Avatar: The Last Airbender - 108 - Winter Solstice Part 2 (Avatar Roku).avi')))
     
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
         credentials = self.tv.extract_episode_details_from_file('chuck.s1e08.blah.avi')
