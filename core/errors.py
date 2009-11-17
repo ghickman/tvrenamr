@@ -41,6 +41,11 @@ class OutputFormatMissingSyntaxException(Exception):
         log.error(msg)
         print msg
 
+class SeriesIdNotFoundException(Exception):
+    """"""
+    def __init__(self,show):
+        log.error('Id could not be found for: %s'%show)
+
 class ShowNotFoundException(Exception):
     """"""
     def __init__(self,show):
