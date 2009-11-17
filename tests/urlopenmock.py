@@ -3,7 +3,7 @@ import urllib2, urlparse
 from hashlib import md5
 from minimock import mock, Mock, restore
 
-def urlopen_stub(url, data=None):
+def urlopen_stub(url, data=None, timeout=30):
     """Mock urllib2.urlopen and return a local file handle or create file if not existent and then return it."""
 
     if isinstance(url, urllib2.Request):
