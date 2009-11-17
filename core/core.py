@@ -9,8 +9,10 @@ from errors import *
 log = logging.getLogger('Core')
 
 class TvRenamr():
-    def __init__(self, working_dir, log_level='debug'):
+    def __init__(self, working_dir, log_level='info'):
         self.working_dir = working_dir
+        # set the log level on the pacakge level logger
+        logging.getLogger().setLevel(self.__set_log_level(log_level))
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
         """
