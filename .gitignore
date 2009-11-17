@@ -1,10 +1,9 @@
-testcase/
 prototypes/
 .DS_Store
 ._*
 *.log
 *.pyc
-test/files/
-test/data/
-test/cache
+tests/files/
+tests/data/
+tests/cache
 .com*
