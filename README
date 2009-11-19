@@ -1,33 +1,42 @@
-This software is currently undergoing heavy development.
 
-Tv Renamr provides a way for you to rename your tv show files. By default it looks at files in the format show.s0e00.foo.bar.avi 
-or show.0x00.foo.bar.avi and renames them to: "Show - 103 - Foo Bar.avi".
+TV Renamr is a utility to rename TV shows based upon filenames or user input.
 
-Users can specify a number of options to manipulate the output filenames and where they would like the files moved to when named. 
 
-Tv Renamr is an open source project written in Python and released under the MIT license. The source code can be found at 
-http://github.com/ghickman/tvrenamr/tree/master
 
-OPTIONS
--a or --auto - Automatically move renamed files to the appropriate directory under the directory specified. Mutually exclusive to -r
--n or --name - Set the show name for renaming
--r or --renamed - The directory to move renamed files to. Mutually exclusive to -a
---regex - the regular expression to set the format of files being renamed.
--s or --season - Sets the season to rename file(s) to.
--w or --working - The working directory or file to run tvrenamr on. Required.
-(Future)
--d or --depth - Sets the maximum depth to look through folders.
--o or --output - Sets the output format for files.
+===== Requirements =====
+- Python 2.5+
+- The Interwebs
 
-CUSTOM REGULAR EXPRESSIONS
-When creating your own regular expression you will need to use some custom syntax to specify which parts of the filename relate to 
-information about the episode.
 
-%n - the show name.
-%s - the season number.
-%e - the episode number.
 
-NOTE: All spaces are converted to periods.
+===== How To Use =====
+TV Renamr can be run with either the script or as a daemon (currently linux only)
 
-KNOWN EXPRESSIONS
-- "Peep Show - 502.avi" -> %n\.-\.%s%e
+=== Script ===
+Run the script with python tvrenamr.py [options] file/folder
+
+Options
+
+
+
+=== Daemon ===
+The daemon will watch the specified folder for new files to rename so you can drag and drop files into it.
+
+Run it with python tvrenamrd.py [options] folder_to_watch
+
+Options
+
+
+
+=== Custom Regular Expressions ===
+By default TV Renamr will match shows in the formats: show.s0e00 and show.0x00 but you can specify custom regular 
+expressions if your files aren't in either of these formats. Some custom regular expression syntax has been used to help you
+specify different parts of the filename:
+
+Series: %n - (?P<series>[\w\s.,_-]+)
+Season: %s - (?P<season>[\d]{1,2})
+Episode: %e - (?P<episode>[\d]{2})
+
+Note: All spaces are converted to periods before your regular expression is run
+
+Python regular expression syntax can be found at: http://www.python.org/doc/2.6.1/library/re.html#regular-expression-syntax
