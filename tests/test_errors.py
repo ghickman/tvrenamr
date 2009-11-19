@@ -1,4 +1,5 @@
-import shutil, os, urllib2
+import shutil
+import os
 
 from nose.tools import *
 
@@ -27,7 +28,7 @@ class TestExceptionsAreRaised(object):
     def test_unexpected_format_exception_should_be_raised_when_unrecognised_file_format(self):
         assert_raises(UnexpectedFormatException, self.tv.extract_episode_details_from_file, 'chuck.avi')
     
-    def test_url_error_should_be_raised_when_episode_not_found(self):
+    def test_episode_not_found_exception_should_be_raised_when_episode_not_found(self):
         credentials = self.tv.extract_episode_details_from_file('chuck.s04e05.avi')
         assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, credentials['series'], credentials['season'], credentials['episode'])
     
