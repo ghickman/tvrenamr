@@ -16,7 +16,7 @@ class TvRage():
     
     def __get_series_id(self):
         url = url_name + self.series.replace(' ', '%20')
-        try: data = urllib2.urlopen(url, None, 15).read()
+        try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise
         dom = ET.fromstring(data)
         if dom is None: raise SeriesIdNotFoundException('Error retriving XML for %s\'s series id' % self.series)
@@ -32,7 +32,7 @@ class TvRage():
     def get_episode_name(self, season, episode):
         series_id = self.__get_series_id()
         url = url_ep + series_id
-        try: data = urllib2.urlopen(url, None, 15).read()
+        try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise
         dom = ET.fromstring(data)
         if dom is None: raise EpisodeNotFoundException('Error retriving XML for %s %s%s' % (self.series, season, episode))
