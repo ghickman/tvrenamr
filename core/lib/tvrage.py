@@ -38,18 +38,16 @@ class TvRage():
         if dom is None: raise EpisodeNotFoundException('Error retriving XML for %s %s%s' % (self.series, season, episode))
         log.debug('XML retrieved, searching for episode')
         
+        # In a single digit episode number add a zero
+        if len(episode) == 1 and episode[:1] != '0': episode = '0'+episode
+        
+        title = None
         for s in dom.find('Episodelist'):
             if s.get('no') == season:
-                title = None
                 for e in s.findall('episode'):
-                    if e.find('epnum').text == str(int(episode)):
+                    if e.find('seasonnum').text == episode:
                         title = e.find('title').text
                         log.info('Retrieved episode: %s' % title)
-                if title: return {'series': self.series, 'title':title}
-                else: raise EpisodeNotFoundException(self.series, season, episode)
-        
-        # for ep in dom.findall('season' % season):
-        #     if ep.find('epnum') == episode:
-        #         title = ep.find('title')
-        # if not title: raise EpisodeNotFoundException('Error finding episode for %s' % self.series)
-        # else: return title
+        if title is not None: return {'series': self.series, 'title':title}
+        else: raise EpisodeNotFoundException(self.series, season, episode)
+    
