@@ -13,18 +13,31 @@ TV Renamr is a utility to rename TV shows based upon filenames or user input.
 TV Renamr can be run with either the script or as a daemon (currently linux only)
 
 === Script ===
-Run the script with python tvrenamr.py [options] file/folder
+Run the script with: python tvrenamr.py [options] file/folder
 
-Options
+== Options ==
+-e or --episode - Set the episode number for a file. Cannot be used when renaming more than one file.
+--ignore-recursive - Only use files from the root of the specified directory and do not enter any sub-directories.
+-l or --log_level - Set the log level. Valid options are debug, info, warning, error and critical.
+-n or --name - Set the name of the name of the show to rename.
+-o or --output - Set the output format for the episodes being renamed.
+--organise - Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.
+-r or --renamed - The directory to move renamed files to, if not specified the working directory is used.
+--regex - The regular expression to use when extracting information from files.
+-s or --season - Set the season number. Cannot be used when renaming more than one file.
+-t or --the - Set the position of 'The' in a show's name to the end of the show name, i.e. 'The Wire' becomes 'Wire, The'.
+-x or --exceptions - Specify the location of an exceptions file.
 
-
+= Example =
+python tvrenamr.py -
 
 === Daemon ===
 The daemon will watch the specified folder for new files to rename so you can drag and drop files into it.
+This is currently a Linux only script and requires kernel version 1.26.5 (?) or higher for the relevant dependencies.
 
-Run it with python tvrenamrd.py [options] folder_to_watch
+Run it with: python tvrenamrd.py [options] folder_to_watch
 
-Options
+== Options ==
 
 
 
@@ -40,3 +53,31 @@ Episode: %e - (?P<episode>[\d]{2})
 Note: All spaces are converted to periods before your regular expression is run
 
 Python regular expression syntax can be found at: http://www.python.org/doc/2.6.1/library/re.html#regular-expression-syntax
+
+
+
+=== Exceptions File ===
+Specify files that you know have different show names in the their file names to that of the actual show name. 
+Each line should define the expected show name from your files and then the actual show name, i.e what The Tv Db and Tv Rage
+expect the name to be, separated by the string ' => '. Lines beginning with # are treated as comments. 
+
+= Example & Known Shows =
+# This is a comment
+american dad => american dad!
+avatar => avatar: the last airbender
+csi => csi: crime scene investigation
+
+
+
+=== Custom Output Format ===
+It is possible to set a custom output format for your files using the following syntax:
+
+%n - Series
+%s - Season
+%e - Episode
+%t - Title
+%x - Extension
+
+you can specify the format you like, i.e. %n - %s%e - $t%x would mirror the default format.
+
+NOTE: Not including the %x section on Windows systems can cause problems when trying to run your media files.
