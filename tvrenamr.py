@@ -5,17 +5,16 @@ from optparse import OptionParser
 
 from core.core import TvRenamr
 from core.errors import *
-import core
 
 parser = OptionParser()
-parser.add_option('-a', '--auto', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified in renamed and organise them appropriated according to their show name and season number')
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file')
 parser.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', default=False, help='Only use files from the root of a given directory do not enter any sub-directories')
 parser.add_option('-l', '--log_level', dest='log', default='debug', help='Set the log level')
 parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming')
-parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed')
+parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
+parser.add_option('--organise', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.')
 parser.add_option('-r', "--renamed", dest='renamed', help='The directory to move renamed files to, if not specified the working directory is used')
-parser.add_option('--regex', dest='regex', help='The regular expression to set the format of files being renamed. Use %n to specify the show name, %s for the season number and %e for the episode number. All spaces are converted to periods before the regex is run')
+parser.add_option('--regex', dest='regex', help='The regular expression to use when extracting information from files.')
 parser.add_option('-s', '--season', dest='season', help='Set the season number.')
 parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
 parser.add_option('-x', '--exceptions', dest='exceptions', help='Specify an exceptions file')
