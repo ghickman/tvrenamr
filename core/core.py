@@ -11,7 +11,6 @@ log = logging.getLogger('Core')
 class TvRenamr():
     def __init__(self, working_dir, log_level='info'):
         self.working_dir = working_dir
-        # set the log level on the pacakge level logger
         logging.getLogger().setLevel(self.__set_log_level(log_level))
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
@@ -21,15 +20,14 @@ class TvRenamr():
         or series.000.xxx
         A user can specify their own regular expression for a format not already covered.
         """
-        #if re.compile(".*?\s-\s[\d]{3,4}\s-\s.+?\."+fn[-3:]).match(fn): raise AlreadyNamedException(fn)
         fn = fn.replace("_", ".").replace(" ", ".")
         log.info('Renaming file: '+fn)
         regex = self.__build_regex(user_regex)
         log.info('Renaming using: '+regex)
         m = re.compile(regex).match(fn)
         if m is not None:
-            series = m.group('series').replace('.',' ')
-            #if re.compile('\s{1}[\d]{4}').match(series[-5:]) != None: series = "%s(%s)" % (series[:-4], series[-4:])
+            series = m.group('series').replace('.',' ').strip()
+            log.debug('Returned series: %s, season: %s, episode: %s, extension: %s' % (series, m.group('season'), m.group('episode'), fn[-4:]))
             return {'series': series, 'season': m.group('season'), 'episode': m.group('episode'), 'extension': fn[-4:]}
         else: raise UnexpectedFormatException(fn)
     
