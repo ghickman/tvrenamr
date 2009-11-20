@@ -159,16 +159,17 @@ class TvRenamr():
         # season number
         # %s{n}
         if regex.find('%s{') is not -1:
-            log.debug('User set season digit number found')
+            log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
-            log.debug('User specified '+r+' season digits')
-            regex = regex.replace('%s{'+r+'}', season.replace('1,2', r))
-            log.debug('Season regex set: '+regex)
+            log.debug('Specified '+r+' season digits')
+            s = season.replace('1,2', r)
+            regex = regex.replace('%s{'+r+'}', s)
+            log.debug('Season regex set: %s' % s)
         
         # %s
         if regex.find('%s') is not -1:
             regex = regex.replace('%s', season)
-            log.debug('Season regex set: '+regex)
+            log.debug('Default season regex set: %s' % regex)
         
         # episode number
         # %e{n}
@@ -176,13 +177,14 @@ class TvRenamr():
             log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
             log.debug('User specified '+r+' episode digits')
-            regex = regex.replace('%e{'+r+'}', episode.replace('2', r))
-            log.debug('Episode regex set: '+regex)
+            e = episode.replace('2', r)
+            regex = regex.replace('%e{'+r+'}', e)
+            log.debug('Episode regex set: %s' % e)
         
         # %e
         if regex.find('%e') is not -1:
             regex = regex.replace('%e', episode)
-            log.debug('Episode regex set: '+regex)
+            log.debug('Default episode regex set: %s' % regex)
         
         return regex
     
