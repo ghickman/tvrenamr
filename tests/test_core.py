@@ -12,7 +12,7 @@ class TestCore(object):
     
     def setUp(self):
         files = 'tests/data/files'
-        self.tv = TvRenamr(self.working, log_level='debug')
+        self.tv = TvRenamr(self.working, log_level='critical')
         for fn in os.listdir(files): shutil.copy(os.path.join(files, fn), os.path.join(self.working, fn))
     
     def tearDown(self):
@@ -34,7 +34,7 @@ class TestCore(object):
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
         credentials = self.tv.extract_episode_details_from_file('chuck.s1e08.blah.avi')
         title = self.tv.retrieve_episode_name(series=credentials['series'], season='2', episode=credentials['episode'])
-        assert_equal(title['title'], 'Chuck Versus the Gravitron')
+        assert_equal(title['title'], 'Chuck Versus The Gravitron')
     
     def test_passing_in_a_season_number_renames_a_file_using_that_season_number(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
@@ -68,7 +68,7 @@ class TestCore(object):
         credentials['series'] = self.tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
         credentials['title'] = title['title']
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
-        test = self.tv.rename(fn, path)
+        self.tv.rename(fn, path)
         assert_true(os.path.isfile(os.path.join(self.working, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
     
     def test_removing_the_part_section_from_an_episode_in_a_multiple_episode_group(self):
