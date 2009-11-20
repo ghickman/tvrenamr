@@ -57,7 +57,6 @@ class TestAutoMoving(object):
         credentials['series'] = title['series']
         credentials['title'] = title['title']
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], organise=self.organise, renamed_dir=self.organised)
-        print path
         assert_equal(path, 'tests/data/organised/True Blood/Season 2/True Blood - 205 - Never Let Me Go.avi')
     
     def test_moving_the_leading_the_to_the_end_of_a_show_name_causes_the_series_folder_name_to_follow_suit_when_using_organise(self):
