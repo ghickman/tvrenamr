@@ -140,7 +140,7 @@ class TvRenamr():
             'error': logging.ERROR,     #40
             'critical': logging.CRITICAL#50
         }
-        return LEVELS.get(level, logging.NOTSET)
+        return LEVELS.get(level, logging.INFO)
     
     def __build_regex(self, regex=None):
         """
