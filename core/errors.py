@@ -57,12 +57,10 @@ class ShowNotInExceptionsList(Exception):
         log.debug('%s is not in the Exceptions list' % show)
 
 class NoLeadingTheException(Exception):
-    """
-    """
-    def __init__(self,show):
-        msg = show+" has no leading the in its name"
-        log.error(msg)
-        print msg
+    """"""
+    def __init__(self,show=None):
+        if show is not None: log.error('%s has no leading the' % show)
+        else: log.warning('No leading the found')
 
 class UnexpectedFormatException(Exception):
     """
