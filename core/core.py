@@ -144,13 +144,13 @@ class TvRenamr():
     
     def __build_regex(self, regex=None):
         """
-        Builds the regular expression to extract the files details.
+        Builds the regular expression to extract a files details.
         """
         series = '(?P<series>[\w\s.,_-]+)'
         season = '(?P<season>[\d]{1,2})'
         episode = '(?P<episode>[\d]{2})'
         
-        if regex is None: return series+'\.[Ss]?'+season+'([Xx]|[Ee]|)'+episode
+        if regex is None: return series+'\.[Ss]?'+season+'[XxEe]?'+episode
         if regex.find('%s') is -1 or regex.find('%e') is -1: raise IncorrectCustomRegularExpressionSyntaxException(regex)
         
         # series name
