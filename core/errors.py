@@ -8,12 +8,9 @@ class AlreadyNamedException(Exception):
         log.error('Already in correct naming format: %s' % fn)
 
 class EpisodeAlreadyExistsInFolderException(Exception):
-    """
-    """
-    def __init__(self,fn,new_fn):
-        msg = "This episode already exists in the specified destination: %s" %new_fn
-        log.error(msg)
-        print msg
+    """Exception that is raised when a file with the same name as the renamed file exists in the destination folder"""
+    def __init__(self, fn, dest):
+        log.error('\'%s\' already exists in: %s' % (fn, dest))
     
 class EpisodeNotFoundException(Exception):
     """
@@ -22,20 +19,18 @@ class EpisodeNotFoundException(Exception):
         log.error('%s - %s%s could not be found' % (series, season, episode))
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
-    def __init__(self,string):
-        msg = 'The regular expression provided does not contain the required custom syntax.'
-        log.error(msg)
-        print msg
+    """"""
+    def __init__(self, regex):
+        log.error('The regular expression provided does not contain the required custom syntax.')
 
 class OutputFormatMissingSyntaxException(Exception):
+    """"""
     def __init__(self,syntax):
         if len(syntax) > 1:
             t = ', '
             errors = t.join(syntax)
         else: errors = syntax[0]
-        msg = 'The output format is missing the following format elements: '+errors
-        log.error(msg)
-        print msg
+        log.error('The output format is missing the following format elements: %s' % errors)
 
 class SeriesIdNotFoundException(Exception):
     """"""
@@ -50,7 +45,7 @@ class ShowNotFoundException(Exception):
 class ShowNotInExceptionsList(Exception):
     """The specified show wasn't found in the exceptions list"""
     def __init__(self,show):
-        log.debug('%s is not in the Exceptions list' % show)
+        log.warning('%s is not in the Exceptions list' % show)
 
 class NoLeadingTheException(Exception):
     """"""
@@ -59,9 +54,6 @@ class NoLeadingTheException(Exception):
         else: log.warning('No leading the found')
 
 class UnexpectedFormatException(Exception):
-    """
-    """
+    """"""
     def __init__(self,fn):
-        msg = "The file was in an unexpected format: "+fn
-        log.error(msg)
-        print msg
+        log.error('File in an unexpected format: %s' % fn)
