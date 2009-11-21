@@ -13,10 +13,9 @@ class EpisodeAlreadyExistsInFolderException(Exception):
         log.error('\'%s\' already exists in: %s' % (fn, dest))
     
 class EpisodeNotFoundException(Exception):
-    """
-    """
-    def __init__(self,series,season,episode):
-        log.error('%s - %s%s could not be found' % (series, season, episode))
+    """Exception raised when an episode cannot be found in the database of whichever library was used"""
+    def __init__(self, library, series, season, episode):
+        log.error('%s - %s%s could not be found on %s' % (series, season, episode, library))
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
     """"""
