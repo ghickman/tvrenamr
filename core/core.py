@@ -109,8 +109,20 @@ class TvRenamr():
         
         Builds the new path for the file to be renamed to, by default this is the working directory. Users can 
         specify a directory to move files to once renamed using the renamed_dir option. The auto_move option 
-        can be used to specify a top level directory where files will be placed in season and series folders, 
-        i.e. series/season 1/episodes
+        can be used to specify a top level directory where files will be placed in season and show folders, 
+        i.e. Show/Season 1/episodes
+        
+        :param show: The show name.
+        :param season: The season number.
+        :param episode: The episode number.
+        :param title: The episode title.
+        :param extension: The file extension.
+        :param format: The order in of the show name, season and episode numbers, episode title and extension in the renamed file's name.
+        :param renamed_dir: The directory to place the renamed file into.
+        :param organise: A boolean to set whether the renamed directory path should be constructed from the show name and season number.
+        
+        :returns: The full path to the new file including the formatted file name.
+        :rtype: A string.
         """
         if format is None: format = '%n - %s%e - %t'
         else:
@@ -144,6 +156,9 @@ class TvRenamr():
     def rename(self, fn, new_fn):
         """
         Renames the file passed in to the new filename path passed in and returns the new filename
+        
+        :param fn: The file to rename.
+        :param new_fn: The name to rename the file to.
         """
         if not os.path.exists(new_fn):
             log.info('Beginning rename')
@@ -153,6 +168,15 @@ class TvRenamr():
         else: raise EpisodeAlreadyExistsInDirectoryException(fn, os.path.split(new_fn)[0])
     
     def __set_log_level(self, level):
+        """
+        Converts a user specified log level into a logging object level. By default this is Info.
+        
+        :param level: The log level to set.
+        
+        :returns: A log level useable by a logging object
+        :rtype: A string.
+        
+        """
         LEVELS = {
             'debug': logging.DEBUG,     #10
             'info': logging.INFO,       #20
@@ -164,7 +188,17 @@ class TvRenamr():
     
     def __build_regex(self, regex=None):
         """
-        Builds the regular expression to extract a files details.
+        Builds the regular expression to extract a files details. Custom syntax can be used in the regular expression to help specify
+        parts of the episode's file name. These custom syntax snippets are replaced by the regular expression blocks show.
+        
+        %n - [\w\s.,_-]+ - The show name.
+        %s - [\d]{1,2} - The season number.
+        %e - [\d]{2} - The episode number.
+        
+        :param regex: The regular expression string.
+        
+        :returns: An actual regular expression.
+        :rtype: A string.
         """
         series = '(?P<show>[\w\s.,_-]+)'
         season = '(?P<season>[\d]{1,2})'
@@ -210,7 +244,14 @@ class TvRenamr():
     
     def __build_organise_path(self, start_path, show_name, season_number):
         """
-        Constructs a directory path using the series name and season number of an episode.
+        Constructs a directory path using the show name and season number of an episode.
+        
+        :param start_path: The root path to construct the new path under.
+        :param show_name: The show name.
+        :param season_number: The season number.
+        
+        :return: The path to move a renamed episode to.
+        :rtype: A string.
         """
         if start_path[-1:] != '/': start_path = start_path +'/'
         path = start_path + series_name +'/Season '+ str(int(season_number)) +'/'
