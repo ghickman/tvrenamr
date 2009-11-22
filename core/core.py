@@ -19,6 +19,13 @@ class TvRenamr():
         using regular expression magic. The default formats accepted are: series.0x00.xxx or series.s0e00.xxx 
         or series.000.xxx
         A user can specify their own regular expression for a format not already covered.
+        
+        :param fn: The file name passed in.
+        :param user_regex: A user specified regular expression. Defaults to None.
+        
+        :returns: The show name, season number, episode number and last four characters (assumed to be the extension) extracted from
+        the file passed in.
+        :rtype: A dictionary with the keys 'series', 'season', 'episode' and 'extension'.
         """
         fn = fn.replace("_", ".").replace(" ", ".")
         log.info('Renaming file: '+fn)
