@@ -10,6 +10,10 @@ log = logging.getLogger('Core')
 
 class TvRenamr():
     def __init__(self, working_dir, log_level='info'):
+        """
+        :param working_dir: The working directory.
+        :param log_level: The log level to set.
+        """
         self.working_dir = working_dir
         logging.getLogger().setLevel(self.__set_log_level(log_level))
     
@@ -42,6 +46,12 @@ class TvRenamr():
         """
         Converts a show name to a new name specified in the exceptions_file. This method is designed for use in
         conjunction with the daemon.
+        
+        :param exceptions_file: Location of the exceptions file to use.
+        :param show_name: The show name to replace from the exceptions file.
+        
+        :returns: The new show name.
+        :rtype: A string.
         """
         for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
             try:
