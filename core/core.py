@@ -265,7 +265,7 @@ class TvRenamr():
         :rtype: A string.
         """
         if start_path[-1:] != '/': start_path = start_path +'/'
-        path = start_path + series_name +'/Season '+ str(int(season_number)) +'/'
+        path = start_path + show_name +'/Season '+ str(int(season_number)) +'/'
         if not os.path.exists(path):
             os.makedirs(path)
             log.debug('Directories created for path: '+path)
