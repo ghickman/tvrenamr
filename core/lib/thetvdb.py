@@ -24,7 +24,7 @@ class TheTvDb():
         :returns: A show ID.
         :rtype: A string.
         """
-        url = url_base.url + url_series + urllib2.quote(self.series)
+        url = url_base + url_series + urllib2.quote(self.series)
         log.debug('Series url: '+url)
         try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise
