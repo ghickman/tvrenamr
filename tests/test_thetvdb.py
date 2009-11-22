@@ -13,10 +13,10 @@ class TestTheTvDb(object):
         self.tv = TvRenamr("tests/data/files/", log_level='critical')
     
     def test_searching_the_tv_db_with_an_ambiguous_name_returns_the_correct_show(self):
-        assert_equal(self.tv.retrieve_episode_name('the o.c.', '03', '04')['series'], 'The O.C.')
+        assert_equal(self.tv.retrieve_episode_name('the o.c.', '03', '04', 'thetvdb')['series'], 'The O.C.')
     
     def test_searching_the_tv_db_for_an_incorrect_name_returns_a_show_not_found_exception(self):
-        assert_raises(ShowNotFoundException, self.tv.retrieve_episode_name, 'west wing', '04', '01')
+        assert_raises(ShowNotFoundException, self.tv.retrieve_episode_name, 'west wing', '04', '01', 'thetvdb')
     
     def test_searching_the_tv_db_for_an_episode_that_does_not_exist_returns_an_episode_not_found_exception(self):
-        assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, 'chuck', '03', '32')
+        assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, 'chuck', '03', '32', 'thetvdb')
