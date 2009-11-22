@@ -20,9 +20,9 @@ class TestLogging(object):
         fn = 'avatar.s1e08.blah.HDTV.XViD.avi'
         credentials = self.tv.extract_episode_details_from_file(fn, user_regex='%n.s%s{1}e%e{2}.blah')
         # title = self.tv.retrieve_episode_name(series='Avatar: The Last Airbender', season=credentials['season'], episode=credentials['episode'])
-        credentials['series'] = 'Avatar: The Last Airbender'
+        credentials['show'] = 'Avatar: The Last Airbender'
         credentials['title'] = 'Winter Solstice (2): Avatar Roku'
-        path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
+        path = self.tv.build_path(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
         self.tv.rename(fn, path)
         assert_true(os.path.exists(os.path.join(self.working, 'Avatar: The Last Airbender - 108 - Winter Solstice (2): Avatar Roku.avi')))
     
