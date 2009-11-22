@@ -130,7 +130,7 @@ class TvRenamr():
             os.rename(os.path.join(self.working_dir, fn), new_fn)
             renamed = os.path.split(new_fn)
             log.debug('Renamed '+fn+' to '+renamed[1])
-        else: raise EpisodeAlreadyExistsInFolderException(fn, os.path.split(new_fn)[0])
+        else: raise EpisodeAlreadyExistsInDirectoryException(fn, os.path.split(new_fn)[0])
     
     def __set_log_level(self, level):
         LEVELS = {

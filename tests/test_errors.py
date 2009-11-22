@@ -39,7 +39,7 @@ class TestExceptionsAreRaised(object):
         credentials['series'] = title['series']
         credentials['title'] = title['title']
         path = self.tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
-        assert_raises(EpisodeAlreadyExistsInFolderException, self.tv.rename, fn, path)
+        assert_raises(EpisodeAlreadyExistsInDirectoryException, self.tv.rename, fn, path)
     
     def test_no_leading_the_exception_is_raised_when_set_leading_the_to_end_of_show_name_method_is_called_on_a_show_with_no_leading_the(self):
         fn = 'chuck.s02e05.avi'
