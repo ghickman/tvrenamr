@@ -44,10 +44,11 @@ class TvRenamr():
         conjunction with the daemon.
         """
         for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
-            if show[0] == show_name:
-                log.debug('Replacing '+show_name+' with '+show[1])
-                return show[1]
-            else: log.warning(show_name+' wasn\'t found in the exceptions file')
+            try:
+                if show[0] == show_name.lower():
+                    log.debug('Replacing '+show_name+' with '+show[1])
+                    return show[1]
+            except ShowNotInExceptionsList(show_name): pass
     
     def retrieve_episode_name(self, show, season, episode, library='tvrage'):
         """
