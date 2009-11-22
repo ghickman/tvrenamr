@@ -8,7 +8,12 @@ class AlreadyNamedException(Exception):
         log.error('Already in correct naming format: %s' % fn)
 
 class EpisodeAlreadyExistsInFolderException(Exception):
-    """Exception that is raised when a file with the same name as the renamed file exists in the destination folder"""
+    """
+    Exception that is raised when a file with the same name as the renamed file exists in the destination folder
+    
+    :param fn: The destination file name.
+    :param dest: The destination directory.
+    """
     def __init__(self, fn, dest):
         log.error('\'%s\' already exists in: %s' % (fn, dest))
     
