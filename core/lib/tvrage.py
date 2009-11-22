@@ -13,7 +13,7 @@ url_ep = "http://services.tvrage.com/feeds/full_show_info.php?sid="
 class TvRage():
     def __init__(self, show_name):
         """
-        :param series_name: The show name of the episode title to be retrieved.
+        :param show_name: The show name of the episode title to be retrieved.
         """
         self.series = show_name
     
@@ -36,7 +36,7 @@ class TvRage():
                 self.series = s
                 log.debug('Series chosen %s' % self.series)
                 return name.find('showid').text
-            else: raise ShowNotFoundException(self.series)
+            else: raise ShowNotFoundException(log.name, self.series)
     
     def get_episode_name(self, season, episode):
         """
