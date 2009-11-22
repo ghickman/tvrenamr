@@ -58,18 +58,18 @@ def rename(path):
         try:
             credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
             if options.exceptions:
-                try: credentials['series'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['series'])
+                try: credentials['show'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['show'])
                 except ShowNotInExceptionsList: pass
-            if options.name: credentials['series']=options.name
+            if options.name: credentials['show']=options.name
             if options.season: credentials['season']=options.season
             if options.episode: credentials['episode']=options.episode
-            title = tv.retrieve_episode_name(credentials['series'],credentials['season'],credentials['episode'])
+            title = tv.retrieve_episode_name(credentials['show'],credentials['season'],credentials['episode'])
             if options.the:
-                try: credentials['series'] = tv.set_position_of_leading_the_to_end_of_series_name(title['series'])
+                try: credentials['show'] = tv.set_position_of_leading_the_to_end_of_series_name(title['show'])
                 except NoLeadingTheException: pass
-            else: credentials['series'] = title['series']
+            else: credentials['show'] = title['show']
             credentials['title'] = title['title']
-            path = tv.build_path(series=credentials['series'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
+            path = tv.build_path(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
             tv.rename(filename,path)
         except Exception, e: print e
 
