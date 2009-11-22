@@ -3,7 +3,11 @@ import logging
 log = logging.getLogger('Error')
 
 class AlreadyNamedException(Exception):
-    """Raised when the format of the file being passed in is the same as the output format"""
+    """
+    Raised when the format of the file being passed in is the same as the output format
+    
+    :param fn: The file that is already in the correct naming format.
+    """
     def __init__(self, fn):
         log.error('Already in correct naming format: %s' % fn)
 
@@ -23,13 +27,21 @@ class EpisodeNotFoundException(Exception):
         log.error('%s - %s%s could not be found on %s' % (series, season, episode, library))
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
-    """"""
+    """
+    The syntax used in a custom regular expression was incorrect.
+    
+    :param regex: The regular expression.
+    """
     def __init__(self, regex):
         log.error('The regular expression provided does not contain the required custom syntax.')
 
 class OutputFormatMissingSyntaxException(Exception):
-    """"""
-    def __init__(self,syntax):
+    """
+    The output format string is missing syntax.
+    
+    :param syntax: The syntax string required.
+    """
+    def __init__(self, syntax):
         if len(syntax) > 1:
             t = ', '
             errors = t.join(syntax)
@@ -37,27 +49,49 @@ class OutputFormatMissingSyntaxException(Exception):
         log.error('The output format is missing the following format elements: %s' % errors)
 
 class SeriesIdNotFoundException(Exception):
-    """"""
-    def __init__(self,show):
-        log.error('Id could not be found for: %s'%show)
+    """
+    SUPERFLOUOUS!
+    
+    :param library: 
+    :param show: The show name searched for.
+    """
+    def __init__(self, library, show):
+        log.error('Id could not be found for \'%s\' while searching %s' % (show, library))
 
 class ShowNotFoundException(Exception):
-    """"""
-    def __init__(self,show):
-        log.error('%s could not be found' % show)
+    """
+    Raised when a show cannot be found by the specified library.
+    
+    :param library: The library that was searched.
+    :param show: The show name searched for.
+    """
+    def __init__(self, library, show):
+        log.error('%s could not be found on %s' % (show, library))
 
 class ShowNotInExceptionsList(Exception):
-    """The specified show wasn't found in the exceptions list"""
-    def __init__(self,show):
+    """
+    The specified show wasn't found in the exceptions list
+    
+    :param show: The show name not found.
+    """
+    def __init__(self, show):
         log.warning('%s is not in the Exceptions list' % show)
 
 class NoLeadingTheException(Exception):
-    """"""
-    def __init__(self,show=None):
+    """
+    Raised when the file passed in has no leading The in the show name
+    
+    :param show: The show name with no leading The.
+    """
+    def __init__(self, show=None):
         if show is not None: log.error('%s has no leading the' % show)
-        else: log.warning('No leading the found')
+        else: log.warning('No leading The found in show name')
 
 class UnexpectedFormatException(Exception):
-    """"""
-    def __init__(self,fn):
+    """
+    Raised when the file passed in is in an unexpected format
+    
+    :param fn: The file name that was in an unexpected format.
+    """
+    def __init__(self, fn):
         log.error('File in an unexpected format: %s' % fn)
