@@ -73,7 +73,14 @@ class TvRenamr():
         return lib.get_episode_name(str(int(season)), episode)
     
     def set_position_of_leading_the_to_end_of_series_name(self, show_name):
-        """Moves the leading the of a series name to the end of the series name."""
+        """
+        Moves the leading 'The' of a show name to a trailing 'The'. A comma and space are added before the new 'The'.
+        
+        :param show_name: The show name.
+        
+        :returns: The new show name.
+        :rtype: A string.
+        """
         if not(show_name.startswith('The ')): raise NoLeadingTheException(show_name)
         log.debug('Moving the leading \'The\' to end of: '+show_name)
         return show_name[4:]+', The'
