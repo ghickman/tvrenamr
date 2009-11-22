@@ -22,9 +22,16 @@ class EpisodeAlreadyExistsInDirectoryException(Exception):
         log.error('\'%s\' already exists in: %s' % (fn, dest))
     
 class EpisodeNotFoundException(Exception):
-    """Exception raised when an episode cannot be found in the database of whichever library was used"""
-    def __init__(self, library, series, season, episode):
-        log.error('%s - %s%s could not be found on %s' % (series, season, episode, library))
+    """
+    Exception raised when an episode cannot be found in the database of whichever library was used.
+    
+    :param library: The library where the episode could't be found.
+    :param show: The show name that was searched for.
+    :param season: The season number that was searched for.
+    :param episode: The episode number that was searched for.
+    """
+    def __init__(self, library, show, season, episode):
+        log.error('%s - %s%s could not be found on %s' % (show, season, episode, library))
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
     """
