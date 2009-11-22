@@ -25,13 +25,11 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
     Determines which files need to be processed for renaming.
 
     :param path: The input file or directory.
-    :param ignore_recursive: To ignore a recursive search for files if
-    `path` is a directory. Default is False.
-    :param ignore_filelist: Optional set of files to ignore from renaming.
-    Often used by filtering methods such as Deluge.
+    :param ignore_recursive: To ignore a recursive search for files if 'path' is a directory. Default is False.
+    :param ignore_filelist: Optional set of files to ignore from renaming. Often used by filtering methods such as Deluge.
 
     :returns: A list of files to be renamed.
-    :rtype: A list of dictionaries, who's keys are `directory` and `filename`
+    :rtype: A list of dictionaries, who's keys are 'directory' and 'filename'.
     """
     if os.path.isdir(path):
         filelist = []
