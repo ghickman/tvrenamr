@@ -11,10 +11,19 @@ url_series = 'GetSeries.php?seriesname='
 apikey = 'C4C424B4E9137AFD'
 
 class TheTvDb():
-    def __init__(self, series_name):
-        self.series = series_name
+    def __init__(self, show_name):
+        """
+        :param show_name: The show name of the episode title to be retrieved.
+        """
+        self.series = show_name
         
     def __get_series_id(self):
+        """
+        Retrieves the show ID of the show name passed in when the class is instantiated.
+        
+        :returns: A show ID.
+        :rtype: A string.
+        """
         url = url_base.url + url_series + urllib2.quote(self.series)
         log.debug('Series url: '+url)
         try: data = urllib2.urlopen(url).read()
@@ -28,9 +37,18 @@ class TheTvDb():
                 self.series = s
                 log.debug('Series chosen %s' % self.series)
                 return name.find('seriesid').text
-            else: raise ShowNotFoundException(self.series)
+            else: raise ShowNotFoundException(log.name, self.series)
         
     def get_episode_name(self, season, episode):
+        """
+        Retrieves the episode title for the given episode from tvrage.com.
+        
+        :param season: The season number of the episode
+        :param episode: The episode number of the episode
+        
+        :returns: The series name and title. Series name is returned so that it is formatted correctly.
+        :rtype: A dictionary whose keys are 'series' and 'title'.
+        """
         log.debug('Retrieving series id for %s' % self.series)
         series_id = self.__get_series_id()
         log.debug('Building episode url')
@@ -38,7 +56,7 @@ class TheTvDb():
         log.debug(episode_url)
         log.debug('Attempting to retrieve episode name')
         try: f = urllib2.urlopen(episode_url) # timeout after 15 seconds
-        except urllib2.URLError: raise EpisodeNotFoundException(season+episode)
+        except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.series, season, episode)
         dom = ET.fromstring(f.read())
         if dom is not None:
             title = dom.find("Episode").find("EpisodeName").text
