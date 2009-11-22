@@ -47,7 +47,7 @@ class TestScript(object):
         assert_true(os.path.exists('%s/Chuck - 110 - Chuck Versus The Nemesis.avi' % self.renamed))
     
     def test_single_rename_with_rename_folder_location_specified_and_organise_option(self):
-        os.system('%s -l%s -a -r%s %s/chuck.s1e11.blah.HDTV.XViD.avi' % (self.base, self.logging, self.renamed, self.working))
+        os.system('%s -l%s --organise -r%s %s/chuck.s1e11.blah.HDTV.XViD.avi' % (self.base, self.logging, self.renamed, self.working))
         assert_true(os.path.exists('%s/Chuck/Season 1/Chuck - 111 - Chuck Versus The Crown Vic.avi' % self.renamed))
     
     def test_single_rename_with_name_option(self):
