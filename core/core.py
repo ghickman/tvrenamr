@@ -49,22 +49,28 @@ class TvRenamr():
                 return show[1]
             else: log.warning(show_name+' wasn\'t found in the exceptions file')
     
-    def retrieve_episode_name(self, series, season, episode, library=None):
+    def retrieve_episode_name(self, show, season, episode, library='tvrage'):
         """
         Retrieves the name of a given episode. The series name, season and episode numbers must be specified 
-        to get the episode's name. The library can be specified by the user, but by default TheTvDb will be
-        used.
+        to get the episode's name. The library can be specified by the user, but will default to Tv Rage.
+        
+        :param show: The show name to search for.
+        :param season: The season number to search for.
+        :param episode: The episode number to search for.
+        :param library: The library to search in.
+        
+        :returns: The episode title.
+        :rtype: A string.
         """
-        if library == 'tvrage':
-            from lib.tvrage import TvRage as library
-            log.debug('Opening TvRage library')
-        else: 
+        if library == 'thetvdb':
             from lib.thetvdb import TheTvDb as library
-            log.debug('Opening TheTvDb library')
-        lib = library(series)
-        name = lib.get_episode_name(season,episode)
-        log.info('Retrieved: '+name['title'])
-        return name
+            log.debug('Opening The Tv Db library')
+        elif library == 'tvrage':
+            from lib.tvrage import TvRage as library
+            log.debug('Opening Tv Rage library')
+        
+        lib = library(show)
+        return lib.get_episode_name(str(int(season)), episode)
     
     def set_position_of_leading_the_to_end_of_series_name(self, show_name):
         """Moves the leading the of a series name to the end of the series name."""
