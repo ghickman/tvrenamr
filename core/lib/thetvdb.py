@@ -61,5 +61,5 @@ class TheTvDb():
         if dom is not None:
             title = dom.find("Episode").find("EpisodeName").text
             log.info('Retrieved episode: %s' % title)
-            return {'series': self.series, 'title': title}
+            return {'show': self.series, 'title': title}
         else: raise EpisodeNotFoundException(log.name, self.series, season, episode)

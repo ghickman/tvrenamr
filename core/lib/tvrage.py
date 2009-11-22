@@ -66,6 +66,6 @@ class TvRage():
                     if e.find('seasonnum').text == episode:
                         title = e.find('title').text
                         log.info('Retrieved episode: %s' % title)
-        if title is not None: return {'series': self.series, 'title':title}
+        if title is not None: return {'show': self.series, 'title':title}
         else: raise EpisodeNotFoundException(log.name, self.series, season, episode)
     

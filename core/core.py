@@ -25,7 +25,7 @@ class TvRenamr():
         
         :returns: The show name, season number, episode number and last four characters (assumed to be the extension) extracted from
         the file passed in.
-        :rtype: A dictionary with the keys 'series', 'season', 'episode' and 'extension'.
+        :rtype: A dictionary with the keys 'show', 'season', 'episode' and 'extension'.
         """
         fn = fn.replace("_", ".").replace(" ", ".")
         log.info('Renaming file: '+fn)
@@ -33,9 +33,9 @@ class TvRenamr():
         log.info('Renaming using: '+regex)
         m = re.compile(regex).match(fn)
         if m is not None:
-            series = m.group('series').replace('.',' ').strip()
-            log.debug('Returned series: %s, season: %s, episode: %s, extension: %s' % (series, m.group('season'), m.group('episode'), fn[-4:]))
-            return {'series': series, 'season': m.group('season'), 'episode': m.group('episode'), 'extension': fn[-4:]}
+            show = m.group('show').replace('.',' ').strip()
+            log.debug('Returned show: %s, season: %s, episode: %s, extension: %s' % (show, m.group('season'), m.group('episode'), fn[-4:]))
+            return {'show': show, 'season': m.group('season'), 'episode': m.group('episode'), 'extension': fn[-4:]}
         else: raise UnexpectedFormatException(fn)
     
     def convert_show_names_using_exceptions_file(self, exceptions_file, show_name):
@@ -102,7 +102,7 @@ class TvRenamr():
         # build new episode title
         pass
     
-    def build_path(self, series, season, episode, title, extension, format=None, renamed_dir=None, organise=False):
+    def build_path(self, show, season, episode, title, extension, format=None, renamed_dir=None, organise=False):
         """
         Set the output format for the file name of a renamed show. By default the format is: 
         Show Name - Season NumberEpisode Number - Episode Title.format.
@@ -115,20 +115,20 @@ class TvRenamr():
         if format is None: format = '%n - %s%e - %t'
         else:
             error = []
-            if format.find('%n') is -1: error.append('series name')
+            if format.find('%n') is -1: error.append('show name')
             if format.find('%s') is -1: error.append('season')
             if format.find('%e') is -1: error.append('episode')
             if format.find('%t') is -1: error.append('episode title')
             if len(error) is not 0 : raise OutputFormatMissingSyntaxException(error)
         
         if len(episode) == 1: episode = '0'+ episode
-        formatted = format.replace('%n', series.replace(series[:1], series[:1].upper(), 1)).replace('%s', str(int(season))).replace('%e', episode).replace('%t', title)
+        formatted = format.replace('%n', show.replace(show[:1], show[:1].upper(), 1)).replace('%s', str(int(season))).replace('%e', episode).replace('%t', title)
         log.info('Destination file: '+formatted)
         
         if renamed_dir is None: renamed = self.working_dir
         else: renamed = renamed_dir
         
-        if organise is True: renamed = self.__build_organise_path(renamed, series, season)
+        if organise is True: renamed = self.__build_organise_path(renamed, show, season)
         
         log.debug('Destination directory: '+renamed)
         return os.path.join(renamed, formatted+extension)
@@ -166,7 +166,7 @@ class TvRenamr():
         """
         Builds the regular expression to extract a files details.
         """
-        series = '(?P<series>[\w\s.,_-]+)'
+        series = '(?P<show>[\w\s.,_-]+)'
         season = '(?P<season>[\d]{1,2})'
         episode = '(?P<episode>[\d]{2})'
         
@@ -208,7 +208,7 @@ class TvRenamr():
         
         return regex
     
-    def __build_organise_path(self, start_path, series_name, season_number):
+    def __build_organise_path(self, start_path, show_name, season_number):
         """
         Constructs a directory path using the series name and season number of an episode.
         """
