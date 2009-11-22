@@ -9,7 +9,9 @@ from core.errors import *
 parser = OptionParser()
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file')
 parser.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', default=False, help='Only use files from the root of a given directory do not enter any sub-directories')
-parser.add_option('-l', '--log_level', dest='log', default='debug', help='Set the log level')
+parser.add_option('-l', '--log_level', dest='log', default='debug', help='Set the log level. Valid options are debug, info, warning, error and critical.')
+parser.add_option('--logfile', dest='logfile', help='Set the location of the log file.')
+parser.add_option('--library', dest='library', help='Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.')
 parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming')
 parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
 parser.add_option('--organise', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.')
@@ -54,7 +56,7 @@ def rename(path):
     for show in details:
         filename = show['filename']
         working_dir = show['directory']
-        tv = TvRenamr(working_dir, options.log)
+        tv = TvRenamr(working_dir, options.log, options.logfile)
         try:
             credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
             if options.exceptions:
