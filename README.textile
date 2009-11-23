@@ -3,24 +3,28 @@ TV Renamr is a utility to rename TV shows based upon filenames or user input.
 
 
 
-===== Requirements =====
+h1. Requirements
+
 - Python 2.5+
 - The Interwebs
 
 
 
-===== How To Use =====
+h1. How To Use
+
 TV Renamr can be run with either the script or as a daemon (currently linux only)
 
-=== Script ===
-Run the script with: python tvrenamr.py [options] file/folder
+h2. Script
 
-== Options ==
+Run the script with: @python tvrenamr.py [options] file/folder@
+
+h3. Options
+
 -e or --episode - Set the episode number for a file. Cannot be used when renaming more than one file.
 --ignore-recursive - Only use files from the root of the specified directory and do not enter any sub-directories.
 -l or --log_level - Set the log level. Valid options are debug, info, warning, error and critical.
 --log_file - Set the location of the log file.
---library - Set the library to use when retrieving episode titles.
+--library - Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.
 -n or --name - Set the name of the name of the show to rename.
 -o or --output - Set the output format for the episodes being renamed.
 --organise - Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.
@@ -30,56 +34,62 @@ Run the script with: python tvrenamr.py [options] file/folder
 -t or --the - Set the position of 'The' in a show's name to the end of the show name, i.e. 'The Wire' becomes 'Wire, The'.
 -x or --exceptions - Specify the location of an exceptions file.
 
-= Example =
-python tvrenamr.py -
+h4. Example
 
-=== Daemon ===
+@python tvrenamr.py -@
+
+h2. Daemon
+
 The daemon will watch the specified folder for new files to rename so you can drag and drop files into it.
 This is currently a Linux only script and requires kernel version 1.26.5 (?) or higher for the relevant dependencies.
 
-Run it with: python tvrenamrd.py [options] folder_to_watch
+Run it with: @python tvrenamrd.py [options] folder_to_watch@
 
-== Options ==
+h3. Options 
 
 
 
-=== Custom Regular Expressions ===
+h2. Custom Regular Expressions
+
 By default TV Renamr will match shows in the formats: show.s0e00 and show.0x00 but you can specify custom regular 
 expressions if your files aren't in either of these formats. Some custom regular expression syntax has been used to help you
 specify different parts of the filename:
 
-Series: %n - (?P<series>[\w\s.,_-]+)
-Season: %s - (?P<season>[\d]{1,2})
-Episode: %e - (?P<episode>[\d]{2})
+Show: %n - @(?P<show>[\w\s.,_-]+)@
+Season: %s - @(?P<season>[\d]{1,2})@
+Episode: %e - @(?P<episode>[\d]{2})@
 
-Note: All spaces are converted to periods before your regular expression is run
+*Note:* All spaces are converted to periods before your regular expression is run
 
-Python regular expression syntax can be found at: http://www.python.org/doc/2.6.1/library/re.html#regular-expression-syntax
+Python regular expression syntax can be found at: "http://www.python.org/doc/2.6.1/library/re.html#regular-expression-syntax":http://www.python.org/doc/2.6.1/library/re.html#regular-expression-syntax
 
 
 
-=== Exceptions File ===
+h2. Exceptions File
+
 Specify files that you know have different show names in the their file names to that of the actual show name. 
 Each line should define the expected show name from your files and then the actual show name, i.e what The Tv Db and Tv Rage
 expect the name to be, separated by the string ' => '. Lines beginning with # are treated as comments. 
 
-= Example & Known Shows =
-# This is a comment
-american dad => american dad!
-avatar => avatar: the last airbender
-csi => csi: crime scene investigation
+h4. Example & Known Shows
+
+@# This is a comment@
+@american dad => american dad!@
+@avatar => avatar: the last airbender@
+@csi => csi: crime scene investigation@
 
 
 
-=== Custom Output Format ===
+h2. Custom Output Format
+
 It is possible to set a custom output format for your files using the following syntax:
 
-%n - Series
-%s - Season
-%e - Episode
-%t - Title
-%x - Extension
+@%n@ - Show
+@%s@ - Season
+@%e@ - Episode
+@%t@ - Title
+@%x@ - Extension
 
-you can specify the format you like, i.e. %n - %s%e - $t%x would mirror the default format.
+you can specify the format you like, i.e. @%n - %s%e - $t%x@ would mirror the default format.
 
-NOTE: Not including the %x section on Windows systems can cause problems when trying to run your media files.
+*Note:* Not including the @%x@ section on Windows systems can cause problems when trying to run your media files.
