@@ -12,7 +12,7 @@ parser.add_option('--ignore-recursive', action='store_true', dest='ignore_recurs
 parser.add_option('-l', '--log_level', dest='log', default='debug', help='Set the log level. Valid options are debug, info, warning, error and critical.')
 parser.add_option('--logfile', dest='logfile', help='Set the location of the log file.')
 parser.add_option('--library', dest='library', help='Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.')
-parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming')
+parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming.')
 parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
 parser.add_option('--organise', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.')
 parser.add_option('-r', "--renamed", dest='renamed', help='The directory to move renamed files to, if not specified the working directory is used')
@@ -67,7 +67,7 @@ def rename(path):
             if options.episode: credentials['episode']=options.episode
             title = tv.retrieve_episode_name(credentials['show'],credentials['season'],credentials['episode'])
             if options.the:
-                try: credentials['show'] = tv.set_position_of_leading_the_to_end_of_series_name(title['show'])
+                try: credentials['show'] = tv.move_leading_the_to_trailing_the(title['show'])
                 except NoLeadingTheException: pass
             else: credentials['show'] = title['show']
             credentials['title'] = title['title']
