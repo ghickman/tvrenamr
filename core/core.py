@@ -9,13 +9,14 @@ from errors import *
 log = logging.getLogger('Core')
 
 class TvRenamr():
-    def __init__(self, working_dir, log_level='info'):
+    def __init__(self, working_dir, log_level='info', log_file=None):
         """
         :param working_dir: The working directory.
         :param log_level: The log level to set.
         """
         self.working_dir = working_dir
         logging.getLogger().setLevel(self.__set_log_level(log_level))
+        self.log_file = log_file
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
         """
