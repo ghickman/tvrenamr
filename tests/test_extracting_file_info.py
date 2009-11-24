@@ -10,11 +10,11 @@ class TestExtractFileInfo(object):
     def setup(self):
         self.tv = TvRenamr("tests/data/files", log_level='critical')
     
-    def test_extracting_season_season_from_file_format_s0e00(self):
+    def test_extracting_season_from_file_format_s0e00(self):
         credentials = self.tv.extract_episode_details_from_file("chuck.s2e06.avi")
         assert_equal(credentials['season'], '2')
     
-    def test_extracting_season_season_from_file_format_s00e00(self):
+    def test_extracting_season_from_file_format_s00e00(self):
         credentials = self.tv.extract_episode_details_from_file("chuck.s20e05.avi")
         assert_equal(credentials['season'], '20')
     
@@ -27,11 +27,11 @@ class TestExtractFileInfo(object):
         assert_equal(credentials['episode'], '05')
     
     
-    def test_extracting_season_season_from_file_format_0x00(self):
+    def test_extracting_season_from_file_format_0x00(self):
         credentials = self.tv.extract_episode_details_from_file("chuck.2x05.avi")
         assert_equal(credentials['season'], '2')
     
-    def test_extracting_season_season_from_file_format_00x00(self):
+    def test_extracting_season_from_file_format_00x00(self):
         credentials = self.tv.extract_episode_details_from_file("chuck.20x05.avi")
         assert_equal(credentials['season'], '20')
     
@@ -44,7 +44,7 @@ class TestExtractFileInfo(object):
         assert_equal(credentials['episode'], '05')
     
     
-    def test_extracting_season_season_from_file_format_000(self):
+    def test_extracting_season_from_file_format_000(self):
         credentials = self.tv.extract_episode_details_from_file("chuck.205.avi")
         assert_equal(credentials['season'], '2')
     
