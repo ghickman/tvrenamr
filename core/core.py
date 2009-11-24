@@ -173,10 +173,10 @@ class TvRenamr():
         :param new_fn: The name to rename the file to.
         """
         if not os.path.exists(new_fn):
-            log.info('Beginning rename')
+            log.debug('Beginning rename')
             os.rename(os.path.join(self.working_dir, fn), new_fn)
             renamed = os.path.split(new_fn)
-            log.debug('Renamed '+fn+' to '+renamed[1])
+            log.info('Renamed '+fn+' to '+renamed[1])
         else: raise EpisodeAlreadyExistsInDirectoryException(fn, os.path.split(new_fn)[0])
     
     def __set_log_level(self, level):
