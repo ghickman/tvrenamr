@@ -61,7 +61,7 @@ class TvRenamr():
                     return show[1]
             except ShowNotInExceptionsList(show_name): pass
     
-    def retrieve_episode_name(self, show, season, episode, library='tvrage'):
+    def retrieve_episode_name(self, show, season, episode, library='thetvdb'):
         """
         Retrieves the name of a given episode. The series name, season and episode numbers must be specified 
         to get the episode's name. The library can be specified by the user, but will default to Tv Rage.
