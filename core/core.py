@@ -35,7 +35,7 @@ class TvRenamr():
         fn = fn.replace("_", ".").replace(" ", ".")
         log.info('Renaming file: '+fn)
         regex = self.__build_regex(user_regex)
-        log.info('Renaming using: '+regex)
+        log.debug('Renaming using: '+regex)
         m = re.compile(regex).match(fn)
         if m is not None:
             show = m.group('show').replace('.',' ').strip()
