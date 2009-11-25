@@ -39,7 +39,7 @@ class TvRenamr():
         m = re.compile(regex).match(fn)
         if m is not None:
             show = m.group('show').replace('.',' ').strip()
-            log.debug('Returned show: %s, season: %s, episode: %s, extension: %s' % (show, m.group('season'), m.group('episode'), fn[-4:]))
+            log.debug('Returned show: %s, season: %s, episode: %s, extension: %s' % (show, m.group('season'), m.group('episode'), os.path.splitext(fn)))
             return {'show': show, 'season': m.group('season'), 'episode': m.group('episode'), 'extension': fn[-4:]}
         else: raise UnexpectedFormatException(fn)
     
