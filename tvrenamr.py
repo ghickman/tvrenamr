@@ -7,6 +7,8 @@ from core.core import TvRenamr
 from core.errors import *
 
 parser = OptionParser()
+parser.add_option('--deluge', action='store_true', dest='deluge', help='Checks Deluge to make sure the file has been completed before renaming')
+parser.add_option('--deluge-ratio', dest='deluge_ratio', help='Checks Deluge for completed and that the file has at least reached X share ratio')
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file')
 parser.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', default=False, help='Only use files from the root of a given directory do not enter any sub-directories')
 parser.add_option('-l', '--log_level', dest='log', default='debug', help='Set the log level. Valid options are debug, info, warning, error and critical.')
@@ -77,5 +79,16 @@ def rename(path):
 
 if __name__=="__main__":
     if args[0] is None: parser.error('You must specify a file or directory')
-    rename(args[0])
+        
+        
+    # Need to capture the Deluge arguments here, before we enter rename
+    # so we can instead pass it as a callback to be called once we've fetched
+    # the required information from deluge.
+    if options.deluge or options.deluge_ratio:
+        if options.deluge and not options.deluge_ratio:
+            options.deluge_ratio = 0
+        from core.lib.filter_deluge import get_deluge_ignore_file_list
+        get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
+    else:
+        rename(args[0])
 else: print 'This script is only designed to be run standalone'
