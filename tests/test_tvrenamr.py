@@ -12,7 +12,7 @@ working = 'tests/data/working'
 renamed = 'tests/data/renamed'
 organised = 'tests/data/organised'
 exceptions = 'tests/exceptions.txt'
-logging = 'debug'
+logging = 'info'
 
 class TestScript(object):
     
