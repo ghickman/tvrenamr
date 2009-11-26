@@ -29,7 +29,7 @@ class TheTvDb():
         try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise
         dom = ET.fromstring(data)
-        if dom is None: raise SeriesIdNotFoundException(self.series)
+        if dom is None: raise XMLEmptyException(log.name, self.series)
         log.debug('XML retrieved, searching for series')
         for name in dom.findall("Series"):
             s = name.find("SeriesName").text
@@ -58,8 +58,10 @@ class TheTvDb():
         try: f = urllib2.urlopen(episode_url) # timeout after 15 seconds
         except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.series, season, episode)
         dom = ET.fromstring(f.read())
-        if dom is not None:
-            title = dom.find("Episode").find("EpisodeName").text
-            log.info('Retrieved episode: %s' % title)
-            return {'show': self.series, 'title': title}
-        else: raise EpisodeNotFoundException(log.name, self.series, season, episode)
+        if dom is None: raise XMLEmptyException(log.name, self.series)
+        
+        log.debug('XML retrived for %s - ')
+        title = dom.find("Episode").find("EpisodeName").text
+        
+        log.info('Retrieved episode: %s' % title)
+        return {'show': self.series, 'title': title}

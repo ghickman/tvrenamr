@@ -28,7 +28,7 @@ class TvRage():
         try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise
         dom = ET.fromstring(data)
-        if dom is None: raise SeriesIdNotFoundException('Error retriving XML for %s\'s series id' % self.series)
+        if dom is None: raise XMLEmptyException(log.name, self.series)
         log.debug('XML retrieved, searching for series')
         for name in dom.findall('show'):
             s = name.find('name').text
@@ -51,9 +51,9 @@ class TvRage():
         series_id = self.__get_series_id()
         url = url_ep + series_id
         try: data = urllib2.urlopen(url).read()
-        except urllib2.URLError: raise
+        except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.series)
         dom = ET.fromstring(data)
-        if dom is None: raise Exception('Error retriving XML for %s %s%s' % (self.series, season, episode))
+        if dom is None: raise XMLEmptyException(log.name, self.series)
         log.debug('XML retrieved, searching for episode')
         
         # In a single digit episode number add a zero
