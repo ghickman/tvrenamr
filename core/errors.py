@@ -102,3 +102,13 @@ class UnexpectedFormatException(Exception):
     """
     def __init__(self, fn):
         log.error('File in an unexpected format: %s' % fn)
+
+class XMLEmptyException(Exception):
+    """
+    Raised when the XML document retrieved from a library is empty.
+    
+    :param library: The library the exception was raised in.
+    :param show: The show name.
+    """
+    def __init__(self, library, show):
+        log.error('The XML file retrieved from %s was empty while looking for %s.' % (library, show))
