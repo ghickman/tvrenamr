@@ -90,9 +90,8 @@ class NoLeadingTheException(Exception):
     
     :param show: The show name with no leading The.
     """
-    def __init__(self, show=None):
-        if show is not None: log.error('%s has no leading the' % show)
-        else: log.warning('No leading The found in show name')
+    def __init__(self, show):
+        log.warning('%s has no leading The' % show)
 
 class UnexpectedFormatException(Exception):
     """
