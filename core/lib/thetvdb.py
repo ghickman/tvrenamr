@@ -55,7 +55,7 @@ class TheTvDb():
         episode_url = url_base + apikey +'/series/'+ series_id +'/default/'+ str(int(season)) +'/'+ str(int(episode)) +'/en.xml'
         log.debug(episode_url)
         log.debug('Attempting to retrieve episode name')
-        try: f = urllib2.urlopen(episode_url) # timeout after 15 seconds
+        try: f = urllib2.urlopen(episode_url)
         except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.series, season, episode)
         dom = ET.fromstring(f.read())
         if dom is None: raise XMLEmptyException(log.name, self.series)

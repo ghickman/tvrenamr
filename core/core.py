@@ -54,12 +54,13 @@ class TvRenamr():
         :returns: The new show name.
         :rtype: A string.
         """
+        new_show = None
         for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
-            try:
-                if show[0] == show_name.lower():
-                    log.debug('Replacing '+show_name+' with '+show[1])
-                    return show[1]
-            except ShowNotInExceptionsList(show_name): pass
+            if show[0] == show_name.lower():
+                log.debug('Replacing '+show_name+' with '+show[1])
+                new_show = show[1]
+        if new_show is None: raise ShowNotInExceptionsList(show_name)
+        else: return new_show
     
     def retrieve_episode_name(self, show, season, episode, library='thetvdb'):
         """
