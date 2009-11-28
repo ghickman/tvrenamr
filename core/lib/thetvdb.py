@@ -60,7 +60,7 @@ class TheTvDb():
         dom = ET.fromstring(f.read())
         if dom is None: raise XMLEmptyException(log.name, self.series)
         
-        log.debug('XML retrived for %s - ')
+        log.debug('XML retrived for %s - ' % self.series)
         title = dom.find("Episode").find("EpisodeName").text
         
         log.info('Retrieved episode: %s' % title)
