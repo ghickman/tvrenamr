@@ -7,7 +7,7 @@ from core.core import TvRenamr
 from core.errors import *
 from optparse import OptionParser
 
-log = logging.getLogger('daemon')
+log = logging.getLogger('Daemon')
 
 class WatchFolder(ProcessEvent):
     def __init__(self): 
@@ -35,8 +35,8 @@ class WatchFolder(ProcessEvent):
             title = tv.retrieve_episode_name(credentials['show'],credentials['season'],credentials['episode'])
             credentials['show'] = title['show']
             if options.the:
-                try: credentials['series'] = tv.move_leading_the_to_trailing_the(credentials['show'])
-                except NoLeadingTheException: pass
+                try: credentials['show'] = tv.move_leading_the_to_trailing_the(credentials['show'])
+                except: NoLeadingTheException
             credentials['title'] = title['title']
             path = tv.build_path(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
             tv.rename(filename, path)
