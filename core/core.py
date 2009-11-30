@@ -12,7 +12,13 @@ class TvRenamr():
     def __init__(self, working_dir, log_level='info', log_file=None):
         """
         :param working_dir: The working directory.
+        :type working_dir: A string.
+        
         :param log_level: The log level to set.
+        :type log_level: A string that defaults to info.
+        
+        :param log_file: The location to use for the log file
+        :type log_file: A string or None.
         """
         self.working_dir = working_dir
         logging.getLogger().setLevel(self.__set_log_level(log_level))
@@ -20,16 +26,19 @@ class TvRenamr():
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
         """
-        Looks at the file given and extracts from it the show title, it's season number and episode number 
-        using regular expression magic. The default formats accepted are: series.0x00.xxx or series.s0e00.xxx 
-        or series.000.xxx
+        Looks at the file given and extracts from it the show title, it's season number and episode number using regular expression magic. The default 
+        formats accepted are: series.0x00.xxx or series.s0e00.xxx or series.000.xxx
         A user can specify their own regular expression for a format not already covered.
         
         :param fn: The file name passed in.
-        :param user_regex: A user specified regular expression. Defaults to None.
+        :type fn: String.
         
-        :returns: The show name, season number, episode number and last four characters (assumed to be the extension) extracted from
-        the file passed in.
+        :param user_regex: A user specified regular expression.
+        :type user_regex: A string or None.
+        
+        :raises UnexpectedFormatException: Raised if the file is in an unexpected format.
+        
+        :returns: The show name, season number, episode number and last four characters (assumed to be the extension) extracted from the file passed in.
         :rtype: A dictionary with the keys 'show', 'season', 'episode' and 'extension'.
         """
         fn = fn.replace("_", ".").replace(" ", ".")
@@ -50,6 +59,8 @@ class TvRenamr():
         
         :param exceptions_file: Location of the exceptions file to use.
         :param show_name: The show name to replace from the exceptions file.
+        
+        :raises ShowNotInExceptionsList: Raised when the show isn't found in the exceptions file.
         
         :returns: The new show name.
         :rtype: A string.
@@ -90,6 +101,9 @@ class TvRenamr():
         Moves the leading 'The' of a show name to a trailing 'The'. A comma and space are added before the new 'The'.
         
         :param show_name: The show name.
+        :type show_name: A string.
+        
+        :raises NoLeadingTheException: Raised when a show name doesn't have a leading The.
         
         :returns: The new show name.
         :rtype: A string.
@@ -100,20 +114,16 @@ class TvRenamr():
     
     def remove_part_from_multiple_episodes(self, show_name):
         """
-        In episode titles of multiple part episodes that use the format (Part n) remove the 'Part ' section so
-        the format is (n)
+        In episode titles of multiple part episodes that use the format (Part n) remove the 'Part ' section so the format is (n).
+        
+        :param show_name: The show name to sanitise.
+        :type show_name: A string.
+        
+        :returns: The show name with sanitised multi-episode section.
+        :rtype: A string.
         """
         log.debug('Removing Part from episode name')
         return show_name.replace('(Part ','(')
-    
-    def set_format_for_multiple_part_episodes(self, show_name, format):
-        """
-        Set the format for multiple part episodes and return a formatted episode title
-        """
-        # find the current multiple part section
-        # extract multipart number
-        # build new episode title
-        pass
     
     def build_path(self, show, season, episode, title, extension, format=None, renamed_dir=None, organise=False):
         """
@@ -162,6 +172,18 @@ class TvRenamr():
         """
         Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify 
         the new characters to be used.
+        
+        :param fn: The string to replace characters in.
+        :type fn: A string.
+        
+        :param character_to_replace: The character to replace.
+        :type character_to_replace: A string that defaults to a colon ':'.
+        
+        :param replacement_character: The replacement character.
+        :type replacement_character: A string that defaults to a comma ','.
+        
+        :returns: The file 
+        :rtype: A string.
         """
         return fn.replace(character_to_replace, replacement_character)
     
@@ -171,6 +193,8 @@ class TvRenamr():
         
         :param fn: The file to rename.
         :param new_fn: The name to rename the file to.
+        
+        :raises EpisodeAlreadyExistsInDirectoryException: Raised when the destination file already exists in chosen directory.
         """
         if not os.path.exists(new_fn):
             log.debug('Beginning rename')

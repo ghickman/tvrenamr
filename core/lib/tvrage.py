@@ -21,6 +21,10 @@ class TvRage():
         """
         Retrieves the show ID of the show name passed in when the class is instantiated.
         
+        :raises URLError: Raised when a network error occurs. Usually when there is no internet.
+        :raises XMLEmptyException: Raised when the XML document returned from Tv Rage is empty.
+        :raises ShowNotFoundException: Raised when the Show cannot be found on Tv Rage.
+        
         :returns: A show ID.
         :rtype: A string.
         """
@@ -44,6 +48,9 @@ class TvRage():
         
         :param season: The season number of the episode
         :param episode: The episode number of the episode
+        
+        :raises EpisodeNotFoundException: Raised when the url for an episode doesn't exist or the network cannot be reached.
+        :raises XMLEmptyException: Raised when the XML document returned from Tv Rage is empty.
         
         :returns: The series name and title. Series name is returned so that it is formatted correctly.
         :rtype: A dictionary whose keys are 'series' and 'title'.
