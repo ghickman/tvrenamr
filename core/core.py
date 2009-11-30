@@ -147,7 +147,7 @@ class TvRenamr():
             if len(error) is not 0 : raise OutputFormatMissingSyntaxException(error)
         
         if len(episode) == 1: episode = '0'+ episode
-        formatted = format.replace('%n', show.replace(show[:1], show[:1].upper(), 1)).replace('%s', str(int(season))).replace('%e', episode).replace('%t', title)
+        formatted = format.replace('%n', self.clean_names(show.replace(show[:1], show[:1].upper(), 1))).replace('%s', str(int(season))).replace('%e', episode).replace('%t', self.clean_names(title))
         log.info('Destination file: '+formatted)
         
         if renamed_dir is None: renamed = self.working_dir
@@ -158,12 +158,11 @@ class TvRenamr():
         log.debug('Destination directory: '+renamed)
         return os.path.join(renamed, formatted+extension)
     
-    def clean_names(self, fn, character_to_replace=':', replacement_character=' -'):
+    def clean_names(self, fn, character_to_replace=':', replacement_character=','):
         """
         Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify 
         the new characters to be used.
         """
-        print fn
         return fn.replace(character_to_replace, replacement_character)
     
     def rename(self, fn, new_fn):

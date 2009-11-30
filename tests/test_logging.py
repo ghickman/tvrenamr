@@ -23,5 +23,5 @@ class TestLogging(object):
         credentials['title'] = 'Winter Solstice (2): Avatar Roku'
         path = self.tv.build_path(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'])
         self.tv.rename(fn, path)
-        assert_true(os.path.exists(os.path.join(self.working, 'Avatar: The Last Airbender - 108 - Winter Solstice (2): Avatar Roku.avi')))
+        assert_true(os.path.exists(os.path.join(self.working, 'Avatar, The Last Airbender - 108 - Winter Solstice (2), Avatar Roku.avi')))
     
