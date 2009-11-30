@@ -14,7 +14,7 @@ class WatchFolder(ProcessEvent):
         pass
     
     def process_IN_MOVED_TO(self, event):
-        log.debug('MOVED: '+event.pathname)
+        log.debug('MOVED TO: '+event.pathname)
         if not event.name.startswith('.'):
             if event.dir:
                 for each_tuple in os.walk(event.pathname):
@@ -22,7 +22,7 @@ class WatchFolder(ProcessEvent):
             else: self.__rename(*os.path.split(event.pathname))
     
     def process_IN_CREATE(self, event):
-        log.debug('CREATE: '+event.pathname)
+        log.debug('CREATED: '+event.pathname)
         if not event.name.startswith('.') and not event.dir: self.__rename(*os.path.split(event.pathname))
     
     def __rename(self, directory, filename):
@@ -49,11 +49,11 @@ if __name__=="__main__":
     parser.add_option('-l', '--log_level', dest='log', default='info', help='Set the log level. Valid options are debug, info, warning, error and critical.')
     parser.add_option('--logfile', dest='logfile', help='Set the location of the log file.')
     parser.add_option('--library', dest='library', help='Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.')
-    parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed')
+    parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
     parser.add_option('--organise', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.')
-    parser.add_option('-r', "--renamed", dest='renamed', help='The directory to move renamed files to, if not specified the working directory is used')
-    parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
-    parser.add_option('-x', '--exceptions', dest='exceptions', help='Set the location of the exceptions file')
+    parser.add_option('-r', '--renamed', dest='renamed', help='The directory to move renamed files to, if not specified the working directory is used.')
+    parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file.')
+    parser.add_option('-x', '--exceptions', dest='exceptions', help='Set the location of the exceptions file.')
     (options, args) = parser.parse_args()
     if args is None: parser.error('You must specify a file or directory')
     
