@@ -128,9 +128,9 @@ h2. Script & Daemon
 All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives 
 a cleaner format on windows where python replaces the colon character with a backslash '\'.
 
-When adding options it is sometimes easier to use the long version, especially if you need to pass something in with the switch. This is because 
-specifying a short-hand version of a switch, say '-r', would require you to add the renamed path like so: @-r'/path/to/dir'@. Whereas the long-hand
-version, in this instance, tends to look neater - @--renamed=/path/to/dir@.
+When adding options it is sometimes easier to use the long version, especially if you need to pass data in with the switch. This is because specifying 
+a short-hand version of a switch, say '-r', would require you to add the renamed path like so: @-r'/path/to/dir'@. Whereas the long-hand version, in 
+this instance, tends to look neater - @--renamed=/path/to/dir@.
 
 *Note:* When passing data to a short-hand switch you must not leave any spaces between the switch and the data or Tv Renamr will pick it up as the
 working directory!
@@ -140,8 +140,8 @@ working directory!
 h2. Daemon
 
 You cannot interactively set options while the daemon is running so using options such as --the will cause all shows with a leading The will have the 
-leading The moved to a trailing The. This is not always a desired option if you want some shows to have the position of the leading The moved and some 
-not.
+leading The moved to a trailing The. This is not always a desired option if you want some shows to have the position of the leading The moved and 
+some not.
 
 When moving files into a watched folder you may see two entries in your logs for the file. One saying it was moved successfully and another saying it 
 could not be moved since the renamed file already exists. Some architectures seem to pick up the file that was moved in twice so the initial rename is 
