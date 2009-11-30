@@ -128,6 +128,13 @@ h2. Script & Daemon
 All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives 
 a cleaner format on windows where python replaces the colon character with a backslash '\'.
 
+When adding options it is sometimes easier to use the long version, especially if you need to pass something in with the switch. This is because 
+specifying a short-hand version of a switch, say '-r', would require you to add the renamed path like so: @-r'/path/to/dir'@. Whereas the long-hand
+version, in this instance, tends to look neater - @--renamed=/path/to/dir@.
+
+*Note:* When passing data to a short-hand switch you must not leave any spaces between the switch and the data or Tv Renamr will pick it up as the
+working directory!
+
 
 
 h2. Daemon
