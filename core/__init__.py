@@ -84,5 +84,4 @@ def flush_logging():
     _mem_handler.flush()
 
 initialize_logging()
-log.debug('initilised logging')
 start_logging(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'tvrenamr.log'), logging.INFO)

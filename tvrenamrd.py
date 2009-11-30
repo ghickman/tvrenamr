@@ -27,7 +27,7 @@ class WatchFolder(ProcessEvent):
     
     def __rename(self, directory, filename):
         try:
-            tv = TvRenamr(directory, options.log, options.logfile)
+            tv = TvRenamr(directory, options.log)
             credentials = tv.extract_episode_details_from_file(filename)
             if options.exceptions is not None:
                 try: credentials['show'] = tv.convert_show_names_using_exceptions_file(options.exceptions, credentials['show'])
@@ -47,7 +47,6 @@ class WatchFolder(ProcessEvent):
 if __name__=="__main__":
     parser = OptionParser()
     parser.add_option('-l', '--log_level', dest='log', default='info', help='Set the log level. Valid options are debug, info, warning, error and critical.')
-    parser.add_option('--logfile', dest='logfile', help='Set the location of the log file.')
     parser.add_option('--library', dest='library', help='Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.')
     parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
     parser.add_option('--organise', action='store_true', dest='organise', help='Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.')

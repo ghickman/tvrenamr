@@ -25,7 +25,6 @@ h3. Options
 -e or --episode - Set the episode number for a file. Cannot be used when renaming more than one file.
 --ignore-recursive - Only use files from the root of the specified directory and do not enter any sub-directories.
 -l or --log_level - Set the log level. Valid options are debug, info, warning, error and critical.
---log_file - Set the location of the log file.
 --library - Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.
 -n or --name - Set the name of the name of the show to rename.
 -o or --output - Set the output format for the episodes being renamed.
@@ -53,7 +52,6 @@ Run it with: @python tvrenamrd.py [options] folder_to_watch@
 h3. Options 
 
 -l or --log_level - Set the log level. Valid options are debug, info, warning, error and critical.
---logfile - Set the location of the log file.
 --library - Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.
 -o or --output - Set the output format for the episodes being renamed.
 --organise - Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.

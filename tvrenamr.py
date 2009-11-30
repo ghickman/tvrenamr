@@ -11,8 +11,7 @@ parser.add_option('--deluge', action='store_true', dest='deluge', help='Checks D
 parser.add_option('--deluge-ratio', dest='deluge_ratio', help='Checks Deluge for completed and that the file has at least reached X share ratio')
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file')
 parser.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', default=False, help='Only use files from the root of a given directory do not enter any sub-directories')
-parser.add_option('-l', '--log_level', dest='log', default='debug', help='Set the log level. Valid options are debug, info, warning, error and critical.')
-parser.add_option('--logfile', dest='logfile', help='Set the location of the log file.')
+parser.add_option('-l', '--log_level', dest='log', default='info', help='Set the log level. Valid options are debug, info, warning, error and critical.')
 parser.add_option('--library', dest='library', help='Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.')
 parser.add_option('-n', '--name', dest='name', help='Set the show name for renaming.')
 parser.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
@@ -58,7 +57,7 @@ def rename(path):
     for show in details:
         filename = show['filename']
         working_dir = show['directory']
-        tv = TvRenamr(working_dir, options.log, options.logfile)
+        tv = TvRenamr(working_dir, options.log)
         try:
             credentials = tv.extract_episode_details_from_file(filename, user_regex=options.regex)
             if options.exceptions:
@@ -79,8 +78,7 @@ def rename(path):
 
 if __name__=="__main__":
     if args[0] is None: parser.error('You must specify a file or directory')
-        
-        
+    
     # Need to capture the Deluge arguments here, before we enter rename
     # so we can instead pass it as a callback to be called once we've fetched
     # the required information from deluge.
