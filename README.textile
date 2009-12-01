@@ -6,6 +6,7 @@ TV Renamr is a utility to rename TV shows based upon filenames or user input.
 h1. Requirements
 
 * Python 2.5+
+* Pyinotify (for using the Daemon on Linux)
 * The Interwebs
 
 
