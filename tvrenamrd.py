@@ -64,5 +64,5 @@ if __name__=="__main__":
 
     mask = IN_MOVED_TO | IN_CREATE  # watched events -> add IN_DONT_FOLLOW to not follow symlinks, and IN_CREATE to watch created files
     wdd = wm.add_watch(working_dir, mask, rec=True, auto_add=True) #watch this directory, with mask(s), recursively
-    notifier.loop()#daemonize=True, pid_file=os.path.join(os.path.dirname(__file__), tvrenamrd.pid), force_kill=True, stdout=os.path.join(os.path.dirname(__file__), stdout.txt))
+    notifier.loop(daemonize=True, pid_file=os.path.join(os.path.dirname(__file__), 'tvrenamrd.pid'), force_kill=True, stdout=os.path.join(os.path.dirname(__file__), 'stdout.txt'))
 else: print 'This script is only designed to be run standalone'
