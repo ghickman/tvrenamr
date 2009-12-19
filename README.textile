@@ -148,3 +148,6 @@ When moving files into a watched folder you may see two entries in your logs for
 could not be moved since the renamed file already exists. Some architectures seem to pick up the file that was moved in twice so the initial rename is 
 successful but the second one fails since the first one already moved the actual file. This seems to occur on some systems but not others and doesn't
 cause any problems with the rename option but does muddy your log file unfortunately.
+
+Sometimes a file will be copied to the destination folder rather than moved, this seems to happen if large numbers of files are added to the watch
+folder or files are added while others are still being renamed.
