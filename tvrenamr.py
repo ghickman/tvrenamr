@@ -66,7 +66,7 @@ def rename(path):
             if options.name: credentials['show']=options.name
             if options.season: credentials['season']=options.season
             if options.episode: credentials['episode']=options.episode
-            title = tv.retrieve_episode_name(credentials['show'],credentials['season'],credentials['episode'])
+            title = tv.retrieve_episode_name(credentials['show'], credentials['season'], credentials['episode'], options.library)
             if options.the:
                 try: credentials['show'] = tv.move_leading_the_to_trailing_the(title['show'])
                 except NoLeadingTheException: pass
