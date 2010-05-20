@@ -72,7 +72,16 @@ def rename(path):
                 except NoLeadingTheException: pass
             else: credentials['show'] = title['show']
             credentials['title'] = title['title']
-            path = tv.build_path(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
+            path = tv.build_path(
+                show=credentials['show'],
+                season=credentials['season'],
+                episode=credentials['episode'],
+                title=credentials['title'],
+                extension=credentials['extension'],
+                renamed_dir=options.renamed,
+                organise=options.organise,
+                format=options.output_format
+            )
             tv.rename(filename,path)
         except Exception, e: print e
 
