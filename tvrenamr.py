@@ -66,13 +66,22 @@ def rename(path):
             if options.name: credentials['show']=options.name
             if options.season: credentials['season']=options.season
             if options.episode: credentials['episode']=options.episode
-            title = tv.retrieve_episode_name(credentials['show'],credentials['season'],credentials['episode'])
+            title = tv.retrieve_episode_name(credentials['show'], credentials['season'], credentials['episode'], options.library)
             if options.the:
                 try: credentials['show'] = tv.move_leading_the_to_trailing_the(title['show'])
                 except NoLeadingTheException: pass
             else: credentials['show'] = title['show']
             credentials['title'] = title['title']
-            path = tv.build_path(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], title=credentials['title'], extension=credentials['extension'], renamed_dir=options.renamed, organise=options.organise, format=options.output_format)
+            path = tv.build_path(
+                show=credentials['show'],
+                season=credentials['season'],
+                episode=credentials['episode'],
+                title=credentials['title'],
+                extension=credentials['extension'],
+                renamed_dir=options.renamed,
+                organise=options.organise,
+                format=options.output_format
+            )
             tv.rename(filename,path)
         except Exception, e: print e
 
