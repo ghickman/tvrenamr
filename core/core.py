@@ -86,6 +86,7 @@ class TvRenamr():
         :returns: The episode title.
         :rtype: A string.
         """
+        log.debug('Trying to import given library: ' + library)
         if library == 'thetvdb':
             from lib.thetvdb import TheTvDb as library
             log.debug('Opening The Tv Db library')
