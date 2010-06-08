@@ -3,8 +3,8 @@
 import os
 from optparse import OptionParser
 
-from core.core import TvRenamr
-from core.errors import *
+from main import TvRenamr
+from errors import *
 
 parser = OptionParser()
 parser.add_option('--deluge', action='store_true', dest='deluge', help='Checks Deluge to make sure the file has been completed before renaming')
@@ -94,7 +94,7 @@ if __name__=="__main__":
     if options.deluge or options.deluge_ratio:
         if options.deluge and not options.deluge_ratio:
             options.deluge_ratio = 0
-        from core.lib.filter_deluge import get_deluge_ignore_file_list
+        from lib.filter_deluge import get_deluge_ignore_file_list
         get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
     else:
         rename(args[0])

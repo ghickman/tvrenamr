@@ -3,7 +3,7 @@ import os, shutil
 from nose.tools import *
 
 import urlopenmock #stub urlopen calls
-from core.core import TvRenamr
+from main import TvRenamr
 
 class TestLogging(object):
     working = 'tests/data/working'

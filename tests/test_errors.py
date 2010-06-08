@@ -6,8 +6,8 @@ from nose.tools import *
 #stub urlopen calls
 import urlopenmock
 
-from core.core import TvRenamr
-from core.errors import *
+from main import TvRenamr
+from errors import *
 
 class TestExceptionsAreRaised(object):
     

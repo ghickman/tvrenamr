@@ -6,6 +6,8 @@ import sys
 
 from errors import *
 
+import logs
+
 log = logging.getLogger('Core')
 
 class TvRenamr():
@@ -21,6 +23,10 @@ class TvRenamr():
         :type log_file: A string or None.
         """
         self.working_dir = working_dir
+        
+        logs.initialize_logging()
+        logs.start_logging(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'tvrenamr.log'), logging.INFO)
+        
         logging.getLogger().setLevel(self.__set_log_level(log_level))
         self.log_file = log_file
     

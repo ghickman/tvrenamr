@@ -82,6 +82,3 @@ def flush_logging():
         for record in _mem_handler.buffer:
             console.handle(record)
     _mem_handler.flush()
-
-initialize_logging()
-start_logging(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'tvrenamr.log'), logging.INFO)

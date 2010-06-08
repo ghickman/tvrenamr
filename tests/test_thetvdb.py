@@ -6,9 +6,9 @@ from nose.tools import *
 #stub urlopen calls
 import urlopenmock
 
-from core.core import TvRenamr
-from core.lib.thetvdb import TheTvDb
-from core.errors import *
+from main import TvRenamr
+from lib.thetvdb import TheTvDb
+from errors import *
 
 class TestTheTvDb(object):
     working = 'tests/data/working'
