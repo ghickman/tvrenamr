@@ -1,9 +1,5 @@
-prototypes/
-.DS_Store
-._*
 *.log
 *.pyc
-tests/files/
-tests/data/
-tests/cache
 .com*
+tests
+!tests/data/files
