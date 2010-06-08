@@ -14,20 +14,20 @@ TV Renamr is a utility to rename TV shows based upon filenames or user input.
 
 Run the script with: `python tvrenamr.py [options] file/folder`
 
-### Options
+## Options
 
--e or --episode - Set the episode number for a file. Cannot be used when renaming more than one file.
---ignore-recursive - Only use files from the root of the specified directory and do not enter any sub-directories.
--l or --log_level - Set the log level. Valid options are debug, info, warning, error and critical.
---library - Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.
--n or --name - Set the name of the name of the show to rename.
--o or --output - Set the output format for the episodes being renamed.
---organise - Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.
--r or --renamed - The directory to move renamed files to, if not specified the working directory is used.
---regex - The regular expression to use when extracting information from files.
--s or --season - Set the season number. Cannot be used when renaming more than one file.
--t or --the - Set the position of 'The' in a show's name to the end of the show name, i.e. 'The Wire' becomes 'Wire, The'.
--x or --exceptions - Specify the location of an exceptions file.
+`-e` or `--episode` - Set the episode number for a file. Cannot be used when renaming more than one file.  
+`--ignore-recursive` - Only use files from the root of the specified directory and do not enter any sub-directories.  
+`-l` or `--log_level` - Set the log level. Valid options are debug, info, warning, error and critical.  
+`--library` - Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.  
+`-n` or --name - Set the name of the name of the show to rename.  
+`-o` or `--output` - Set the output format for the episodes being renamed.  
+`--organise` - Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.  
+`-r` or `--renamed` - The directory to move renamed files to, if not specified the working directory is used.  
+`--regex` - The regular expression to use when extracting information from files.  
+`-s` or `--season` - Set the season number. Cannot be used when renaming more than one file.  
+`-t` or `--the` - Set the position of 'The' in a show's name to the end of the show name, i.e. 'The Wire' becomes 'Wire, The'.  
+`-x` or `--exceptions` - Specify the location of an exceptions file.  
 
 ### Examples
 
@@ -92,12 +92,8 @@ you can specify the format you like, i.e. `%n - %s%e - $t%x` would mirror the de
 
 # Known Issues
 
-All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives 
-a cleaner format on windows where python replaces the colon character with a backslash '\'.
+All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives a cleaner format on windows where python replaces the colon character with a backslash '\'.
 
-When adding options it is sometimes easier to use the long version, especially if you need to pass data in with the switch. This is because specifying 
-a short-hand version of a switch, say '-r', would require you to add the renamed path like so: `-r'/path/to/dir'`. Whereas the long-hand version, in 
-this instance, tends to look neater - `--renamed=/path/to/dir`.
+Shows with a year in the canonical title, like Doctor Who (2005), will fail without specifying the show name and including the year in brackets.
 
-*Note:* When passing data to a short-hand switch you must not leave any spaces between the switch and the data or Tv Renamr will pick it up as the
-working directory!
+Renaming sections of a files output, such as the show name, isn't possible yet.
