@@ -5,7 +5,7 @@ import re
 import sys
 
 from errors import *
-
+from config import Config
 import logs
 
 log = logging.getLogger('Core')
@@ -29,6 +29,8 @@ class TvRenamr():
         
         logging.getLogger().setLevel(self.__set_log_level(log_level))
         self.log_file = log_file
+        
+        self.conf = Config(os.path.join(sys.path[0], 'config.yml'))
     
     def extract_episode_details_from_file(self, fn, user_regex=None):
         """
