@@ -39,7 +39,7 @@ class TheTvDb():
             s = name.find("SeriesName").text
             if s.lower() == self.series.lower():
                 self.series = s
-                log.debug('Series chosen %s' % self.series)
+                log.debug('Series chosen: %s' % self.series)
                 return name.find('seriesid').text
             else: raise ShowNotFoundException(log.name, self.series)
         
@@ -66,8 +66,8 @@ class TheTvDb():
         except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.series, season, episode)
         dom = ET.fromstring(f.read())
         if dom is None: raise XMLEmptyException(log.name, self.series)
+        log.debug('Episode XML retrived for %s - %s%s' % (self.series, season, episode))
         
-        log.debug('XML retrived for %s - ' % self.series)
         title = dom.find("Episode").find("EpisodeName").text
         
         log.info('Retrieved episode: %s' % title)
