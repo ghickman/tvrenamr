@@ -4,48 +4,54 @@ import sys
 
 import yaml
 
+from errors import ShowNotInConfigException
+
 class Config():
     def __init__(self, config):
-        self.config = {}
-        self.defaults = {}
+        self.log = logging.getLogger('Config')
         
-        self.__load_config(config)
-        self.__get_defaults()
+        self.config = self.__load_config(config)
         
-        # self.log = logging.getLogger('Config')
-        # print self.config
-    
-                                      
-    def get_deluge(self):             
-        if not show in self.config: return self.defaults['deluge']
-        else:                         
-            try: return self.config[show]['deluge']
-            except KeyError: return self.defaults['deluge']
-                                      
-    
-    def get_format(self, show):
-        if not show in self.config: return self.defaults['format']
-        else:
-            try: return self.config[show]['format']
-            except KeyError: return self.defaults['format']
-    
-    def get_rename_dir(self, show):
-        if not show in self.config: return self.defaults['renamed']
-        else:
-            try: return self.config[show]['renamed']
-            except KeyError: return self.defaults['renamed']
+        self.log.debug('Config loaded')
+        
+        self.defaults = self.__get_defaults()
+        self.log.debug('Defautls retrieved')
     
     
-    def get_the(self, show):
-        if not show in self.config: return self.defaults['the']
-        else:
-            try: return self.config[show]['the']
-            except KeyError: return self.defaults['the']
+    def exists(self, show):
+        if show in self.config: return True
+        else: return False
+    
+    
+    def get(self, show, option):
+        try:
+            return self.config[show][option]
+        except KeyError:
+            try:
+                return self.defaults[option]
+            except KeyError:
+                return False
+    
+    
+    def get_canonical(self, show):
+        if not show in self.config: raise ShowNotInConfigException(show)
+        try:
+            return self.config[show]['canonical']
+        except KeyError:
+            return show
+    
+    
+    def get_output(self, show):
+        if not show in self.config: raise ShowNotInConfigException(show)
+        try:
+            return self.config[show]['output']
+        except KeyError:
+            return self.config[show]['canonical']
     
     
     def __load_config(self, config):
         try:
-            self.config = yaml.safe_load(file(config))
+            return yaml.safe_load(file(config))
         except Exception, e:
             self.log.critical(e)
             print ''
@@ -81,16 +87,11 @@ class Config():
     
     
     def __get_defaults(self):
-        if 'defaults' in self.config: self.defaults = self.config['defaults']
+        if 'defaults' in self.config: return self.config['defaults']
     
     
 
-conf = os.path.join(sys.path[0], 'config.yml')
-# print conf
-c = Config(conf)
-
-# print c.get_rename_dir()
-print c.get_the('the simpsons')
-# print c.get_format()
-# print c.get_deluge()
-# print c.get_show_options('csi')
+# conf = os.path.join(sys.path[0], 'config.yml')
+# c = Config(conf)
+# if c.get('help', 'the'):
+# print c.get('the simpsons', 'the')
