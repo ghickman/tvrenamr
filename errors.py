@@ -11,6 +11,19 @@ class AlreadyNamedException(Exception):
     def __init__(self, fn):
         log.error('Already in correct naming format: %s' % fn)
 
+
+class ConfigNotFoundException(Exception):
+    """
+    Exception that is raised when a file with the same name as the renamed file exists in the destination folder
+    
+    :param fn: The destination file name.
+    :param dest: The destination directory.
+    """
+    def __init__(self):
+        log.error('A config could not be found. Please place one in either ~/.tvrenamr or the root directory of Tv Renamr')
+    
+
+
 class EpisodeAlreadyExistsInDirectoryException(Exception):
     """
     Exception that is raised when a file with the same name as the renamed file exists in the destination folder
