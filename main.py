@@ -30,9 +30,52 @@ class TvRenamr():
         logging.getLogger().setLevel(self.__set_log_level(log_level))
         self.log_file = log_file
         
-        self.conf = Config(os.path.join(sys.path[0], 'config.yml'))
+        self.config = None
+        possible = (os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'), os.path.join(sys.path[0], 'config.yml'))
+        
+        for path in possible:
+            if os.path.exists(path): self.config = Config(path)
+        if self.config is None: raise ConfigNotFoundException
     
-    def extract_episode_details_from_file(self, fn, user_regex=None):
+    
+    def convert_show_names_using_exceptions_file(self, exceptions_file, show_name):
+        """
+        DEPRECATED
+        Converts a show name to a new name specified in the exceptions_file. This method is designed for use in
+        conjunction with the daemon.
+        
+        :param exceptions_file: Location of the exceptions file to use.
+        :param show_name: The show name to replace from the exceptions file.
+        
+        :raises ShowNotInExceptionsList: Raised when the show isn't found in the exceptions file.
+        
+        :returns: The new show name.
+        :rtype: A string.
+        """
+        new_show = None
+        for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
+            if show[0] == show_name.lower():
+                log.debug('Replacing '+show_name+' with '+show[1])
+                new_show = show[1]
+        if new_show is None: raise ShowNotInExceptionsList(show_name)
+        else: return new_show
+    
+        
+    def remove_part_from_multiple_episodes(self, show_name):
+        """
+        In episode titles of multiple part episodes that use the format (Part n) remove the 'Part ' section so the format is (n).
+        
+        :param show_name: The show name to sanitise.
+        :type show_name: A string.
+        
+        :returns: The show name with sanitised multi-episode section.
+        :rtype: A string.
+        """
+        log.debug('Removing Part from episode name')
+        return show_name.replace('(Part ','(')
+    
+    
+    def extract_details_from_file(self, fn, user_regex=None):
         """
         Looks at the file given and extracts from it the show title, it's season number and episode number using regular expression magic. The default 
         formats accepted are: series.0x00.xxx or series.s0e00.xxx or series.000.xxx
@@ -60,143 +103,102 @@ class TvRenamr():
             return {'show': show, 'season': m.group('season'), 'episode': m.group('episode'), 'extension': os.path.splitext(fn)[1]}
         else: raise UnexpectedFormatException(fn)
     
-    def convert_show_names_using_exceptions_file(self, exceptions_file, show_name):
-        """
-        Converts a show name to a new name specified in the exceptions_file. This method is designed for use in
-        conjunction with the daemon.
-        
-        :param exceptions_file: Location of the exceptions file to use.
-        :param show_name: The show name to replace from the exceptions file.
-        
-        :raises ShowNotInExceptionsList: Raised when the show isn't found in the exceptions file.
-        
-        :returns: The new show name.
-        :rtype: A string.
-        """
-        new_show = None
-        for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
-            if show[0] == show_name.lower():
-                log.debug('Replacing '+show_name+' with '+show[1])
-                new_show = show[1]
-        if new_show is None: raise ShowNotInExceptionsList(show_name)
-        else: return new_show
     
-    def retrieve_episode_name(self, show, season, episode, library='thetvdb'):
+    def retrieve_episode_name(self, library='thetvdb', canonical=None, **kwargs):
         """
-        Retrieves the name of a given episode. The series name, season and episode numbers must be specified 
-        to get the episode's name. The library can be specified by the user, but will default to Tv Rage.
+        Retrieves the name of a given episode. The series name, season and episode numbers must be
+        specified to get the episode's name. The library can be specified by the user, but will
+        default to The Tv DB.
         
-        :param show: The show name to search for.
-        :param season: The season number to search for.
-        :param episode: The episode number to search for.
+        :param the:
         :param library: The library to search in.
         
         :returns: The episode title.
         :rtype: A string.
         """
-        log.debug('Trying to import given library: ' + library)
         if library == 'thetvdb':
             from lib.thetvdb import TheTvDb as library
-            log.debug('Opening The Tv Db library')
+            log.debug('Imported The Tv Db library')
         elif library == 'tvrage':
             from lib.tvrage import TvRage as library
-            log.debug('Opening Tv Rage library')
+            log.debug('Imported Tv Rage library')
         
-        lib = library(show)
-        return lib.get_episode_name(str(int(season)), episode)
+        # from lib.lib_test import TheTvDb as library
+        log.debug('Opening test lib')
+        
+        if canonical is not None: kwargs['show'] = canonical
+        self.library = library(self.config.get_canonical(kwargs['show']), kwargs['season'], kwargs['episode'])
+        
+        self.title = self.library.get_title()
+        log.info('Episode title set: %s' % self.title)
+        
+        return self.title
     
-    def move_leading_the_to_trailing_the(self, show_name):
-        """
-        Moves the leading 'The' of a show name to a trailing 'The'. A comma and space are added before the new 'The'.
-        
-        :param show_name: The show name.
-        :type show_name: A string.
-        
-        :raises NoLeadingTheException: Raised when a show name doesn't have a leading The.
-        
-        :returns: The new show name.
-        :rtype: A string.
-        """
-        if not(show_name.startswith('The ')): raise NoLeadingTheException(show_name)
-        log.debug('Moving the leading \'The\' to end of: '+show_name)
-        return show_name[4:]+', The'
     
-    def remove_part_from_multiple_episodes(self, show_name):
-        """
-        In episode titles of multiple part episodes that use the format (Part n) remove the 'Part ' section so the format is (n).
+    def format_show_name(self, show, the=None, override=None):
+        if the is None: self.config.get(show, 'the')
         
-        :param show_name: The show name to sanitise.
-        :type show_name: A string.
+        try:
+            show = self.config.get_output(show)
+            log.debug('Using config output name: %s' % show)
+        except ShowNotInConfigException:
+            show = self.library.get_show()
+            log.debug('Using the formatted show name retrieved by the library: %s' % show)
         
-        :returns: The show name with sanitised multi-episode section.
-        :rtype: A string.
-        """
-        log.debug('Removing Part from episode name')
-        return show_name.replace('(Part ','(')
+        if override is not None:
+            show = override
+            log.debug('Overrode show name with: %s' % show)
+        
+        if the is not False: show = self.__move_leading_the_to_trailing_the(show)
+        
+        log.debug('Final show name: %s' % show)
+        
+        return show
     
-    def build_path(self, show, season, episode, title, extension, format=None, renamed_dir=None, organise=False):
+    
+    def build_path(self, dry_run=False, rename_dir=None, organise=None, format=None, **kwargs):
         """
-        Set the output format for the file name of a renamed show. By default the format is: 
+        Build the full destination path and filename of the renamed file Set the output format for
+        the file name of a renamed show. By default the format is: 
+        
         Show Name - Season NumberEpisode Number - Episode Title.format.
         
-        Builds the new path for the file to be renamed to, by default this is the working directory. Users can 
-        specify a directory to move files to once renamed using the renamed_dir option. The auto_move option 
-        can be used to specify a top level directory where files will be placed in season and show folders, 
-        i.e. Show/Season 1/episodes
+        Builds the new path for the file to be renamed to, by default this is the working directory.
+        Users can specify a directory to move files to once renamed using the renamed_dir option.
+        The auto_move option can be used to specify a top level directory where files will be placed
+        in season and show folders, i.e. Show/Season 1/episodes
         
-        :param show: The show name.
-        :param season: The season number.
-        :param episode: The episode number.
-        :param title: The episode title.
-        :param extension: The file extension.
-        :param format: The order in of the show name, season and episode numbers, episode title and extension in the renamed file's name.
+        :param kwargs
+        :param format: The output format of the show name, season and episode numbers, episode title and
+        extension in the renamed file's name.
         :param renamed_dir: The directory to place the renamed file into.
-        :param organise: A boolean to set whether the renamed directory path should be constructed from the show name and season number.
+        :param organise: A boolean to set whether the renamed directory path should be constructed
+        from the show name and season number.
         
         :returns: The full path to the new file including the formatted file name.
         :rtype: A string.
         """
-        if format is None: format = '%n - %s%e - %t'
-        else:
-            error = []
-            if format.find('%n') is -1: error.append('show name')
-            if format.find('%s') is -1: error.append('season')
-            if format.find('%e') is -1: error.append('episode')
-            if format.find('%t') is -1: error.append('episode title')
-            if len(error) is not 0 : raise OutputFormatMissingSyntaxException(error)
+        kwargs['show'] = self.__clean_names(kwargs['show'].replace(kwargs['show'][:1], kwargs['show'][:1].upper(), 1))
+        if len(kwargs['episode']) == 1: kwargs['episode'] = '0'+ kwargs['episode']
         
-        if len(episode) == 1: episode = '0'+ episode
-        formatted = format.replace('%n', self.clean_names(show.replace(show[:1], show[:1].upper(), 1))).replace('%s', str(int(season))).replace('%e', episode).replace('%t', self.clean_names(title))
-        log.info('Destination file: '+formatted)
+        if format is None: format = self.config.get(kwargs['show'], 'format')
+        format = format.replace('%n', kwargs['show']).replace('%s', str(int(kwargs['season']))) \
+                    .replace('%e', kwargs['episode']).replace('%t', self.__clean_names(kwargs['title'])) \
+                    .replace('%x', kwargs['extension'])
         
-        if renamed_dir is None: renamed = self.working_dir
-        else: renamed = renamed_dir
+        if rename_dir is None: rename_dir = self.config.get(kwargs['show'], 'renamed')
+        if rename_dir is False: rename_dir = self.working_dir
         
-        if organise is True: renamed = self.__build_organise_path(renamed, show, season)
+        if organise is None: organise = self.config.get(kwargs['show'], 'organise')
         
-        log.debug('Destination directory: '+renamed)
-        return os.path.join(renamed, formatted+extension)
+        if organise is True: rename_dir = self.__build_organise_path(rename_dir, kwargs['show'], kwargs['season'], dry_run)
+        
+        log.info('Destination directory: %s' % rename_dir)
+        log.info('Destination file: %s' % format)
+        return os.path.join(rename_dir, format)
     
-    def clean_names(self, fn, character_to_replace=':', replacement_character=','):
-        """
-        Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify 
-        the new characters to be used.
-        
-        :param fn: The string to replace characters in.
-        :type fn: A string.
-        
-        :param character_to_replace: The character to replace.
-        :type character_to_replace: A string that defaults to a colon ':'.
-        
-        :param replacement_character: The replacement character.
-        :type replacement_character: A string that defaults to a comma ','.
-        
-        :returns: The file 
-        :rtype: A string.
-        """
-        return fn.replace(character_to_replace, replacement_character)
     
-    def rename(self, fn, new_fn):
+    def rename(self, current_filepath, destination_filepath):
         """
         Renames the file passed in to the new filename path passed in and returns the new filename
         
@@ -205,12 +207,14 @@ class TvRenamr():
         
         :raises EpisodeAlreadyExistsInDirectoryException: Raised when the destination file already exists in chosen directory.
         """
-        if not os.path.exists(new_fn):
-            log.debug('Beginning rename')
-            os.rename(os.path.join(self.working_dir, fn), new_fn)
-            renamed = os.path.split(new_fn)
-            log.info('Renamed '+fn+' to '+renamed[1]+'\n')
-        else: raise EpisodeAlreadyExistsInDirectoryException(fn, os.path.split(new_fn)[0])
+        if not os.path.exists(destination_filepath):
+            log.debug(os.path.join(self.working_dir, current_filepath))
+            log.debug(destination_filepath)
+            os.rename(os.path.join(self.working_dir, current_filepath), destination_filepath)
+            destination_file = os.path.split(destination_filepath)[1]
+            log.info('Renamed %s to %s\n' % (current_filepath, destination_file))
+        else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
+    
     
     def __set_log_level(self, level):
         """
@@ -230,6 +234,44 @@ class TvRenamr():
             'critical': logging.CRITICAL#50
         }
         return LEVELS.get(level, logging.INFO)
+    
+    
+    def __move_leading_the_to_trailing_the(self, show_name):
+        """
+        Moves the leading 'The' of a show name to a trailing 'The'. A comma and space are added before the new 'The'.
+        
+        :param show_name: The show name.
+        :type show_name: A string.
+        
+        :raises NoLeadingTheException: Raised when a show name doesn't have a leading The.
+        
+        :returns: The new show name.
+        :rtype: A string.
+        """
+        if not(show_name.startswith('The ')): return show_name
+        log.debug('Moving the leading \'The\' to end of: '+show_name)
+        return show_name[4:]+', The'
+    
+    
+    def __clean_names(self, filename, character_to_replace=':', replacement_character=','):
+        """
+        Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify 
+        the new characters to be used.
+        
+        :param fn: The string to replace characters in.
+        :type fn: A string.
+        
+        :param character_to_replace: The character to replace.
+        :type character_to_replace: A string that defaults to a colon ':'.
+        
+        :param replacement_character: The replacement character.
+        :type replacement_character: A string that defaults to a comma ','.
+        
+        :returns: The file 
+        :rtype: A string.
+        """
+        return filename.replace(character_to_replace, replacement_character)
+    
     
     def __build_regex(self, regex=None):
         """
@@ -287,7 +329,8 @@ class TvRenamr():
         
         return regex
     
-    def __build_organise_path(self, start_path, show_name, season_number):
+    
+    def __build_organise_path(self, start_path, show_name, season_number, dry_run=False):
         """
         Constructs a directory path using the show name and season number of an episode.
         
@@ -300,7 +343,7 @@ class TvRenamr():
         """
         if start_path[-1:] != '/': start_path = start_path +'/'
         path = start_path + show_name +'/Season '+ str(int(season_number)) +'/'
-        if not os.path.exists(path):
+        if not os.path.exists(path) and not dry_run:
             os.makedirs(path)
             log.debug('Directories created for path: '+path)
         return path
