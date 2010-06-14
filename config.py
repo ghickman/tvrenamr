@@ -35,7 +35,7 @@ class Config():
     
     def get_canonical(self, show):
         try:
-            return self.config[show]['canonical']
+            return self.config[show.lower()]['canonical']
         except KeyError:
             return show
     
