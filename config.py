@@ -34,7 +34,6 @@ class Config():
     
     
     def get_canonical(self, show):
-        if not show in self.config: raise ShowNotInConfigException(show)
         try:
             return self.config[show]['canonical']
         except KeyError:
@@ -89,9 +88,7 @@ class Config():
     def __get_defaults(self):
         if 'defaults' in self.config: return self.config['defaults']
     
-    
 
 # conf = os.path.join(sys.path[0], 'config.yml')
 # c = Config(conf)
-# if c.get('help', 'the'):
 # print c.get('the simpsons', 'the')
