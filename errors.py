@@ -75,6 +75,17 @@ class ShowNotFoundException(Exception):
     def __init__(self, library, show):
         log.error('%s could not be found on %s' % (show, library))
 
+
+class ShowNotInConfigException(Exception):
+    """
+    The specified show wasn't found in the exceptions list
+    
+    :param show: The show name not found.
+    """
+    def __init__(self, show):
+        log.debug('%s is not in the Config - falling back on name extracted from the file' % show)
+
+
 class ShowNotInExceptionsList(Exception):
     """
     The specified show wasn't found in the exceptions list
