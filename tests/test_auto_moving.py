@@ -32,7 +32,7 @@ class TestAutoMoving(object):
         credentials['show'] = self.tv.format_show_name(credentials['show'], the=False)
         path = self.tv.build_path(organise=self.organise, rename_dir=self.organised, **credentials)
         self.tv.rename(fn, path)
-        assert_true(os.path.isfile(os.path.join(self.organised+'/Chuck/Season 1', 'Chuck - 106 - Chuck Versus the Sandworm.avi')))
+        assert_true(os.path.isfile(os.path.join(self.organised + '/Chuck/Season 1', 'Chuck - 106 - Chuck Versus the Sandworm.avi')))
     
     
     def test_using_organise_moves_the_file_to_the_correct_folder(self):
