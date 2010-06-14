@@ -48,16 +48,14 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
             if ignore_recursive: break
         return filelist
     elif os.path.isfile(path):
-        working = os.path.split(path)
-        return [{'directory': working[0], 'filename': working[1]}]
+        return working
 
 
 def rename(path):
     if options.dry_run: print 'Dry Run beginning.'
     details = __determine_type(path)
     for full_path in details:
-        filename = full_path['filename']
-        working_dir = full_path['directory']
+        working_dir, filename = full_path
         tv = TvRenamr(working_dir, options.log)
         try:
             credentials = tv.extract_details_from_file(filename, user_regex=options.regex)
