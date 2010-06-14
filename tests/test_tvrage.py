@@ -22,7 +22,7 @@ class TestTvRage(object):
         for fn in os.listdir(self.working): os.remove(os.path.join(self.working,fn))
     
     def test_searching_tv_rage_with_an_ambiguous_name_returns_the_correct_show(self):
-        assert_equal(self.tv.retrieve_episode_name('the o.c.', '03', '04', 'tvrage')['show'], 'The O.C.')
+        assert_equal(self.tv.retrieve_episode_name(library='tvrage', **{'show':'the o.c.', 'season':'03', 'episode':'04'})[0], 'The O.C.')
     
     def test_searching_tv_rage_for_an_incorrect_name_returns_a_show_not_found_exception(self):
         assert_raises(ShowNotFoundException, self.tv.retrieve_episode_name, 'west wing', '04', '01', 'tvrage')
@@ -33,8 +33,8 @@ class TestTvRage(object):
     def test_searching_tv_rage_for_a_specific_episode_returns_the_correct_episode(self):
         fn = 'the.big.bang.theory.S03E01.HDTV.XviD-NoTV.avi'
         credentials = self.tv.extract_episode_details_from_file(fn)
-        title = self.tv.retrieve_episode_name(show=credentials['show'], season=credentials['season'], episode=credentials['episode'], library='tvrage')
-        assert_equals(title['title'], 'The Electric Can Opener Fluctuation')
+        title = self.tv.retrieve_episode_name(library='tvrage', **credentials)[1]
+        assert_equals(title, 'The Electric Can Opener Fluctuation')
     
     def test_tv_rage_returns_a_formatted_show_name(self):
         fn = 'the.big.bang.theory.S03E01.HDTV.XviD-NoTV.avi'
