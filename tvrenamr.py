@@ -43,7 +43,7 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
             for fname in files:
                 # If we have a file we should be ignoring and skipping it.
                 if ignore_filelist is not None and (os.path.join(root, fname) in ignore_filelist): continue
-                filelist.append({'directory': root, 'filename': fname})
+                filelist.append((root, fname))
             # Don't want a recusive walk?
             if ignore_recursive: break
         return filelist
