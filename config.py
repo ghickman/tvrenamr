@@ -41,11 +41,11 @@ class Config():
     
     
     def get_output(self, show):
-        if not show in self.config: raise ShowNotInConfigException(show)
+        if not show.lower() in self.config: raise ShowNotInConfigException(show)
         try:
-            return self.config[show]['output']
+            return self.config[show.lower()]['output']
         except KeyError:
-            return self.config[show]['canonical']
+            return self.config[show.lower()]['canonical']
     
     
     def __load_config(self, config):
