@@ -72,7 +72,7 @@ def rename(path):
             path = tv.build_path(dry_run=options.dry_run, rename_dir=options.rename_dir, \
                                 organise=options.organise, format=options.output_format, **credentials)
             
-            if not options.dry_run : print 'rename!'#tv.rename(filename,path)
+            if not options.dry_run: tv.rename(filename,path)
             else: print 'Dry Run complete. No files were harmed in the process.'
         except Exception, e: print e
 
