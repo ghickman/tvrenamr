@@ -48,7 +48,7 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
             if ignore_recursive: break
         return filelist
     elif os.path.isfile(path):
-        return working
+        return [os.path.split(path)]
 
 
 def rename(path):
