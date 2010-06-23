@@ -6,12 +6,12 @@ import sys
 
 from errors import *
 from config import Config
-import logs
+from logs import start_logging
 
 log = logging.getLogger('Core')
 
 class TvRenamr():
-    def __init__(self, working_dir, log_level='info', log_file=None):
+    def __init__(self, working_dir, log_level='info', log_file=None, debug=False, quiet=False, dry=False):
         """
         :param working_dir: The working directory.
         :type working_dir: A string.
@@ -23,17 +23,23 @@ class TvRenamr():
         :type log_file: A string or None.
         """
         self.working_dir = working_dir
+        self.dry = dry
         
-        logs.initialize_logging()
-        logs.start_logging(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'tvrenamr.log'), logging.INFO)
+        if log_file == None: log_file = os.path.join(os.path.expanduser('~'), '.tvrenamr', 'tvrenamr.log')
+        start_logging(log_file, debug, quiet)
         
-        logging.getLogger().setLevel(self.__set_log_level(log_level))
-        self.log_file = log_file
+        if self.dry:
+            log.info('Dry Run beginning.')
+            log.info('-'*70)
+            log.info('')
         
         self.config = None
-        possible = (os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'), os.path.join(sys.path[0], 'config.yml'))
+        possible_config = (
+            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
+            os.path.join(sys.path[0], 'config.yml')
+        )
         
-        for path in possible:
+        for path in possible_config:
             if os.path.exists(path): self.config = Config(path)
         if self.config is None: raise ConfigNotFoundException
     
@@ -182,6 +188,7 @@ class TvRenamr():
         if len(kwargs['episode']) == 1: kwargs['episode'] = '0'+ kwargs['episode']
         
         if format is None: format = self.config.get(kwargs['show'], 'format')
+        if '%x' not in format: format = format + '%x'
         format = format.replace('%n', kwargs['show']).replace('%s', str(int(kwargs['season']))) \
                     .replace('%e', kwargs['episode']).replace('%t', self.__clean_names(kwargs['title'])) \
                     .replace('%x', kwargs['extension'])
@@ -205,14 +212,20 @@ class TvRenamr():
         :param fn: The file to rename.
         :param new_fn: The name to rename the file to.
         
-        :raises EpisodeAlreadyExistsInDirectoryException: Raised when the destination file already exists in chosen directory.
+        :raises EpisodeAlreadyExistsInDirectoryException: Raised when the destination file already
+        exists in chosen directory.
         """
         if not os.path.exists(destination_filepath):
             log.debug(os.path.join(self.working_dir, current_filepath))
             log.debug(destination_filepath)
-            os.rename(os.path.join(self.working_dir, current_filepath), destination_filepath)
+            if not self.dry: os.rename(os.path.join(self.working_dir, current_filepath), destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
-            log.info('Renamed: %s to %s\n' % (current_filepath, destination_file))
+            log.info('Renamed: \"%s\" to \"%s\"' % (current_filepath, destination_file))
+            if self.dry:
+                log.info('')
+                log.info('-'*70)
+                log.info('Dry Run complete. No files were harmed in the process.')
+                log.info('')
         else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
     
     
