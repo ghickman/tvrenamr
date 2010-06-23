@@ -16,7 +16,7 @@ class TheTvDb():
         :param show_name: The show name of the episode title to be retrieved.
         """
         self.show = show
-        log.info('Looking up show: %s' % self.show)
+        log.info('Searching: %s' % self.show)
         self.season = season
         self.episode = episode
         

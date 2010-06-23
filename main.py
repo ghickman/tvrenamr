@@ -93,7 +93,7 @@ class TvRenamr():
         :rtype: A dictionary with the keys 'show', 'season', 'episode' and 'extension'.
         """
         fn = fn.replace("_", ".").replace(" ", ".")
-        log.info('Renaming file: '+fn)
+        log.info('Renaming: %s' % fn)
         regex = self.__build_regex(user_regex)
         log.debug('Renaming using: '+regex)
         m = re.compile(regex).match(fn)
@@ -130,7 +130,7 @@ class TvRenamr():
         self.library = library(self.config.get_canonical(kwargs['show']), kwargs['season'], kwargs['episode'])
         
         self.title = self.library.get_title()
-        log.info('Episode title set: %s' % self.title)
+        log.info('Episode: %s' % self.title)
         
         return self.title
     
@@ -193,8 +193,8 @@ class TvRenamr():
         
         if organise is True: rename_dir = self.__build_organise_path(rename_dir, kwargs['show'], kwargs['season'], dry_run)
         
-        log.info('Destination directory: %s' % rename_dir)
-        log.info('Destination file: %s' % format)
+        log.info('Directory: %s' % rename_dir)
+        log.info('File: %s' % format)
         return os.path.join(rename_dir, format)
     
     
@@ -212,7 +212,7 @@ class TvRenamr():
             log.debug(destination_filepath)
             os.rename(os.path.join(self.working_dir, current_filepath), destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
-            log.info('Renamed %s to %s\n' % (current_filepath, destination_file))
+            log.info('Renamed: %s to %s\n' % (current_filepath, destination_file))
         else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
     
     

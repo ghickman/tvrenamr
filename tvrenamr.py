@@ -52,7 +52,10 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
 
 
 def rename(path):
-    if options.dry_run: print 'Dry Run beginning.'
+    if options.dry_run:
+        print 'Dry Run beginning.'
+        print '-'*70
+        print ''
     details = __determine_type(path)
     for full_path in details:
         working_dir, filename = full_path
