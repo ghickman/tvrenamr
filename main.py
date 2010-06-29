@@ -155,7 +155,7 @@ class TvRenamr():
             show = override
             log.debug('Overrode show name with: %s' % show)
         
-        if the is not False: show = self.__move_leading_the_to_trailing_the(show)
+        if the is True: show = self.__move_leading_the_to_trailing_the(show)
         
         log.debug('Final show name: %s' % show)
         
