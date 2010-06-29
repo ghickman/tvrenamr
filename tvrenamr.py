@@ -7,6 +7,8 @@ from optparse import OptionParser
 from main import TvRenamr
 from errors import *
 
+log = logging.getLogger('Core')
+
 parser = OptionParser()
 # parser.add_option('--config', dest='config', help='')
 parser.add_option('-c', '--canonical', dest='canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
@@ -62,6 +64,19 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
         raise Exception
 
 
+def __start_dry_run():
+    log.info('Dry Run beginning.')
+    log.info('-'*70)
+    log.info('')
+
+
+def __stop_dry_run():
+    log.info('')
+    log.info('-'*70)
+    log.info('Dry Run complete. No files were harmed in the process.')
+    log.info('')
+
+
 def rename(path):
     try:
         details = __determine_type(path)
@@ -70,6 +85,7 @@ def rename(path):
     for full_path in details:
         working, filename = full_path
         tv = TvRenamr(working, options.log, options.log_file, options.debug, options.quiet, options.dry)
+        if options.dry: __start_dry_run()
         try:
             credentials = tv.extract_details_from_file(filename, user_regex=options.regex)
             
@@ -85,7 +101,9 @@ def rename(path):
                                 organise=options.organise, format=options.output_format, **credentials)
             
             tv.rename(filename,path)
-        except Exception, e: print e
+        except Exception: pass
+        if options.dry: __stop_dry_run()
+
 
 if __name__=="__main__":
     if args[0] is None: parser.error('You must specify a file or directory')
