@@ -28,11 +28,6 @@ class TvRenamr():
         if log_file == None: log_file = os.path.join(os.path.expanduser('~'), '.tvrenamr', 'tvrenamr.log')
         start_logging(log_file, debug, quiet)
         
-        if self.dry:
-            log.info('Dry Run beginning.')
-            log.info('-'*70)
-            log.info('')
-        
         self.config = None
         possible_config = (
             os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
@@ -198,11 +193,6 @@ class TvRenamr():
             if not self.dry: os.rename(os.path.join(self.working_dir, current_filepath), destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
             log.info('Renamed: \"%s\" to \"%s\"' % (current_filepath, destination_file))
-            if self.dry:
-                log.info('')
-                log.info('-'*70)
-                log.info('Dry Run complete. No files were harmed in the process.')
-                log.info('')
         else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
     
     
