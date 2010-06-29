@@ -38,7 +38,7 @@ class TvRenamr():
             if os.path.exists(path): self.config = Config(path)
         if self.config is None: raise ConfigNotFoundException
     
-        
+    
     def remove_part_from_multiple_episodes(self, show_name):
         """
         In episode titles of multiple part episodes that use the format (Part n) remove the 'Part ' section so the format is (n).
@@ -196,41 +196,23 @@ class TvRenamr():
         else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
     
     
-    def __move_leading_the_to_trailing_the(self, show_name):
+    def __build_organise_path(self, start_path, show_name, season_number, dry_run=False):
         """
-        Moves the leading 'The' of a show name to a trailing 'The'. A comma and space are added before the new 'The'.
+        Constructs a directory path using the show name and season number of an episode.
         
+        :param start_path: The root path to construct the new path under.
         :param show_name: The show name.
-        :type show_name: A string.
+        :param season_number: The season number.
         
-        :raises NoLeadingTheException: Raised when a show name doesn't have a leading The.
-        
-        :returns: The new show name.
+        :return: The path to move a renamed episode to.
         :rtype: A string.
         """
-        if not(show_name.startswith('The ')): return show_name
-        log.debug('Moving the leading \'The\' to end of: '+show_name)
-        return show_name[4:]+', The'
-    
-    
-    def __clean_names(self, filename, character_to_replace=':', replacement_character=','):
-        """
-        Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify 
-        the new characters to be used.
-        
-        :param fn: The string to replace characters in.
-        :type fn: A string.
-        
-        :param character_to_replace: The character to replace.
-        :type character_to_replace: A string that defaults to a colon ':'.
-        
-        :param replacement_character: The replacement character.
-        :type replacement_character: A string that defaults to a comma ','.
-        
-        :returns: The file 
-        :rtype: A string.
-        """
-        return filename.replace(character_to_replace, replacement_character)
+        if start_path[-1:] != '/': start_path = start_path +'/'
+        path = start_path + show_name +'/Season '+ str(int(season_number)) +'/'
+        if not os.path.exists(path) and not dry_run:
+            os.makedirs(path)
+            log.debug('Directories created for path: '+path)
+        return path
     
     
     def __build_regex(self, regex=None):
@@ -290,21 +272,39 @@ class TvRenamr():
         return regex
     
     
-    def __build_organise_path(self, start_path, show_name, season_number, dry_run=False):
+    def __clean_names(self, filename, character_to_replace=':', replacement_character=','):
         """
-        Constructs a directory path using the show name and season number of an episode.
+        Cleans the string passed in, making it be safe for all file systems. Also allows the user to specify 
+        the new characters to be used.
         
-        :param start_path: The root path to construct the new path under.
-        :param show_name: The show name.
-        :param season_number: The season number.
+        :param fn: The string to replace characters in.
+        :type fn: A string.
         
-        :return: The path to move a renamed episode to.
+        :param character_to_replace: The character to replace.
+        :type character_to_replace: A string that defaults to a colon ':'.
+        
+        :param replacement_character: The replacement character.
+        :type replacement_character: A string that defaults to a comma ','.
+        
+        :returns: The file 
         :rtype: A string.
         """
-        if start_path[-1:] != '/': start_path = start_path +'/'
-        path = start_path + show_name +'/Season '+ str(int(season_number)) +'/'
-        if not os.path.exists(path) and not dry_run:
-            os.makedirs(path)
-            log.debug('Directories created for path: '+path)
-        return path
+        return filename.replace(character_to_replace, replacement_character)
+    
+        
+    def __move_leading_the_to_trailing_the(self, show_name):
+        """
+        Moves the leading 'The' of a show name to a trailing 'The'. A comma and space are added before the new 'The'.
+
+        :param show_name: The show name.
+        :type show_name: A string.
+
+        :raises NoLeadingTheException: Raised when a show name doesn't have a leading The.
+
+        :returns: The new show name.
+        :rtype: A string.
+        """
+        if not(show_name.startswith('The ')): return show_name
+        log.debug('Moving the leading \'The\' to end of: '+show_name)
+        return show_name[4:]+', The'
     
