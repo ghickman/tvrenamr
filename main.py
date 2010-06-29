@@ -193,7 +193,7 @@ class TvRenamr():
             if not self.dry: os.rename(os.path.join(self.working_dir, current_filepath), destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
             log.info('Renamed: \"%s\" to \"%s\"' % (current_filepath, destination_file))
-        else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
+        else: raise EpisodeAlreadyExistsInDirectoryException(destination_filepath)
     
     
     def __build_organise_path(self, start_path, show_name, season_number, dry_run=False):

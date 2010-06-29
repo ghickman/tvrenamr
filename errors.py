@@ -31,8 +31,10 @@ class EpisodeAlreadyExistsInDirectoryException(Exception):
     :param fn: The destination file name.
     :param dest: The destination directory.
     """
-    def __init__(self, fn, dest):
-        log.error('\'%s\' already exists in: %s' % (fn, dest))
+    def __init__(self, destination_path):
+        import os
+        path, filename = os.path.split(destination_path)
+        log.error('\'%s\' already exists in: %s' % (filename, path))
     
 class EpisodeNotFoundException(Exception):
     """
