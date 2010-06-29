@@ -43,29 +43,6 @@ class TvRenamr():
             if os.path.exists(path): self.config = Config(path)
         if self.config is None: raise ConfigNotFoundException
     
-    
-    def convert_show_names_using_exceptions_file(self, exceptions_file, show_name):
-        """
-        DEPRECATED
-        Converts a show name to a new name specified in the exceptions_file. This method is designed for use in
-        conjunction with the daemon.
-        
-        :param exceptions_file: Location of the exceptions file to use.
-        :param show_name: The show name to replace from the exceptions file.
-        
-        :raises ShowNotInExceptionsList: Raised when the show isn't found in the exceptions file.
-        
-        :returns: The new show name.
-        :rtype: A string.
-        """
-        new_show = None
-        for show in [line.strip().split(' => ') for line in fileinput.input(exceptions_file) if not line.startswith('#')]:
-            if show[0] == show_name.lower():
-                log.debug('Replacing '+show_name+' with '+show[1])
-                new_show = show[1]
-        if new_show is None: raise ShowNotInExceptionsList(show_name)
-        else: return new_show
-    
         
     def remove_part_from_multiple_episodes(self, show_name):
         """
@@ -227,26 +204,6 @@ class TvRenamr():
                 log.info('Dry Run complete. No files were harmed in the process.')
                 log.info('')
         else: raise EpisodeAlreadyExistsInDirectoryException(current_filepath, os.path.split(destination_filepath)[0])
-    
-    
-    def __set_log_level(self, level):
-        """
-        Converts a user specified log level into a logging object level. By default this is Info.
-        
-        :param level: The log level to set.
-        
-        :returns: A log level useable by a logging object
-        :rtype: A string.
-        
-        """
-        LEVELS = {
-            'debug': logging.DEBUG,     #10
-            'info': logging.INFO,       #20
-            'warning': logging.WARNING, #30
-            'error': logging.ERROR,     #40
-            'critical': logging.CRITICAL#50
-        }
-        return LEVELS.get(level, logging.INFO)
     
     
     def __move_leading_the_to_trailing_the(self, show_name):
