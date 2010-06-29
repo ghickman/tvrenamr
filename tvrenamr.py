@@ -58,10 +58,15 @@ def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
         return filelist
     elif os.path.isfile(path):
         return [os.path.split(path)]
+    else:
+        raise Exception
 
 
 def rename(path):
-    details = __determine_type(path)
+    try:
+        details = __determine_type(path)
+    except Exception:
+        print '%s is not a file or directory. Ruh Roe!' % path
     for full_path in details:
         working, filename = full_path
         tv = TvRenamr(working, options.log, options.log_file, options.debug, options.quiet, options.dry)
