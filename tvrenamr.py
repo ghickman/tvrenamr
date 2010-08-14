@@ -104,14 +104,16 @@ def rename(path):
         if options.dry: __stop_dry_run()
 
 
-if __name__=="__main__":
-    if args[0] is None: parser.error('You must specify a file or directory')
-    
-    # Need to capture the Deluge arguments here, before we enter rename so we can instead pass it
-    # as a callback to be called once we've fetched the required information from deluge.
-    if options.deluge or options.deluge_ratio:
-        if options.deluge and not options.deluge_ratio: options.deluge_ratio = 0
-        from lib.filter_deluge import get_deluge_ignore_file_list
-        get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
-    else: rename(args[0])
-else: print 'This script is only designed to be run standalone'
+def run():
+    try:
+        # Need to capture the Deluge arguments here, before we enter rename so we can instead pass it
+        # as a callback to be called once we've fetched the required information from deluge.
+        if options.deluge or options.deluge_ratio:
+            if options.deluge and not options.deluge_ratio: options.deluge_ratio = 0
+            from lib.filter_deluge import get_deluge_ignore_file_list
+            get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
+        else: rename(args[0])
+    except IndexError: parser.error('You must specify a file or directory')
+
+
+if __name__=="__main__": run()
