@@ -122,7 +122,7 @@ class NoLeadingTheException(Exception):
         log.warning('%s has no leading The' % show)
 
 
-class NoInternetConnection(Exception):
+class NoInternetConnectionException(Exception):
     """
     Raised when no internet connection is detected
     """
