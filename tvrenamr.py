@@ -101,7 +101,9 @@ def rename(path):
                                 organise=options.organise, format=options.output_format, **credentials)
             
             tv.rename(filename,path)
-        except Exception: pass
+        except Exception, e:
+            print e
+            pass
         if options.dry: __stop_dry_run()
 
 
