@@ -2,7 +2,7 @@ import logging
 import urllib2
 import xml.etree.ElementTree as ET
 
-from errors import *
+from tvrenamr.errors import *
 
 log = logging.getLogger('The Tv DB')
 
