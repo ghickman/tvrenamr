@@ -78,8 +78,7 @@ def __stop_dry_run():
 def rename(path):
     try:
         details = __determine_type(path)
-    except Exception:
-        print '%s is not a file or directory. Ruh Roe!' % path
+    except Exception: parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
     for full_path in details:
         working, filename = full_path
         tv = TvRenamr(working, options.log, options.log_file, options.debug, options.quiet, options.dry)
