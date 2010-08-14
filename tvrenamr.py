@@ -7,8 +7,6 @@ from optparse import OptionParser, SUPPRESS_HELP
 from main import TvRenamr
 from errors import *
 
-log = logging.getLogger('Core')
-
 parser = OptionParser()
 # parser.add_option('--config', dest='config', help='')
 parser.add_option('-c', '--canonical', dest='canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
