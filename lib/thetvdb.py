@@ -50,7 +50,7 @@ class TheTvDb():
         url = url_base + url_series + urllib2.quote(self.show)
         log.debug('Series url: %s' % url)
         try: data = urllib2.urlopen(url).read()
-        except urllib2.URLError: raise
+        except urllib2.URLError: raise NoInternetConnectionException
         dom = ET.fromstring(data)
         if dom is None: raise XMLEmptyException(log.name, self.show)
         log.debug('XML retrieved, searching for series')
