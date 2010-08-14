@@ -91,6 +91,7 @@ class ShowNotFoundException(Exception):
         log.error('%s could not be found on %s' % (show, library))
 
 
+
 class ShowNotInConfigException(Exception):
     """
     The specified show wasn't found in the exceptions list
@@ -110,6 +111,7 @@ class ShowNotInExceptionsList(Exception):
     def __init__(self, show):
         log.warning('%s is not in the Exceptions list' % show)
 
+
 class NoLeadingTheException(Exception):
     """
     Raised when the file passed in has no leading The in the show name
@@ -118,6 +120,15 @@ class NoLeadingTheException(Exception):
     """
     def __init__(self, show):
         log.warning('%s has no leading The' % show)
+
+
+class NoInternetConnection(Exception):
+    """
+    Raised when no internet connection is detected
+    """
+    def __init__(self):
+        log.error('Please connect to the internet before trying to rename shows!')
+
 
 class UnexpectedFormatException(Exception):
     """
@@ -128,6 +139,7 @@ class UnexpectedFormatException(Exception):
     def __init__(self, fn):
         log.error('File in an unexpected format: %s' % fn)
 
+
 class XMLEmptyException(Exception):
     """
     Raised when the XML document retrieved from a library is empty.
@@ -137,3 +149,4 @@ class XMLEmptyException(Exception):
     """
     def __init__(self, library, show):
         log.error('The XML file retrieved from %s was empty while looking for %s.' % (library, show))
+    
