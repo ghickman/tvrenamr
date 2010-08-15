@@ -6,3 +6,5 @@ tvrenamr/tests/cache
 !tests/data/files
 site
 build
+dist
+tvrenamr.egg-info
