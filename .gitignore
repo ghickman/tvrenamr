@@ -5,3 +5,4 @@ tvrenamr/tests/data
 tvrenamr/tests/cache
 !tests/data/files
 site
+build
