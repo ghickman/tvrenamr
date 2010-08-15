@@ -6,7 +6,7 @@ setup(
     description = 'Rename tv show files using online databases',
     author = 'George Hickman',
     author_email = 'george@ghickman.co.uk',
-    url = 'http://ghickman.github.com/tvrenamr',
+    url = 'http://github.com/ghickman/tvrenamr',
     license = 'MIT',
     packages = ['tvrenamr', 'tvrenamr/lib'],
     scripts = ['bin/tvr'],
@@ -22,4 +22,6 @@ setup(
         'Topic :: Multimedia',
         'Topic :: Utilities'
         'Natural Language :: English'],
+    # platform = ['linux', 'osx', 'windows'],
+    # dependencies = ['pyyaml'],
 )
