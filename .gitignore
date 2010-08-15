@@ -1,7 +1,7 @@
 *.log
 *.pyc
 .com*
-tests/data
-tests/cache
+tvrenamr/tests/data
+tvrenamr/tests/cache
 !tests/data/files
 site
