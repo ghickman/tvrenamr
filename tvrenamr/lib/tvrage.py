@@ -48,7 +48,7 @@ class TvRage():
         """
         url = url_name + self.show.replace(' ', '%20')
         try: data = urllib2.urlopen(url).read()
-        except urllib2.URLError: raise
+        except urllib2.URLError: raise NoNetworkConnectionException('tvrage.com')
         dom = ET.fromstring(data)
         if dom is None: raise XMLEmptyException(log.name, self.show)
         log.debug('XML retrieved, searching for series')

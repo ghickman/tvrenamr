@@ -2,6 +2,8 @@ import logging
 
 log = logging.getLogger('Error')
 
+error = 'Alert: '
+
 class AlreadyNamedException(Exception):
     """
     Raised when the format of the file being passed in is the same as the output format
@@ -122,12 +124,13 @@ class NoLeadingTheException(Exception):
         log.warning('%s has no leading The' % show)
 
 
-class NoInternetConnectionException(Exception):
+class NoNetworkConnectionException(Exception):
     """
-    Raised when no internet connection is detected
+    Raised when no connection to the desired library is detected
+    This will be raised if either the library or the internet connection itself is down
     """
-    def __init__(self):
-        log.error('Please connect to the internet before trying to rename shows!')
+    def __init__(self, library):
+        log.error('%sTV Renamr could not connect to %s. Please check your internet connection and try again.' % (error, library))
 
 
 class UnexpectedFormatException(Exception):
