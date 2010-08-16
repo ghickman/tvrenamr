@@ -46,6 +46,7 @@ class TvRage():
         :returns: A show ID.
         :rtype: A string.
         """
+        log.debug('Retrieving series id for %s' % self.show)
         url = '%s%s' % (url_name, self.show.replace(' ', '%20'))
         try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise NoNetworkConnectionException('tvrage.com')
@@ -73,7 +74,8 @@ class TvRage():
         :returns: The series name and title. Series name is returned so that it is formatted correctly.
         :rtype: A dictionary whose keys are 'series' and 'title'.
         """
-        url = '%s%s' % (url_ep, self.show_id)
+        episode_url = '%s%s' % (url_ep, self.show_id)
+        log.debug('Episode URL: %s' % episode_url)
         try: data = urllib2.urlopen(url).read()
         except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.show)
         dom = ET.fromstring(data)
