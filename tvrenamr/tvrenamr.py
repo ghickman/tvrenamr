@@ -84,7 +84,7 @@ def rename(path):
     for full_path in details:
         working, filename = full_path
         tv = TvRenamr(working, options.log, options.log_file, options.debug, options.quiet, options.dry)
-        if options.dry: __start_dry_run()
+        if options.dry or options.debug: __start_dry_run()
         try:
             credentials = tv.extract_details_from_file(filename, user_regex=options.regex)
             
@@ -103,7 +103,7 @@ def rename(path):
         except Exception, e:
             print e
             pass
-        if options.dry: __stop_dry_run()
+        if options.dry or options.debug: __stop_dry_run()
 
 
 def run():
