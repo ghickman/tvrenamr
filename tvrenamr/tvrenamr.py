@@ -115,7 +115,9 @@ def run():
             from lib.filter_deluge import get_deluge_ignore_file_list
             get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
         else: rename(args[0])
-    except IndexError: parser.error('You must specify a file or directory')
+    except IndexError:
+        if options.debug: print 'Debug: No file or directory specified, using current directory'
+        rename(os.getcwd())
 
 
 if __name__=="__main__": run()
