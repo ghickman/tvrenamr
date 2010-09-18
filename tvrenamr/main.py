@@ -25,9 +25,6 @@ class TvRenamr():
         self.working_dir = working_dir
         self.dry = dry
         
-        if log_file == None: log_file = os.path.join(os.path.expanduser('~'), '.tvrenamr', 'tvrenamr.log')
-        start_logging(log_file, debug, quiet)
-        
         self.config = None
         possible_config = (
             os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
