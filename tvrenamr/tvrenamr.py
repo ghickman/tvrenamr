@@ -4,8 +4,9 @@ import os
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
 
-from main import TvRenamr
 from errors import *
+from logs import start_logging
+from main import TvRenamr
 
 log = logging.getLogger('Core')
 
@@ -27,83 +28,97 @@ parser.add_option('-o', '--output', dest='output_format', help='Set the output f
 parser.add_option('--organise', action='store_true', dest='organise', help='Organise renamed files into folders based on their show name and season number.')
 parser.add_option('--no-organise', action='store_false', dest='organise', help='Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.')
 parser.add_option('-q', '--quiet', action='store_true', dest='quiet', help='Don\'t output logs to the command line')
-parser.add_option('-r', "--rename-dir", dest='rename_dir', help='The directory to move renamed files to, if not specified the working directory is used.')
+parser.add_option('-r', '--recursive', action='store_true', dest='recursive', help='Recursively lookup files in a given directory')
+parser.add_option('--rename-dir', dest='rename_dir', help='The directory to move renamed files to, if not specified the working directory is used.')
 parser.add_option('--no-rename-dir', action='store_false', dest='rename_dir', help='Explicity tell Tv Renamr not to move renamed files. Used to override the config.')
 parser.add_option('--regex', dest='regex', help='The regular expression to use when extracting information from files.')
 parser.add_option('-s', '--season', dest='season', help='Set the season number.')
 parser.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the file')
 options, args = parser.parse_args()
 
-def __determine_type(path, ignore_recursive=False, ignore_filelist=None):
-    """
-    Determines which files need to be processed for renaming.
+class FrontEnd():
+    def __init__(self, path):
+        # start logging
+        if options.log_file == None: options.log_file = os.path.join(os.path.expanduser('~'), '.tvrenamr', 'tvrenamr.log')
+        start_logging(options.log_file, options.debug, options.quiet)
+        
+        # determine type
+        try:
+            file_list = self.__determine_type(path, options.recursive, options.ignore_filelist)
+        except Exception: parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
+        
+        # kick off a rename for each file in the list
+        for details in file_list:
+            if options.dry or options.debug: self.__start_dry_run()
+            self.rename(details)
+            if options.dry or options.debug: self.__stop_dry_run()
     
-    :param path: The input file or directory.
-    :param ignore_recursive: To ignore a recursive search for files if 'path' is a directory.
-    Default is False.
-    :param ignore_filelist: Optional set of files to ignore from renaming. Often used by filtering
-    methods such as Deluge.
     
-    :returns: A list of files to be renamed.
-    :rtype: A list of dictionaries, who's keys are 'directory' and 'filename'.
-    """
-    if os.path.isdir(path):
-        filelist = []
-        for root, dirs, files in os.walk(path):
-            for fname in files:
-                # If we have a file we should be ignoring and skipping it.
-                if ignore_filelist is not None and (os.path.join(root, fname) in ignore_filelist):
-                    continue
-                filelist.append((root, fname))
-            # Don't want a recusive walk?
-            if ignore_recursive: break
-        return filelist
-    elif os.path.isfile(path):
-        return [os.path.split(path)]
-    else:
-        raise Exception
-
-
-def __start_dry_run():
-    log.info('Dry Run beginning.')
-    log.info('-'*70)
-    log.info('')
-
-
-def __stop_dry_run():
-    log.info('')
-    log.info('-'*70)
-    log.info('Dry Run complete. No files were harmed in the process.')
-    log.info('')
-
-
-def rename(path):
-    try:
-        details = __determine_type(path)
-    except Exception: parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
-    for full_path in details:
-        working, filename = full_path
+    def __determine_type(self, path, recursive=False, ignore_filelist=None):
+        """
+        Determines which files need to be processed for renaming.
+        
+        :param path: The input file or directory.
+        :param ignore_recursive: To ignore a recursive search for files if 'path' is a directory.
+        Default is False.
+        :param ignore_filelist: Optional set of files to ignore from renaming. Often used by filtering
+        methods such as Deluge.
+        
+        :returns: A list of files to be renamed.
+        :rtype: A list of dictionaries, who's keys are 'directory' and 'filename'.
+        """
+        if os.path.isdir(path):
+            filelist = []
+            for root, dirs, files in os.walk(path):
+                for fname in files:
+                    # If we have a file we should be ignoring and skipping it.
+                    if ignore_filelist is not None and (os.path.join(root, fname) in ignore_filelist):
+                        continue
+                    filelist.append((root, fname))
+                # Don't want a recusive walk?
+                if not recursive: break
+            return filelist
+        elif os.path.isfile(path):
+            return [os.path.split(path)]
+        else:
+            raise Exception
+    
+    
+    def rename(self, details):
+        working, filename = details
         tv = TvRenamr(working, options.log, options.log_file, options.debug, options.quiet, options.dry)
-        if options.dry or options.debug: __start_dry_run()
         try:
             credentials = tv.extract_details_from_file(filename, user_regex=options.regex)
-            
+        
             if options.season: credentials['season']=options.season
             if options.episode: credentials['episode']=options.episode
-            
+        
             credentials['title'] = tv.retrieve_episode_name(library=options.library,
                                                         canonical=options.canonical, **credentials)
             credentials['show'] = tv.format_show_name(show=credentials['show'], the=options.the,
                                                         override=options.name)
-            
+        
             path = tv.build_path(dry=options.dry, rename_dir=options.rename_dir, \
                                 organise=options.organise, format=options.output_format, **credentials)
-            
+        
             tv.rename(filename,path)
         except Exception, e:
-            print e
+            log.critical(e)
             pass
-        if options.dry or options.debug: __stop_dry_run()
+    
+    
+    def __start_dry_run(self):
+        log.info('Dry Run beginning.')
+        log.info('-'*70)
+        log.info('')
+    
+    
+    def __stop_dry_run(self):
+        log.info('')
+        log.info('-'*70)
+        log.info('Dry Run complete. No files were harmed in the process.')
+        log.info('')
+    
 
 
 def run():
@@ -114,10 +129,10 @@ def run():
             if options.deluge and not options.deluge_ratio: options.deluge_ratio = 0
             from lib.filter_deluge import get_deluge_ignore_file_list
             get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
-        else: rename(args[0])
+        else: FrontEnd(args[0])
     except IndexError:
         if options.debug: print 'Debug: No file or directory specified, using current directory'
-        rename(os.getcwd())
+        FrontEnd(os.getcwd())
 
 
 if __name__=="__main__": run()
