@@ -1,5 +1,5 @@
 from setuptools import setup
- 
+
 setup(
     name = 'tvrenamr',
     version = '2.0',
@@ -11,17 +11,14 @@ setup(
     packages = ['tvrenamr', 'tvrenamr/lib'],
     scripts = ['bin/tvr'],
     classifiers = [
-        'Development Status :: Best/Stable', 
-        'Environment :: Console', 
-        'Intended Audience :: End Users/Desktop', 
-        'License :: OSI Approved :: MIT License', 
-        'Operating System :: MacOS', 
-        'Operating System :: Microsoft :: Windows', 
-        'Operating System :: POSIX :: Linux', 
-        'Programming Language :: Python :: 2.6', 
+        'Environment :: Console',
+        'Intended Audience :: End Users/Desktop',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: MacOS',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 2.6',
         'Topic :: Multimedia',
-        'Topic :: Utilities'
+        'Topic :: Utilities',
         'Natural Language :: English'],
-    # platform = ['linux', 'osx', 'windows'],
-    # dependencies = ['pyyaml'],
 )
