@@ -2,8 +2,6 @@ import logging
 import urllib2
 import xml.etree.ElementTree as ET
 
-from tvrenamr.errors import *
-
 log = logging.getLogger('The Tv DB')
 
 url_base = 'http://www.thetvdb.com/api/'
