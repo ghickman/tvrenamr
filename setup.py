@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'tvrenamr',
-    version = '2.1.3',
+    version = '2.1.4',
     description = 'Rename tv show files using online databases',
     author = 'George Hickman',
     author_email = 'george@ghickman.co.uk',
