@@ -40,7 +40,6 @@ options, args = parser.parse_args()
 class FrontEnd():
     def __init__(self, path):
         # start logging
-        if options.log_file == None: options.log_file = os.path.join(os.path.expanduser('~'), '.tvrenamr', 'tvrenamr.log')
         start_logging(options.log_file, options.debug, options.quiet)
         
         # determine type
