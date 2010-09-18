@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'tvrenamr',
-    version = '2.1.1',
+    version = '2.1.3',
     description = 'Rename tv show files using online databases',
     author = 'George Hickman',
     author_email = 'george@ghickman.co.uk',
@@ -21,4 +21,5 @@ setup(
         'Topic :: Multimedia',
         'Topic :: Utilities',
         'Natural Language :: English'],
+    install_requires = 'pyyaml'
 )
