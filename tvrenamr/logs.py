@@ -6,6 +6,12 @@ import logging
 import logging.handlers
 
 def start_logging(filename=None, debug=False, quiet=False):
+    if filename == None: filename = os.path.join(os.path.expanduser('~'), '.tvrenamr', 'tvrenamr.log')
+    filename = filename.replace('~', os.path.expanduser('~'))
+    try:
+        os.makedirs(os.path.split(filename)[0])
+    except OSError: pass
+    
     # set defaults
     format = ['%(message)s']
     level = logging.INFO
