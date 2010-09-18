@@ -18,6 +18,7 @@ parser.add_option('--deluge', action='store_true', dest='deluge', help='Checks D
 parser.add_option('--deluge-ratio', dest='deluge_ratio', help='Checks Deluge for completed and that the file has at least reached X share ratio.')
 parser.add_option('-d', '--dry-run', dest='dry', action='store_true', help='Dry run your renaming.')
 parser.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file.')
+parser.add_option('--ignore-filelist', dest='ignore_filelist', help=SUPPRESS_HELP)
 parser.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', help='Only use files from the root of a given directory, not entering any sub-directories.')
 parser.add_option('-l', '--log_file', dest='log_file', help='Set the log file location.')
 parser.add_option('--log_level', dest='log', help='Set the log level. Options: debug, info, warning, error and critical.')
