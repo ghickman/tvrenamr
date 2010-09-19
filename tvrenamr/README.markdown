@@ -1,39 +1,69 @@
-
 TV Renamr is a utility to rename TV shows based upon filenames or user input.
-
 
 
 # Requirements
 
-* Python 2.5+
+* Python 2.6+
+* PyYaml
 * The Interwebs
 
+
+# Installation
+
+## Python Package Index
+
+Make sure you have the python [setuptools](http://pypi.python.org/pypi/setuptools) package installed for your version of python (check with `python --version`).
+
+To install from the Python Package Index: `easy_install tvrenamr`
+
+## GitHub
+
+`git clone git://github.com/ghickman/tvrenamr.git`
+
+`cd tvrenamr`
+
+`python setup.py bdist_egg`
 
 
 # How To Use
 
-Run the script with: `python tvrenamr.py [options] file/folder`
+Run in your terminal of choice: `tvr [options] file/folder`
 
-## Options
+## Config File
 
-`-e` or `--episode` - Set the episode number for a file. Cannot be used when renaming more than one file.  
-`--ignore-recursive` - Only use files from the root of the specified directory and do not enter any sub-directories.  
-`-l` or `--log_level` - Set the log level. Valid options are debug, info, warning, error and critical.  
-`--library` - Set the library to use for retrieving episode titles. This defaults to tvrage, but thetvdb is also available.  
-`-n` or --name - Set the name of the name of the show to rename.  
-`-o` or `--output` - Set the output format for the episodes being renamed.  
-`--organise` - Automatically move renamed files to the directory specified with -r and organise them based on their show name and season number.  
-`-r` or `--renamed` - The directory to move renamed files to, if not specified the working directory is used.  
-`--regex` - The regular expression to use when extracting information from files.  
-`-s` or `--season` - Set the season number. Cannot be used when renaming more than one file.  
-`-t` or `--the` - Set the position of 'The' in a show's name to the end of the show name, i.e. 'The Wire' becomes 'Wire, The'.  
-`-x` or `--exceptions` - Specify the location of an exceptions file.  
+For ease of use Tv Renamr uses a config file. By default it looks for it in `~/.tvrenamr/config.yml`, an example one is available [here](http://gist.github.com/586062).
+
+## Command Line Options
+
+If you need more control or if theres a pesky file you need to test, then the command line options give you the most power.
+
+`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.
+`--deluge` - Checks Deluge to make sure the file has been completed before renaming.
+`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.
+`-d` or `--dry-run` - Dry run your renaming.
+`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.
+`-l` or `--log_file` - Set the log file location.
+`--log_level` - Set the log level. Options: debug, info, warning, error and critical.
+`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.
+`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.
+`-o` or `--output` - Set the output format for the episodes being renamed.
+`--organise` - Organise renamed files into folders based on their show name and season number.
+`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.
+`-q` or `--quiet` - Don't output logs to the command line
+`-r` or `--recursive` - Recursively lookup files in a given directory
+`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.
+`--no-rename-dir` - Explicity tell Tv Renamr not to move renamed files. Used to override the config.
+`--regex` - The regular expression to use when extracting information from files.
+`-s` or `--season` - Set the season number.
+`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file
 
 ### Examples
 
-* `python tvrenamr.py --organise -r '/path/to/a/directory/' /path/a/directory/or/file/[the_file.avi]`
-* `python tvrenamr.py --season=number --name=name /path/to/a/file/the_file.avi`
-
+* `tvr`
+* `tvr /path/to/a/directory/`
+* `tvr /path/to/a/file.avi`
+* `tvr --organise -r '/path/to/a/directory/' /path/to/a/directory/[a_file.avi]`
+* `tvr --season '1' --name 'chuck' /path/to/a/file/the_file.avi`
 
 
 ## Custom Regular Expressions
@@ -59,7 +89,7 @@ Python regular expression syntax can be found [here](http://www.python.org/doc/2
 
 
 
-## Exceptions File
+<!-- ## Exceptions File
 
 Specify files that you know have different show names in the their file names to that of the actual show name. Each line should define the expected show 
 name from your files and then the actual show name, i.e what The Tv Db and Tv Rage expect the name to be, separated by the string ' => '. Lines 
@@ -70,7 +100,7 @@ beginning with # are treated as comments.
     # This is a comment
     american dad => american dad!
     avatar => avatar: the last airbender
-    csi => csi: crime scene investigation
+    csi => csi: crime scene investigation -->
 
 
 
