@@ -22,7 +22,7 @@ class ConfigNotFoundException(Exception):
     :param dest: The destination directory.
     """
     def __init__(self):
-        log.error('A config could not be found. Please place one in either ~/.tvrenamr or the root directory of Tv Renamr')
+        log.error('A config could not be found. Please place one in ~/.tvrenamr/config.yml or specify a location')
     
 
 
