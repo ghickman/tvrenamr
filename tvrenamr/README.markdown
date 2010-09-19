@@ -31,31 +31,31 @@ Run in your terminal of choice: `tvr [options] file/folder`
 
 ## Config File
 
-For ease of use Tv Renamr uses a config file. By default it looks for it in `~/.tvrenamr/config.yml`, an example one is available [here](http://gist.github.com/586062).
+For ease of use Tv Renamr uses a config file. By default it looks for it in `~/.tvrenamr/config.yml`, an example one is available [here](http://gist.github.com/586062) which shows all the possible default values you can use.
 
 ## Command Line Options
 
 If you need more control or if theres a pesky file you need to test, then the command line options give you the most power.
 
-`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.
-`--deluge` - Checks Deluge to make sure the file has been completed before renaming.
-`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.
-`-d` or `--dry-run` - Dry run your renaming.
-`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.
-`-l` or `--log_file` - Set the log file location.
-`--log_level` - Set the log level. Options: debug, info, warning, error and critical.
-`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.
-`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.
-`-o` or `--output` - Set the output format for the episodes being renamed.
-`--organise` - Organise renamed files into folders based on their show name and season number.
-`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.
-`-q` or `--quiet` - Don't output logs to the command line
-`-r` or `--recursive` - Recursively lookup files in a given directory
-`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.
-`--no-rename-dir` - Explicity tell Tv Renamr not to move renamed files. Used to override the config.
-`--regex` - The regular expression to use when extracting information from files.
-`-s` or `--season` - Set the season number.
-`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file
+`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.  
+`--deluge` - Checks Deluge to make sure the file has been completed before renaming.  
+`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.  
+`-d` or `--dry-run` - Dry run your renaming.  
+`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.  
+`-l` or `--log_file` - Set the log file location.  
+`--log_level` - Set the log level. Options: debug, info, warning, error and critical.  
+`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.  
+`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.  
+`-o` or `--output` - Set the output format for the episodes being renamed.  
+`--organise` - Organise renamed files into folders based on their show name and season number.  
+`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.  
+`-q` or `--quiet` - Don't output logs to the command line.  
+`-r` or `--recursive` - Recursively lookup files in a given directory.  
+`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.  
+`--no-rename-dir` - Explicitly tell Tv Renamr not to move renamed files. Used to override the config.  
+`--regex` - The regular expression to use when extracting information from files.  
+`-s` or `--season` - Set the season number.  
+`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file.  
 
 ### Examples
 
@@ -87,23 +87,6 @@ where the n in `{n}` specifies how many digits are in each of the sections.
 Python regular expression syntax can be found [here](http://www.python.org/doc/2.6.1/library/re.html#regular-expression-syntax)
 
 
-
-
-<!-- ## Exceptions File
-
-Specify files that you know have different show names in the their file names to that of the actual show name. Each line should define the expected show 
-name from your files and then the actual show name, i.e what The Tv Db and Tv Rage expect the name to be, separated by the string ' => '. Lines 
-beginning with # are treated as comments. 
-
-#### Example & Known Shows
-
-    # This is a comment
-    american dad => american dad!
-    avatar => avatar: the last airbender
-    csi => csi: crime scene investigation -->
-
-
-
 ## Custom Output Format
 
 It is possible to set a custom output format for your files using the following syntax:
@@ -119,11 +102,10 @@ you can specify the format you like, i.e. `%n - %s%e - $t%x` would mirror the de
 *Note:* Not including the `%x` section on Windows systems can cause problems when trying to run your media files.
 
 
-
 # Known Issues
 
 All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives a cleaner format on windows where python replaces the colon character with a backslash '\'.
 
-Shows with a year in the canonical title, like Doctor Who (2005), will fail without specifying the show name and including the year in brackets.
+Shows with a year in the canonical title, like Doctor Who (2005), will fail without specifying the show name which includes the year in brackets. You'll need to put this as the canonical name in the config file.
 
-Renaming sections of a files output, such as the show name, isn't possible yet.
+Multiple episode files are just not coped with at all. The first episode is usually picked up so the file will be renamed using this.
