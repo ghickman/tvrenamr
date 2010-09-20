@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name = 'tvrenamr',
@@ -8,7 +8,7 @@ setup(
     author_email = 'george@ghickman.co.uk',
     url = 'http://github.com/ghickman/tvrenamr',
     license = 'MIT',
-    packages = ['tvrenamr', 'tvrenamr/lib'],
+    packages = find_packages(),
     scripts = ['bin/tvr'],
     classifiers = [
         'Environment :: Console',
