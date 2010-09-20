@@ -10,7 +10,7 @@ from main import TvRenamr
 
 log = logging.getLogger('Core')
 
-parser = OptionParser()
+parser = OptionParser(usage="tvr [options] <file/folder>", version="Tv Renamr 2.1.4")
 # parser.add_option('--config', dest='config', help='')
 parser.add_option('-c', '--canonical', dest='canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
 parser.add_option('--debug', action='store_true', dest='debug', help=SUPPRESS_HELP)
