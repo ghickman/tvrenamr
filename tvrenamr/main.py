@@ -98,9 +98,6 @@ class TvRenamr():
             from lib.tvrage import TvRage as library
             log.debug('Imported Tv Rage library')
         
-        # from lib.lib_test import TheTvDb as library
-        log.debug('Opening test lib')
-        
         if canonical is not None: kwargs['show'] = canonical
         self.library = library(self.config.get_canonical(kwargs['show']), kwargs['season'], kwargs['episode'])
         
