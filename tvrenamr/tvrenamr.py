@@ -52,6 +52,9 @@ class FrontEnd():
             if options.dry or options.debug: self.__start_dry_run()
             self.rename(details)
             if options.dry or options.debug: self.__stop_dry_run()
+            # if we're not doing a dry run add a blank line to split up the logs when there are
+            # multiple files
+            else: log.info('')
     
     
     def __determine_type(self, path, recursive=False, ignore_filelist=None):
