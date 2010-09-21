@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+__author__ = 'George Hickman'
+__version__ = '2.2.0'
+
 import os
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
@@ -10,7 +13,7 @@ from main import TvRenamr
 
 log = logging.getLogger('Core')
 
-parser = OptionParser(usage="tvr [options] <file/folder>", version="Tv Renamr 2.2.0")
+parser = OptionParser(usage="tvr [options] <file/folder>", version="Tv Renamr %s" % __version__)
 # parser.add_option('--config', dest='config', help='')
 parser.add_option('-c', '--canonical', dest='canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
 parser.add_option('--debug', action='store_true', dest='debug', help=SUPPRESS_HELP)
