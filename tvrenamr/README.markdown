@@ -132,6 +132,8 @@ you can specify the format you like, i.e. `%n - %s%e - $t%x` would mirror the de
 
 *Note:* Not including the `%x` section on Windows systems can cause problems when trying to run your media files.
 
+On the command line use the `-o` switch or set the `format` option in the defaults section of your config file.
+
 
 # Caveats | Known Issues
 
