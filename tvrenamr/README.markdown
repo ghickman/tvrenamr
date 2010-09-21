@@ -14,15 +14,15 @@ TV Renamr is a utility to rename TV shows based upon filenames or user input.
 
 Make sure you have the python [setuptools](http://pypi.python.org/pypi/setuptools) package installed for your version of python (check with `python --version`).
 
-To install from the Python Package Index: `easy_install tvrenamr`
+To install from the Python Package Index: `easy_install tvrenamr` - You may need to be an administrator to run this.
 
-## GitHub
+## Source: GitHub
 
 `git clone git://github.com/ghickman/tvrenamr.git`
 
 `cd tvrenamr`
 
-`python setup.py bdist_egg`
+`python setup.py install` - You may need to be an administrator to run this.
 
 
 # How To Use
@@ -32,6 +32,37 @@ Run in your terminal of choice: `tvr [options] file/folder`
 ## Config File
 
 For ease of use Tv Renamr uses a config file. By default it looks for it in `~/.tvrenamr/config.yml`, an example one is available [here](http://gist.github.com/586062) which shows all the possible default values you can use.
+
+The defaults segment should be self-explanatory but I'll list them just for completeness. The listed values are the assumed defaults if any of the options are not added.
+
+__`format: '%n - %s%e - %t%x'`__  
+The output format you want your files to be renamed to.  
+
+__`library: thetvdb`__  
+The online database to use for your episode names. Options are: thetvdb or tvrage
+
+__`organise: yes`__  
+Organise your files within the rename directory.
+
+__`renamed: /Volumes/Media/TV/`__  
+The target directory to rename your files to.
+
+__`the: true`__  
+If a show has a leading 'The', such as 'The Wire', move it to the end of the show name: 'Wire, The'.
+
+Below the defaults are shows that won't get renamed correctly using the default options. Taking CSI as the example you have:
+
+    csi:
+        canonical: "CSI: Crime Scene Investigation"
+        output: "CSI, Crime Scene Investigation"
+
+`csi` is the torrent name and needs to match whatever name your file is being downloaded with, which for CSI would be `csi.s10e01.blah.blah.avi`.
+
+`canonical` is name that the online database holds for the show.
+
+`output` is what you want the show to be renamed to.
+
+__Note__: The quotes around the canonical and output names are needed because of the colon and comma characters.
 
 ## Command Line Options
 
@@ -102,7 +133,7 @@ you can specify the format you like, i.e. `%n - %s%e - $t%x` would mirror the de
 *Note:* Not including the `%x` section on Windows systems can cause problems when trying to run your media files.
 
 
-# Known Issues
+# Caveats | Known Issues
 
 All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives a cleaner format on windows where python replaces the colon character with a backslash '\'.
 
