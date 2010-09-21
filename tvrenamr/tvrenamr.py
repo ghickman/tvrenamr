@@ -45,7 +45,7 @@ class FrontEnd():
         # determine type
         try:
             file_list = self.__determine_type(path, options.recursive, options.ignore_filelist)
-        except Exception: parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
+        except OSError: parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
         
         # kick off a rename for each file in the list
         for details in file_list:
@@ -62,29 +62,35 @@ class FrontEnd():
         Determines which files need to be processed for renaming.
         
         :param path: The input file or directory.
-        :param ignore_recursive: To ignore a recursive search for files if 'path' is a directory.
-        Default is False.
+        :param recursive: Do a recursive search for files if 'path' is a directory. Default is False.
         :param ignore_filelist: Optional set of files to ignore from renaming. Often used by filtering
         methods such as Deluge.
         
         :returns: A list of files to be renamed.
         :rtype: A list of dictionaries, who's keys are 'directory' and 'filename'.
         """
-        if os.path.isdir(path):
-            filelist = []
-            for root, dirs, files in os.walk(path):
-                for fname in files:
-                    # If we have a file we should be ignoring and skipping it.
-                    if ignore_filelist is not None and (os.path.join(root, fname) in ignore_filelist):
-                        continue
-                    filelist.append((root, fname))
-                # Don't want a recusive walk?
-                if not recursive: break
+        filelist = []
+        if len(path) > 1:
+            # must have used wildcards
+            for fn in path:
+                filelist.append(os.path.split(fn))
             return filelist
-        elif os.path.isfile(path):
-            return [os.path.split(path)]
         else:
-            raise Exception
+            if os.path.isdir(path[0]):
+                for root, dirs, files in os.walk(path[0]):
+                    for fname in files:
+                        # If we have a file we should be ignoring and skipping it.
+                        if ignore_filelist is not None and (os.path.join(root, fname) in ignore_filelist):
+                            continue
+                        filelist.append((root, fname))
+                    # Don't want a recusive walk?
+                    if not recursive: break
+                return filelist
+            elif os.path.isfile(path[0]):
+                return [os.path.split(path[0])]
+            else:
+                raise OSError
+    
     
     
     def rename(self, details):
@@ -132,7 +138,7 @@ def run():
             if options.deluge and not options.deluge_ratio: options.deluge_ratio = 0
             from lib.filter_deluge import get_deluge_ignore_file_list
             get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
-        else: FrontEnd(args[0])
+        else: FrontEnd(args)
     except IndexError:
         if options.debug: print 'Debug: No file or directory specified, using current directory'
         FrontEnd(os.getcwd())
