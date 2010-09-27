@@ -75,10 +75,19 @@ class TheTvDb():
         """
         episode_url = '%s%s/series/%s/default/%s/%s/en.xml' % (url_base, apikey, self.show_id, str(int(self.season)), str(int(self.episode)))
         log.debug('Episode URL: %s' % episode_url)
+        
         log.debug('Attempting to retrieve episode name')
         try: f = urllib2.urlopen(episode_url)
         except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
-        dom = ET.fromstring(f.read())
+        log.debug('XML: Retreived')
+        
+        log.debug('XML: Attempting to parse')
+        try:
+            dom = ET.fromstring(f.read())
+        except ExpatError, e:
+            log.error('Invalid XML was received from The TvDB. Maybe try querying TvRage?')
+        log.debug('XML: parsed')
+
         if dom is None: raise XMLEmptyException(log.name, self.show)
         log.debug('Episode XML retrived for %s - %s%s' % (self.show, self.season, self.episode))
         
