@@ -31,6 +31,20 @@ class ConfigNotFoundException(Exception):
                     ~/.tvrenamr/config.yml or specify a location')
 
 
+class EmptyEpisodeNameException(Exception):
+    """
+    Raised when the episode XML document is returned but the name field is empty
+
+    This is usually seen when a season is new enough that the episode names
+    aren't fully known
+    """
+
+    def __init__(self):
+        log.error('The episode name was not found. The record on The TvDB is '+
+                'likely incomplete. You could update The Tv DB yourself or '+
+                'try using the Tv Rage library using --library \'tvrage\'')
+
+
 class EpisodeAlreadyExistsInDirectoryException(Exception):
     """
     Exception that is raised when a file with the same name as the renamed file
