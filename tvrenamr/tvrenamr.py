@@ -169,7 +169,6 @@ class FrontEnd():
                                 format=options.output_format, **credentials)
             tv.rename(filename, path)
         except Exception, e:
-            log.critical(e)
             pass
 
     def __start_dry_run(self):
