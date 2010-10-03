@@ -3,6 +3,11 @@ import urllib2
 from xml.etree import ElementTree
 from xml.parsers.expat import ExpatError
 
+try:
+    from tvrenamr.errors import EmptyEpisodeNameException
+except ImportError:
+    from . errors import EmptyEpisodeNameException
+
 log = logging.getLogger('The Tv DB')
 
 apikey = 'C4C424B4E9137AFD'
@@ -109,15 +114,20 @@ class TheTvDb():
         log.debug('XML: Attempting to parse')
         try:
             dom = ElementTree.fromstring(tempfile.read())
-            log.debug('XML: parsed')
+            log.debug('XML: Parsed')
         except ExpatError, e:
-            log.error('Invalid XML was received from The TvDB. Maybe try \
+            log.error('XML: Invalid document received from The TvDB. Maybe try \
                         querying Tv Rage?')
             exit()
 
         if dom is None:
             raise XMLEmptyException(log.name, self.show)
-        log.debug('Episode XML retrived for %s - %s%s' % \
+        log.debug('XML: Episode document retrived for %s - %s%s' % \
                     (self.show, self.season, self.episode))
 
-        return dom.find("Episode").findtext("EpisodeName")
+        log.debug('XML: Attempting to finding the episode name')
+        episode = dom.find("Episode").findtext("EpisodeName")
+        if not episode:
+            raise EmptyEpisodeNameException
+
+        return episode
