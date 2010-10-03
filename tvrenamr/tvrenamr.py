@@ -102,12 +102,12 @@ class FrontEnd():
         try:
             credentials = tv.extract_details_from_file(filename, user_regex=options.regex)
         
-            if options.season: credentials['season']=options.season
-            if options.episode: credentials['episode']=options.episode
+            if options.season: credentials.season=options.season
+            if options.episode: credentials.episode=options.episode
         
-            credentials['title'] = tv.retrieve_episode_name(library=options.library,
+            credentials.title = tv.retrieve_episode_name(library=options.library,
                                                         canonical=options.canonical, **credentials)
-            credentials['show'] = tv.format_show_name(show=credentials['show'], the=options.the,
+            credentials.show = tv.format_show_name(show=credentials.show, the=options.the,
                                                         override=options.name)
         
             path = tv.build_path(dry=options.dry, rename_dir=options.rename_dir, \
