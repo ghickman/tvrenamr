@@ -152,16 +152,16 @@ class FrontEnd():
             credentials = tv.extract_details_from_file(filename, \
                                                     user_regex=options.regex)
             if options.season:
-                credentials.season=options.season
+                credentials['season'] = options.season
             if options.episode:
-                credentials.episode=options.episode
+                credentials['episode'] = options.episode
 
-            credentials.title = tv.retrieve_episode_name( \
+            credentials['title'] = tv.retrieve_episode_name( \
                                                 library=options.library, \
                                                 canonical=options.canonical, \
                                                 **credentials)
-            credentials.show = tv.format_show_name( \
-                                    show=credentials.show, the=options.the,\
+            credentials['show'] = tv.format_show_name( \
+                                    show=credentials['show'], the=options.the,\
                                     override=options.name)
             path = tv.build_path(dry=options.dry,
                                 rename_dir=options.rename_dir, \
@@ -169,6 +169,8 @@ class FrontEnd():
                                 format=options.output_format, **credentials)
             tv.rename(filename, path)
         except Exception, e:
+            if options.debug:
+                log.critical(e)
             pass
 
     def __start_dry_run(self):
