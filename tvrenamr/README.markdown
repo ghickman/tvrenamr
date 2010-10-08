@@ -42,13 +42,13 @@ __`library: thetvdb`__
 The online database to use for your episode names. Options are: thetvdb or tvrage
 
 __`organise: yes`__
-Organise your files within the rename directory.
+Organise your files within the renamed directory.
 
 __`renamed: /Volumes/Media/TV/`__
-The target directory to rename your files to.
+The target directory to move your renamed files to.
 
 __`the: true`__
-If a show has a leading 'The', such as 'The Wire', move it to the end of the show name: 'Wire, The'.
+If a show has a leading 'The', such as 'The Big Bang Theory', move it to the end of the show name: 'Big Bang Theory, The'.
 
 Below the defaults are shows that won't get renamed correctly using the default options. Taking CSI as the example you have:
 
@@ -61,6 +61,8 @@ Below the defaults are shows that won't get renamed correctly using the default 
 `canonical` is name that the online database holds for the show.
 
 `output` is what you want the show to be renamed to.
+
+This method is the easiest way to deal with shows with a year in the name too, i.e. Castle (2009).
 
 __Note__: The quotes around the canonical and output names are needed because of the colon and comma characters.
 
