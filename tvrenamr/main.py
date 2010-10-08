@@ -80,7 +80,7 @@ class TvRenamr():
         fn = fn.replace("_", ".").replace(" ", ".")
         log.info('Renaming: %s' % fn)
         regex = self.__build_regex(user_regex)
-        log.debug('Renaming using: '+regex)
+        log.debug('Renaming using: ' + regex)
         m = re.compile(regex).match(fn)
         if m is not None:
             show = m.group('show').replace('.', ' ').strip()
@@ -125,7 +125,7 @@ class TvRenamr():
 
     def format_show_name(self, show, the=None, override=None):
         if the is None:
-            self.config.get(show, 'the')
+            the = self.config.get(show, 'the')
 
         try:
             show = self.config.get_output(show)
@@ -146,8 +146,7 @@ class TvRenamr():
 
         return show
 
-    def build_path(self, dry_run=False, rename_dir=None, organise=None, \
-                    format=None, **kwargs):
+    def build_path(self, rename_dir=None, organise=None, format=None, **kwargs):
         """
         Build the full destination path and filename of the renamed file Set
         the output format for the file name of a renamed show.
@@ -175,7 +174,7 @@ class TvRenamr():
         kwargs['show'] = self.__clean_names(kwargs['show']\
                 .replace(kwargs['show'][:1], kwargs['show'][:1].upper(), 1))
         if len(kwargs['episode']) == 1:
-            kwargs['episode'] = '0'+ kwargs['episode']
+            kwargs['episode'] = '0' + kwargs['episode']
 
         if format is None:
             format = self.config.get(kwargs['show'], 'format')
@@ -197,7 +196,7 @@ class TvRenamr():
 
         if organise is True:
             rename_dir = self.__build_organise_path(rename_dir, \
-                                    kwargs['show'], kwargs['season'], dry_run)
+                                    kwargs['show'], kwargs['season'])
 
         log.info('Directory: %s' % rename_dir)
         log.info('File: %s' % format)
@@ -228,8 +227,7 @@ class TvRenamr():
             raise EpisodeAlreadyExistsInDirectoryException(\
                                                         destination_filepath)
 
-    def __build_organise_path(self, start_path, show_name, season_number, \
-                                dry_run=False):
+    def __build_organise_path(self, start_path, show_name, season_number):
         """
         Constructs a directory path using the show name and season number of
         an episode.
@@ -242,11 +240,11 @@ class TvRenamr():
         :rtype: A string.
         """
         if start_path[-1:] != '/':
-            start_path = start_path +'/'
-        path = start_path + show_name +'/Season '+ str(int(season_number)) +'/'
-        if not os.path.exists(path) and not dry_run:
+            start_path = start_path + '/'
+        path = start_path + show_name + '/Season' + str(int(season_number)) + '/'
+        if not os.path.exists(path) and not self.dry and not self.debug:
             os.makedirs(path)
-            log.debug('Directories created for path: '+path)
+            log.debug('Directories created for path: ' + path)
         return path
 
     def __build_regex(self, regex=None):
@@ -270,7 +268,7 @@ class TvRenamr():
         episode = '(?P<episode>[\d]{2})'
 
         if regex is None:
-            return series+'\.[Ss]?'+season+'[XxEe]?'+episode
+            return series + '\.[Ss]?' + season + '[XxEe]?' + episode
         if regex.find('%s') is -1 or regex.find('%e') is -1:
             raise IncorrectCustomRegularExpressionSyntaxException(regex)
 
@@ -282,9 +280,9 @@ class TvRenamr():
         if regex.find('%s{') is not -1:
             log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
-            log.debug('Specified '+r+' season digits')
+            log.debug('Specified ' + r + ' season digits')
             s = season.replace('1,2', r)
-            regex = regex.replace('%s{'+r+'}', s)
+            regex = regex.replace('%s{' + r + '}', s)
             log.debug('Season regex set: %s' % s)
 
         # %s
@@ -297,9 +295,9 @@ class TvRenamr():
         if regex.find('%e{') is not -1:
             log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
-            log.debug('User specified '+r+' episode digits')
+            log.debug('User specified' + r + ' episode digits')
             e = episode.replace('2', r)
-            regex = regex.replace('%e{'+r+'}', e)
+            regex = regex.replace('%e{' + r + '}', e)
             log.debug('Episode regex set: %s' % e)
 
         # %e

@@ -27,8 +27,8 @@ class ConfigNotFoundException(Exception):
     """
 
     def __init__(self):
-        log.error('A config could not be found. Please place one in \
-                    ~/.tvrenamr/config.yml or specify a location')
+        log.error('A config could not be found. Please place one in'
+                    '~/.tvrenamr/config.yml or specify a location')
 
 
 class EmptyEpisodeNameException(Exception):
@@ -40,8 +40,8 @@ class EmptyEpisodeNameException(Exception):
     """
 
     def __init__(self):
-        log.error('The episode name was not found. The record on The TvDB is '+
-                'likely incomplete. You could update The Tv DB yourself or '+
+        log.error('The episode name was not found. The record on The TvDB is '
+                'likely incomplete. You could update The Tv DB yourself or '
                 'try using the Tv Rage library using --library \'tvrage\'')
 
 
@@ -101,8 +101,8 @@ class OutputFormatMissingSyntaxException(Exception):
             errors = t.join(syntax)
         else:
             errors = syntax[0]
-        log.error('The output format is missing the following format elements:\
-                    %s' % errors)
+        log.error('The output format is missing the following format elements: '
+                    '%s' % errors)
 
 
 class SeriesIdNotFoundException(Exception):
@@ -138,8 +138,8 @@ class ShowNotInConfigException(Exception):
     """
 
     def __init__(self, show):
-        log.debug('%s is not in the Config - falling back on name extracted \
-                    from the file' % show)
+        log.debug('%s is not in the Config. Falling back on name extracted from'
+                    'the filename' % show)
 
 
 class ShowNotInExceptionsList(Exception):
