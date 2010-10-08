@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 __author__ = 'George Hickman'
-__version__ = '2.2.0'
+__version__ = '2.2.1'
 
 import os
 import sys
@@ -86,6 +86,13 @@ class FrontEnd():
     def __init__(self, path):
         # start logging
         start_logging(options.log_file, options.debug, options.quiet)
+
+        # no path was passed in so assuming current directory.
+        if not path:
+            if options.debug:
+                log.debug('No file or directory specified, using '
+                            'current directory')
+            path = [os.getcwd()]
 
         # determine type
         try:
@@ -186,22 +193,16 @@ class FrontEnd():
 
 
 def run():
-    try:
-        # Need to capture the Deluge arguments here, before we enter rename so
-        # we can instead pass it as a callback to be called once we've fetched
-        # the required information from deluge.
-        if options.deluge or options.deluge_ratio:
-            if options.deluge and not options.deluge_ratio:
-                options.deluge_ratio = 0
-            from lib.filter_deluge import get_deluge_ignore_file_list
-            get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
-        else:
-            FrontEnd(args)
-    except IndexError:
-        if options.debug:
-            print 'Debug: No file or directory specified, using \
-                    current directory'
-        FrontEnd(os.getcwd())
+    # Need to capture the Deluge arguments here, before we enter rename so
+    # we can instead pass it as a callback to be called once we've fetched
+    # the required information from deluge.
+    if options.deluge or options.deluge_ratio:
+        if options.deluge and not options.deluge_ratio:
+            options.deluge_ratio = 0
+        from lib.filter_deluge import get_deluge_ignore_file_list
+        get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
+    else:
+        FrontEnd(args)
 
 
 if __name__ == "__main__":
