@@ -64,7 +64,7 @@ Below the defaults are shows that won't get renamed correctly using the default 
 
 This method is the easiest way to deal with shows with a year in the name too, i.e. Castle (2009).
 
-__Note__: The quotes around the canonical and output names are needed because of the colon and comma characters.
+__Note__: The quotes around the canonical and output names for CSI are needed because of the colon and comma characters as they are reserved by YAML.
 
 ## Command Line Options
 
