@@ -35,19 +35,19 @@ For ease of use Tv Renamr uses a config file. By default it looks for it in `~/.
 
 The defaults segment should be self-explanatory but I'll list them just for completeness. The listed values are the assumed defaults if any of the options are not added.
 
-__`format: '%n - %s%e - %t%x'`__  
-The output format you want your files to be renamed to.  
+__`format: '%n - %s%e - %t%x'`__
+The output format you want your files to be renamed to.
 
-__`library: thetvdb`__  
+__`library: thetvdb`__
 The online database to use for your episode names. Options are: thetvdb or tvrage
 
-__`organise: yes`__  
+__`organise: yes`__
 Organise your files within the rename directory.
 
-__`renamed: /Volumes/Media/TV/`__  
+__`renamed: /Volumes/Media/TV/`__
 The target directory to rename your files to.
 
-__`the: true`__  
+__`the: true`__
 If a show has a leading 'The', such as 'The Wire', move it to the end of the show name: 'Wire, The'.
 
 Below the defaults are shows that won't get renamed correctly using the default options. Taking CSI as the example you have:
@@ -68,25 +68,25 @@ __Note__: The quotes around the canonical and output names are needed because of
 
 If you need more control or if theres a pesky file you need to test, then the command line options give you the most power.
 
-`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.  
-`--deluge` - Checks Deluge to make sure the file has been completed before renaming.  
-`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.  
-`-d` or `--dry-run` - Dry run your renaming.  
-`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.  
-`-l` or `--log_file` - Set the log file location.  
-`--log_level` - Set the log level. Options: debug, info, warning, error and critical.  
-`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.  
-`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.  
-`-o` or `--output` - Set the output format for the episodes being renamed.  
-`--organise` - Organise renamed files into folders based on their show name and season number.  
-`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.  
-`-q` or `--quiet` - Don't output logs to the command line.  
-`-r` or `--recursive` - Recursively lookup files in a given directory.  
-`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.  
-`--no-rename-dir` - Explicitly tell Tv Renamr not to move renamed files. Used to override the config.  
-`--regex` - The regular expression to use when extracting information from files.  
-`-s` or `--season` - Set the season number.  
-`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file.  
+`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.
+`--deluge` - Checks Deluge to make sure the file has been completed before renaming.
+`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.
+`-d` or `--dry-run` - Dry run your renaming.
+`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.
+`-l` or `--log_file` - Set the log file location.
+`--log_level` - Set the log level. Options: debug, info, warning, error and critical.
+`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.
+`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.
+`-o` or `--output` - Set the output format for the episodes being renamed.
+`--organise` - Organise renamed files into folders based on their show name and season number.
+`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.
+`-q` or `--quiet` - Don't output logs to the command line.
+`-r` or `--recursive` - Recursively lookup files in a given directory.
+`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.
+`--no-rename-dir` - Explicitly tell Tv Renamr not to move renamed files. Used to override the config.
+`--regex` - The regular expression to use when extracting information from files.
+`-s` or `--season` - Set the season number.
+`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file.
 
 ### Examples
 
@@ -99,7 +99,7 @@ If you need more control or if theres a pesky file you need to test, then the co
 
 ## Custom Regular Expressions
 
-By default TV Renamr will match shows in the formats: show.s0e00 and show.0x00 but you can specify custom regular expressions if your files aren't in 
+By default TV Renamr will match shows in the formats: show.s0e00 and show.0x00 but you can specify custom regular expressions if your files aren't in
 either of these formats. Some custom regular expression syntax has been used to help you specify different parts of the filename:
 
 * Show: `%n` - `(?P<show>[\w\s.,_-]+)`
