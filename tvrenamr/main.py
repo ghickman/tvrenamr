@@ -132,8 +132,8 @@ class TvRenamr():
             log.debug('Using config output name: %s' % show)
         except ShowNotInConfigException:
             show = self.library.get_show()
-            log.debug('Using the formatted show name retrieved by the library:\
-                        %s' % show)
+            log.debug('Using the formatted show name retrieved by the library:'
+                        ' %s' % show)
 
         if override is not None:
             show = override
@@ -345,5 +345,5 @@ class TvRenamr():
         """
         if not(show_name.startswith('The ')):
             return show_name
-        log.debug('Moving the leading \'The\' to end of: '+show_name)
-        return show_name[4:]+', The'
+        log.debug('Moving leading \'The\' to end of: ' + show_name)
+        return show_name[4:] + ', The'
