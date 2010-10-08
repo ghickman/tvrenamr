@@ -146,9 +146,10 @@ class FrontEnd():
 
     def rename(self, details):
         working, filename = details
-        tv = TvRenamr(working, options.log, options.log_file, options.debug, \
-                        options.quiet, options.dry)
+
         try:
+            tv = TvRenamr(working, options.log, options.log_file, \
+                            options.debug, options.quiet, options.dry)
             credentials = tv.extract_details_from_file(filename, \
                                                     user_regex=options.regex)
             if options.season:
@@ -169,7 +170,7 @@ class FrontEnd():
             tv.rename(filename, path)
         except Exception, e:
             if options.debug:
-                log.critical(e)
+                log.critical('Critical Failure: %s' % e)
             pass
 
     def __start_dry_run(self):

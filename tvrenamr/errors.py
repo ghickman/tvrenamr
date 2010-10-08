@@ -27,8 +27,9 @@ class ConfigNotFoundException(Exception):
     """
 
     def __init__(self):
-        log.error('A config could not be found. Please place one in'
-                    '~/.tvrenamr/config.yml or specify a location')
+        log.error('A config could not be found. Please place one in either'
+                    '~/.tvrenamr/config.yml or the tvrenamr root directory. '
+                    'An example config: http://gist.github.com/586062')
 
 
 class EmptyEpisodeNameException(Exception):
