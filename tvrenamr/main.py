@@ -241,7 +241,7 @@ class TvRenamr():
         """
         if start_path[-1:] != '/':
             start_path = start_path + '/'
-        path = start_path + show_name + '/Season' + str(int(season_number)) + '/'
+        path = start_path + show_name + '/Season ' + str(int(season_number)) + '/'
         if not os.path.exists(path) and not self.dry and not self.debug:
             os.makedirs(path)
             log.debug('Directories created for path: ' + path)
