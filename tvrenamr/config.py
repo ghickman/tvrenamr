@@ -47,7 +47,7 @@ class Config():
             try:
                 return self.config[show.lower()]['canonical']
             except KeyError:
-                return show
+                raise ShowNotInConfigException(show)
 
     def __load_config(self, config):
         try:

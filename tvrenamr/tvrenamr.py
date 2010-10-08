@@ -163,8 +163,7 @@ class FrontEnd():
             credentials['show'] = tv.format_show_name( \
                                     show=credentials['show'], the=options.the,\
                                     override=options.name)
-            path = tv.build_path(dry=options.dry,
-                                rename_dir=options.rename_dir, \
+            path = tv.build_path(rename_dir=options.rename_dir, \
                                 organise=options.organise, \
                                 format=options.output_format, **credentials)
             tv.rename(filename, path)
@@ -175,12 +174,12 @@ class FrontEnd():
 
     def __start_dry_run(self):
         log.info('Dry Run beginning.')
-        log.info('-'*70)
+        log.info('-' * 70)
         log.info('')
 
     def __stop_dry_run(self):
         log.info('')
-        log.info('-'*70)
+        log.info('-' * 70)
         log.info('Dry Run complete. No files were harmed in the process.')
         log.info('')
 
@@ -204,5 +203,5 @@ def run():
         FrontEnd(os.getcwd())
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     run()
