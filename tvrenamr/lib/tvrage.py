@@ -2,8 +2,6 @@ import logging
 import urllib2
 import xml.etree.ElementTree as ET
 
-from errors import *
-
 log = logging.getLogger('Tv Rage')
 
 url_name = "http://services.tvrage.com/feeds/search.php?show="
@@ -76,7 +74,7 @@ class TvRage():
         """
         episode_url = '%s%s' % (url_ep, self.show_id)
         log.debug('Episode URL: %s' % episode_url)
-        try: data = urllib2.urlopen(url).read()
+        try: data = urllib2.urlopen(episode_url).read()
         except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.show)
         dom = ET.fromstring(data)
         if dom is None: raise XMLEmptyException(log.name, self.show)

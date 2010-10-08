@@ -1,27 +1,27 @@
-from setuptools import setup
- 
+from setuptools import setup, find_packages
+
+from tvrenamr import __author__, __version__
+
 setup(
     name = 'tvrenamr',
-    version = '2.0',
+    version = __version__,
     description = 'Rename tv show files using online databases',
-    author = 'George Hickman',
+    author = __author__,
     author_email = 'george@ghickman.co.uk',
     url = 'http://github.com/ghickman/tvrenamr',
     license = 'MIT',
-    packages = ['tvrenamr', 'tvrenamr/lib'],
+    packages = find_packages(),
     scripts = ['bin/tvr'],
     classifiers = [
-        'Development Status :: Best/Stable', 
-        'Environment :: Console', 
-        'Intended Audience :: End Users/Desktop', 
-        'License :: OSI Approved :: MIT License', 
-        'Operating System :: MacOS', 
-        'Operating System :: Microsoft :: Windows', 
-        'Operating System :: POSIX :: Linux', 
-        'Programming Language :: Python :: 2.6', 
+        'Environment :: Console',
+        'Intended Audience :: End Users/Desktop',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: MacOS',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 2.6',
         'Topic :: Multimedia',
-        'Topic :: Utilities'
+        'Topic :: Utilities',
         'Natural Language :: English'],
-    # platform = ['linux', 'osx', 'windows'],
-    # dependencies = ['pyyaml'],
+    install_requires = 'pyyaml'
 )

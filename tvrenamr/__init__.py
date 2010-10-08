@@ -1,7 +1,3 @@
-from tvrenamr import run
-
-__author__ = 'George Hickman'
-__versioninfo__ = (2, 0)
-__version__ = '.'.join(map(str, __versioninfo__))
+from tvrenamr import __author__, __version__, run
 
 __all__ = ['run']
