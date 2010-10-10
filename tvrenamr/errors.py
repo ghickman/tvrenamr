@@ -128,7 +128,7 @@ class ShowNotFoundException(Exception):
     """
 
     def __init__(self, library, show):
-        log.error('%s could not be found on %s' % (show, library))
+        log.error('\'%s\' could not be found on %s' % (show, library))
 
 
 class ShowNotInConfigException(Exception):
