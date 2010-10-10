@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 __author__ = 'George Hickman'
-__version__ = '2.2.1'
+__version__ = '2.2.2'
 
 import os
 import sys
@@ -177,7 +177,7 @@ class FrontEnd():
             tv.rename(filename, path)
         except Exception, e:
             if options.debug:
-                log.critical('Critical Failure: %s' % e)
+                log.critical('Critical Failure. %s' % e)
             pass
 
     def __start_dry_run(self):
