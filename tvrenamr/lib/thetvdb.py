@@ -4,9 +4,17 @@ from xml.etree import ElementTree
 from xml.parsers.expat import ExpatError
 
 try:
-    from tvrenamr.errors import EmptyEpisodeNameException
+    from tvrenamr.errors import EmptyEpisodeNameException, \
+                                EpisodeNotFoundException, \
+                                NoNetworkConnectionException, \
+                                ShowNotFoundException, \
+                                XMLEmptyException
 except ImportError:
-    from . errors import EmptyEpisodeNameException
+    from . errors import EmptyEpisodeNameException, \
+                            EpisodeNotFoundException, \
+                            NoNetworkConnectionException, \
+                            ShowNotFoundException, \
+                            XMLEmptyException
 
 log = logging.getLogger('The Tv DB')
 
