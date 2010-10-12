@@ -74,8 +74,8 @@ class TheTvDb():
         try:
             dom = ElementTree.fromstring(data)
         except ExpatError, e:
-            log.error('Invalid XML was received from The TvDB. Maybe try \
-                        querying Tv Rage?')
+            log.error('Invalid XML was received from The TvDB. Maybe try '
+                        'querying Tv Rage?')
             exit()
 
         if dom is None:
