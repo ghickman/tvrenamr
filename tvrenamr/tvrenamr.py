@@ -101,17 +101,19 @@ class FrontEnd():
         except OSError:
             parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
 
+        if options.dry or options.debug:
+            self.__start_dry_run()
+
         # kick off a rename for each file in the list
         for details in file_list:
-            if options.dry or options.debug:
-                self.__start_dry_run()
             self.rename(details)
-            if options.dry or options.debug:
-                self.__stop_dry_run()
-            # if we're not doing a dry run add a blank line to split up the
-            # logs when there are multiple files
-            else:
+
+            # if we're not doing a dry run add a blank line for clarity
+            if options.debug is False and options.dry is False:
                 log.info('')
+
+        if options.dry or options.debug:
+            self.__stop_dry_run()
 
     def __determine_type(self, path, recursive=False, ignore_filelist=None):
         """
@@ -142,7 +144,7 @@ class FrontEnd():
                             (os.path.join(root, fname) in ignore_filelist):
                             continue
                         filelist.append((root, fname))
-                    # Don't want a recusive walk?
+                    # Don't want a recursive walk?
                     if not recursive:
                         break
                 return filelist
