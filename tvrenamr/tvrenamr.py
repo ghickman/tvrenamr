@@ -177,9 +177,11 @@ class FrontEnd():
                                 organise=options.organise, \
                                 format=options.output_format, **credentials)
             tv.rename(filename, path)
-        except Exception, e:
-            if options.debug:
-                log.critical('Critical Failure. %s' % e)
+        except ConfigNotFoundException:
+            if options.dry or options.debug:
+                self.__stop_dry_run()
+            exit()
+        except Exception:
             pass
 
     def __start_dry_run(self):
