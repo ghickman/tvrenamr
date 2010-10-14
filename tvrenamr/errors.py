@@ -56,9 +56,7 @@ class EpisodeAlreadyExistsInDirectoryException(Exception):
     """
 
     def __init__(self, destination_path):
-        import os
-        path, filename = os.path.split(destination_path)
-        log.error('\'%s\' already exists in: %s' % (filename, path))
+        log.error('File already exists: %s' % destination_path)
 
 
 class EpisodeNotFoundException(Exception):
