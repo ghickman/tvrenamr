@@ -17,7 +17,7 @@ class Config():
         self.log.debug('Config loaded')
 
         self.defaults = self.__get_defaults()
-        self.log.debug('Defautls retrieved')
+        self.log.debug('Defaults retrieved')
 
     def exists(self, show):
         if show in self.config:
