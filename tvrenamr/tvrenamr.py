@@ -85,7 +85,8 @@ class FrontEnd():
 
     def __init__(self, path):
         # start logging
-        start_logging(options.log_file, options.debug, options.quiet)
+        start_logging(options.log_file, options.debug, options.quiet, \
+                        options.log_level)
 
         # no path was passed in so assuming current directory.
         if not path:
@@ -157,8 +158,7 @@ class FrontEnd():
         working, filename = details
 
         try:
-            tv = TvRenamr(working, options.log, options.log_file, \
-                            options.debug, options.quiet, options.dry)
+            tv = TvRenamr(working, options.debug, options.dry)
             credentials = tv.extract_details_from_file(filename, \
                                                     user_regex=options.regex)
             if options.season:

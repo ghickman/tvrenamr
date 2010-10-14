@@ -13,8 +13,7 @@ log = logging.getLogger('Core')
 
 class TvRenamr():
 
-    def __init__(self, working_dir, log_level='info', log_file=None, \
-                    debug=False, quiet=False, dry=False):
+    def __init__(self, working_dir, debug=False, dry=False):
         """
         :param working_dir: The working directory.
         :type working_dir: A string.
