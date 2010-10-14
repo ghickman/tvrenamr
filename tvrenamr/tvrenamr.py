@@ -185,15 +185,15 @@ class FrontEnd():
             pass
 
     def __start_dry_run(self):
-        log.info('Dry Run beginning.')
-        log.info('-' * 70)
-        log.info('')
+        log.log(26, 'Dry Run beginning.')
+        log.log(26, '-' * 70)
+        log.log(26, '')
 
     def __stop_dry_run(self):
-        log.info('')
-        log.info('-' * 70)
-        log.info('Dry Run complete. No files were harmed in the process.')
-        log.info('')
+        log.log(26, '')
+        log.log(26, '-' * 70)
+        log.log(26, 'Dry Run complete. No files were harmed in the process.')
+        log.log(26, '')
 
 
 def run():
