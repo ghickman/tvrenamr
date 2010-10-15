@@ -85,8 +85,9 @@ class FrontEnd():
 
     def __init__(self, path):
         # start logging
-        start_logging(options.log_file, options.debug, options.quiet, \
-                        options.log_level)
+        if options.debug:
+            options.log_level = 10
+        start_logging(options.log_file, options.log_level, options.quiet)
 
         # no path was passed in so assuming current directory.
         if not path:
