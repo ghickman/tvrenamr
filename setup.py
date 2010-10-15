@@ -10,8 +10,8 @@ setup(
     author_email = 'george@ghickman.co.uk',
     url = 'http://github.com/ghickman/tvrenamr',
     license = 'MIT',
-    packages = find_packages(),
-    scripts = ['bin/tvr'],
+    packages = find_packages(exclude=['tests']),
+    entry_points = {'console_scripts': ['tvr = tvrenamr.tvrenamr:run',],},
     classifiers = [
         'Environment :: Console',
         'Intended Audience :: End Users/Desktop',
