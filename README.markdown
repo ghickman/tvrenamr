@@ -16,6 +16,13 @@ Make sure you have the python [setuptools](http://pypi.python.org/pypi/setuptool
 
 To install from the Python Package Index: `easy_install tvrenamr` - You may need to be an administrator to run this.
 
+A nice shiny `tvr` script is now installed in the relevant directory.
+
+### Windows
+
+If you are having trouble installing setup tools on windows make sure you have setup environment variables pointing to your python installation and python scripts folder. This will ensure you can run easy_install and tvr from the command line.
+
+
 ## Source: GitHub
 
 `git clone git://github.com/ghickman/tvrenamr.git`
