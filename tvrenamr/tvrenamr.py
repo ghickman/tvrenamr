@@ -38,11 +38,11 @@ parser.add_option('--ignore-recursive', action='store_true',
                     dest='ignore_recursive',
                     help='Only use files from the root of a given directory, \
                             not entering any sub-directories.')
-parser.add_option('-l', '--log_file', dest='log_file',
+parser.add_option('--log_file', dest='log_file',
                     help='Set the log file location.')
-parser.add_option('--log_level', dest='log',
-                    help='Set the log level. Options: debug, info, warning, \
-                            error and critical.')
+parser.add_option('-l', '--log_level', dest='log_level',
+                    help='Set the log level. Options: debug, info, minimal, \
+                    short, warning, error and critical.')
 parser.add_option('--library', dest='library', default='thetvdb',
                     help='Set the library to use for retrieving episode \
                             titles. Options: thetvdb & tvrage.')
