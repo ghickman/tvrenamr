@@ -77,25 +77,25 @@ __Note__: The quotes around the canonical and output names are needed because of
 
 If you need more control or if theres a pesky file you need to test, then the command line options give you the most power.
 
-`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.
-`--deluge` - Checks Deluge to make sure the file has been completed before renaming.
-`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.
-`-d` or `--dry-run` - Dry run your renaming.
-`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.
-`-l` or `--log_file` - Set the log file location.
-`--log_level` - Set the log level. Options: debug, info, warning, error and critical.
-`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.
-`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.
-`-o` or `--output` - Set the output format for the episodes being renamed.
-`--organise` - Organise renamed files into folders based on their show name and season number.
-`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.
-`-q` or `--quiet` - Don't output logs to the command line.
-`-r` or `--recursive` - Recursively lookup files in a given directory.
-`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.
-`--no-rename-dir` - Explicitly tell Tv Renamr not to move renamed files. Used to override the config.
-`--regex` - The regular expression to use when extracting information from files.
-`-s` or `--season` - Set the season number.
-`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file.
+`-c` or `--canonical` - Set the show's canonical name to use when performing the online lookup.  
+`--deluge` - Checks Deluge to make sure the file has been completed before renaming.  
+`--deluge-ratio` - Checks Deluge for completed and that the file has at least reached X share ratio.  
+`-d` or `--dry-run` - Dry run your renaming.  
+`-e` or `--episode` - Set the episode number. Currently this will cause errors when working with more than one file.  
+`--log-file` - Set the log file location.  
+`-l` or `--log-level` - Set the log level. Options: short, minimal, info and debug.  
+`--library` - Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.  
+`-n` or `--name` - Set the show's name. This will be used as the show's when the renaming is completed.  
+`-o` or `--output` - Set the output format for the episodes being renamed.  
+`--organise` - Organise renamed files into folders based on their show name and season number.  
+`--no-organise` - Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.  
+`-q` or `--quiet` - Don't output logs to the command line.  
+`-r` or `--recursive` - Recursively lookup files in a given directory.  
+`--rename-dir` - The directory to move renamed files to, if not specified the working directory is used.  
+`--no-rename-dir` - Explicitly tell Tv Renamr not to move renamed files. Used to override the config.  
+`--regex` - The regular expression to use when extracting information from files.  
+`-s` or `--season` - Set the season number.  
+`-t` or `--the` - Set the position of 'The' in a show's name to the end of the file.  
 
 ### Examples
 
@@ -106,10 +106,75 @@ If you need more control or if theres a pesky file you need to test, then the co
 * `tvr --season '1' --name 'chuck' /path/to/a/file/the_file.avi`
 
 
+## Output and Log Levels
+
+The logging level for the log file is always `debug`, however the amount of information you see in your console can be modified. Use the `--log-level` or `-l` options to select either `short`, `minimal`, `info` or `debug`.
+
+Given the filename `chuck.S01E02.avi` to rename the log levels would show the following information:
+
+### Short
+
+    Renamed: "Chuck - 102 - Chuck Versus the Helicopter.avi"
+
+### Minimal
+
+    Renaming: chuck.S01E02.avi
+    Directory: /Volumes/Media/TV/Chuck/Season 1/
+    Renamed: "Chuck - 102 - Chuck Versus the Helicopter.avi"
+
+### Info
+
+    Renaming: chuck.S01E02.avi
+    Searching: chuck
+    Episode: Chuck Versus the Helicopter
+    Directory: /Volumes/Media/TV/Chuck/Season 1/
+    Renamed: "Chuck - 102 - Chuck Versus the Helicopter.avi"
+
+### Debug
+
+    2010-10-17 20:40 DEBUG    Config      Config loaded
+    2010-10-17 20:40 DEBUG    Config      Defaults retrieved
+    2010-10-17 20:40 SHORT    Core        Dry Run beginning.
+    2010-10-17 20:40 SHORT    Core        ----------------------------------------------------------------------
+    2010-10-17 20:40 SHORT    Core        
+    2010-10-17 20:40 MINIMAL  Core        Renaming: chuck.S01E02.avi
+    2010-10-17 20:40 DEBUG    Core        Renaming using: (?P<show>[\w\s.,_-]+)\.[Ss]?(?P<season>[\d]{1,2})[XxEe]?(?P<episode>[\d]{2})
+    2010-10-17 20:40 DEBUG    Core        Returned show: chuck, season: 01, episode: 02, extension: .avi
+    2010-10-17 20:40 DEBUG    Core        Imported The Tv Db library
+    2010-10-17 20:40 INFO     The Tv DB   Searching: chuck
+    2010-10-17 20:40 DEBUG    The Tv DB   Retrieving series id for chuck
+    2010-10-17 20:40 DEBUG    The Tv DB   Series url: http://www.thetvdb.com/api/GetSeries.php?seriesname=chuck
+    2010-10-17 20:40 DEBUG    The Tv DB   XML: Attempting to parse
+    2010-10-17 20:40 DEBUG    The Tv DB   XML retrieved, searching for series
+    2010-10-17 20:40 DEBUG    The Tv DB   Series chosen: Chuck
+    2010-10-17 20:40 DEBUG    The Tv DB   Retrieved show id: 80348
+    2010-10-17 20:40 DEBUG    The Tv DB   Retrieved canonical show name: Chuck
+    2010-10-17 20:40 DEBUG    The Tv DB   Episode URL: http://www.thetvdb.com/api/C4C424B4E9137AFD/series/80348/default/1/2/en.xml
+    2010-10-17 20:40 DEBUG    The Tv DB   Attempting to retrieve episode name
+    2010-10-17 20:40 DEBUG    The Tv DB   XML: Retreived
+    2010-10-17 20:40 DEBUG    The Tv DB   XML: Attempting to parse
+    2010-10-17 20:40 DEBUG    The Tv DB   XML: Parsed
+    2010-10-17 20:40 DEBUG    The Tv DB   XML: Episode document retrived for Chuck - 0102
+    2010-10-17 20:40 DEBUG    The Tv DB   XML: Attempting to finding the episode name
+    2010-10-17 20:40 DEBUG    The Tv DB   Retrieved episode name: Chuck Versus the Helicopter
+    2010-10-17 20:40 INFO     Core        Episode: Chuck Versus the Helicopter
+    2010-10-17 20:40 DEBUG    Error       'chuck' is not in the Config. Falling back on name extracted from the filename
+    2010-10-17 20:40 DEBUG    Core        Using the formatted show name retrieved by the library: Chuck
+    2010-10-17 20:40 DEBUG    Core        Final show name: Chuck
+    2010-10-17 20:40 MINIMAL  Core        Directory: /Volumes/Media/TV/Chuck/Season 1/
+    2010-10-17 20:40 DEBUG    Core        Full path: /Volumes/Media/TV/Chuck/Season 1/Chuck - 102 - Chuck Versus the Helicopter.avi
+    2010-10-17 20:40 MINIMAL  Core        Renamed: "Chuck - 102 - Chuck Versus the Helicopter.avi"
+    2010-10-17 20:40 SHORT    Core        
+    2010-10-17 20:40 SHORT    Core        ----------------------------------------------------------------------
+    2010-10-17 20:40 SHORT    Core        Dry Run complete. No files were harmed in the process.
+    2010-10-17 20:40 SHORT    Core
+
+Debug will automatically perform a dry run rename since it was designed to be used for testing. However this is the format you will see in your log file, minus the dry run lines of course.
+
+
 ## Custom Regular Expressions
 
-By default TV Renamr will match shows in the formats: show.s0e00 and show.0x00 but you can specify custom regular expressions if your files aren't in
-either of these formats. Some custom regular expression syntax has been used to help you specify different parts of the filename:
+By default TV Renamr will match shows in the formats: show.s0e00 and show.0x00 but you can specify custom regular expressions if your files aren't in either of these formats. Some custom regular expression syntax has been used to help you specify different parts of the filename:
 
 * Show: `%n` - `(?P<show>[\w\s.,_-]+)`
 * Season: `%s` - `(?P<season>[\d]{1,2})`
