@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 __author__ = 'George Hickman'
-__version__ = '2.2.5'
+__version__ = '2.2.6'
 
 import os
 import sys
