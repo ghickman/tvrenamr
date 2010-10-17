@@ -1,10 +1,11 @@
-import os
-import os.path
 import logging
 
 from lib.log_utils import *
 
-def start_logging(filename, log_level, debug=False, quiet=False):
+def start_logging(filename, log_level, quiet=False):
+    """
+    Setup the file logging and start the root logger
+    """
     filename = get_log_file(filename)
     log_level = convert_log_level(log_level)
 
@@ -21,7 +22,7 @@ def start_logging(filename, log_level, debug=False, quiet=False):
                         filemode = 'w')
 
     if not quiet:
-        # setup the console logs
+        # setup the console logs to debug
         # debug
         if log_level is 10:
             console_format = '%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s'

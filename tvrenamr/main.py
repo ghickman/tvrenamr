@@ -5,15 +5,13 @@ import re
 import sys
 
 from errors import *
-from config import Config
-from logs import start_logging
 
 log = logging.getLogger('Core')
 
 
 class TvRenamr():
 
-    def __init__(self, working_dir, debug=False, dry=False):
+    def __init__(self, working_dir, config, debug=False, dry=False):
         """
         :param working_dir: The working directory.
         :type working_dir: A string.
@@ -27,17 +25,7 @@ class TvRenamr():
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
-
-        self.config = None
-        possible_config = (
-            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
-            os.path.join(sys.path[0], 'config.yml'))
-
-        for path in possible_config:
-            if os.path.exists(path):
-                self.config = Config(path)
-        if self.config is None:
-            raise ConfigNotFoundException
+        self.config = config
 
     def remove_part_from_multiple_episodes(self, show_name):
         """

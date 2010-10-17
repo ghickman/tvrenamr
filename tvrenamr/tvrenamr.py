@@ -7,6 +7,7 @@ import os
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
 
+from config import Config
 from errors import *
 from logs import start_logging
 from main import TvRenamr
@@ -89,6 +90,16 @@ class FrontEnd():
             options.log_level = 10
         start_logging(options.log_file, options.log_level, options.quiet)
 
+        possible_config = (
+            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
+            os.path.join(sys.path[0], 'config.yml'))
+
+        for config in possible_config:
+            if os.path.exists(config):
+                self.config = Config(config)
+        if self.config is None:
+            raise ConfigNotFoundException
+
         # no path was passed in so assuming current directory.
         if not path:
             if options.debug:
@@ -159,7 +170,7 @@ class FrontEnd():
         working, filename = details
 
         try:
-            tv = TvRenamr(working, options.debug, options.dry)
+            tv = TvRenamr(working, self.config, options.debug, options.dry)
             credentials = tv.extract_details_from_file(filename, \
                                                     user_regex=options.regex)
             if options.season:
