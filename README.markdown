@@ -146,6 +146,8 @@ On the command line use the `-o` switch or set the `format` option in the defaul
 
 # Caveats | Known Issues
 
+Please report any bugs or feature requests to the [Tv Renamr Lighthouse](http://tvrenamr.lighthouseapp.com/projects/53048-tvrenamr-core/overview) account.
+
 All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives a cleaner format on windows where python replaces the colon character with a backslash '\'.
 
 Shows with a year in the canonical title, like Doctor Who (2005), will fail without specifying the show name which includes the year in brackets. You'll need to put this as the canonical name in the config file.
