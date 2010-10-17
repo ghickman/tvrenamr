@@ -7,6 +7,7 @@ import os
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
 
+from config import Config
 from errors import *
 from logs import start_logging
 from main import TvRenamr
@@ -38,11 +39,11 @@ parser.add_option('--ignore-recursive', action='store_true',
                     dest='ignore_recursive',
                     help='Only use files from the root of a given directory, \
                             not entering any sub-directories.')
-parser.add_option('-l', '--log_file', dest='log_file',
+parser.add_option('--log_file', dest='log_file',
                     help='Set the log file location.')
-parser.add_option('--log_level', dest='log',
-                    help='Set the log level. Options: debug, info, warning, \
-                            error and critical.')
+parser.add_option('-l', '--log_level', dest='log_level',
+                    help='Set the log level. Options: debug, info, minimal, \
+                    short, warning, error and critical.')
 parser.add_option('--library', dest='library', default='thetvdb',
                     help='Set the library to use for retrieving episode \
                             titles. Options: thetvdb & tvrage.')
@@ -85,7 +86,19 @@ class FrontEnd():
 
     def __init__(self, path):
         # start logging
-        start_logging(options.log_file, options.debug, options.quiet)
+        if options.debug:
+            options.log_level = 10
+        start_logging(options.log_file, options.log_level, options.quiet)
+
+        possible_config = (
+            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
+            os.path.join(sys.path[0], 'config.yml'))
+
+        for config in possible_config:
+            if os.path.exists(config):
+                self.config = Config(config)
+        if self.config is None:
+            raise ConfigNotFoundException
 
         # no path was passed in so assuming current directory.
         if not path:
@@ -157,8 +170,7 @@ class FrontEnd():
         working, filename = details
 
         try:
-            tv = TvRenamr(working, options.log, options.log_file, \
-                            options.debug, options.quiet, options.dry)
+            tv = TvRenamr(working, self.config, options.debug, options.dry)
             credentials = tv.extract_details_from_file(filename, \
                                                     user_regex=options.regex)
             if options.season:
