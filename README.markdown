@@ -20,8 +20,7 @@ A nice shiny `tvr` script is now installed in the relevant directory.
 
 ### Windows
 
-If you are having trouble installing setup tools on windows make sure you have setup environment variables pointing to your python installation and python scripts folder. This will ensure you can run easy_install and tvr from the command line.
-
+Due to a problem with easy_install and Tv Renamr's option parsing code it isn't possible to use easy_install for installation just yet, but it should be fixed in the near future.
 
 ## Source: GitHub
 
