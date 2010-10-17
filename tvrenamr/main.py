@@ -5,16 +5,13 @@ import re
 import sys
 
 from errors import *
-from config import Config
-from logs import start_logging
 
 log = logging.getLogger('Core')
 
 
 class TvRenamr():
 
-    def __init__(self, working_dir, log_level='info', log_file=None, \
-                    debug=False, quiet=False, dry=False):
+    def __init__(self, working_dir, config, debug=False, dry=False):
         """
         :param working_dir: The working directory.
         :type working_dir: A string.
@@ -28,17 +25,7 @@ class TvRenamr():
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
-
-        self.config = None
-        possible_config = (
-            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
-            os.path.join(sys.path[0], 'config.yml'))
-
-        for path in possible_config:
-            if os.path.exists(path):
-                self.config = Config(path)
-        if self.config is None:
-            raise ConfigNotFoundException
+        self.config = config
 
     def remove_part_from_multiple_episodes(self, show_name):
         """
@@ -78,7 +65,7 @@ class TvRenamr():
         'extension'.
         """
         fn = fn.replace("_", ".").replace(" ", ".")
-        log.info('Renaming: %s' % fn)
+        log.log(22, 'Renaming: %s' % fn)
         regex = self.__build_regex(user_regex)
         log.debug('Renaming using: ' + regex)
         m = re.compile(regex).match(fn)
@@ -198,8 +185,8 @@ class TvRenamr():
             rename_dir = self.__build_organise_path(rename_dir, \
                                     kwargs['show'], kwargs['season'])
 
-        log.info('Directory: %s' % rename_dir)
-        log.info('File: %s' % format)
+        log.log(22, 'Directory: %s' % rename_dir)
+        log.debug('Full path: %s' % rename_dir + format)
         return os.path.join(rename_dir, format)
 
     def rename(self, current_filepath, destination_filepath):
@@ -221,8 +208,7 @@ class TvRenamr():
                 os.rename(os.path.join(self.working_dir, current_filepath), \
                             destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
-            log.info('Renamed: \"%s\" to \"%s\"' % \
-                    (current_filepath, destination_file))
+            log.log(26, 'Renamed: \"%s\"' % destination_file)
         else:
             raise EpisodeAlreadyExistsInDirectoryException(\
                                                         destination_filepath)

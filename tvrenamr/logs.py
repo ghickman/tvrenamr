@@ -1,61 +1,42 @@
-import os
-import sys
 import logging
-import logging.handlers
 
+from lib.log_utils import *
 
-def start_logging(filename=None, debug=False, quiet=False):
-    if filename == None:
-        filename = os.path.join(os.path.expanduser('~'), \
-                                    '.tvrenamr', 'tvrenamr.log')
-    filename = filename.replace('~', os.path.expanduser('~'))
-    try:
-        os.makedirs(os.path.split(filename)[0])
-    except OSError:
-        pass
+def start_logging(filename, log_level, quiet=False):
+    """
+    Setup the file logging and start the root logger
+    """
+    filename = get_log_file(filename)
+    log_level = convert_log_level(log_level)
 
-    # set defaults
-    format = ['%(message)s']
-    level = logging.INFO
-    file_handler = logging.handlers.RotatingFileHandler(filename, \
-                                            maxBytes=1000*1024, backupCount=9)
+    # add the custom levels
+    logging.addLevelName(22, 'MINIMAL')
+    logging.addLevelName(26, 'SHORT')
 
-    # set debug options
-    if debug:
-        format = [
-            '%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s',
-            '%Y-%m-%d %H:%M']
-        level = logging.DEBUG
-        file_handler = logging.StreamHandler()
+    # setup log file
+    file_format = '%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s'
+    logging.basicConfig(level = logging.DEBUG,
+                        format = file_format,
+                        datefmt = '%m-%d %H:%M',
+                        filename = filename,
+                        filemode = 'w')
 
-    # root logger
-    logger = logging.getLogger()
+    if not quiet:
+        # setup the console logs to debug
+        # debug
+        if log_level is 10:
+            console_format = '%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s'
+            console_datefmt = '%Y-%m-%d %H:%M'
+        else:
+            console_format = '%(message)s'
+            console_datefmt = ''
 
-    # set the log format.
-    formatter = logging.Formatter(*format)
+        console_formatter = logging.Formatter(console_format, console_datefmt)
 
-    mem_handler = logging.handlers.MemoryHandler(1000*1000, 100)
-    mem_handler.setFormatter(formatter)
-    logger.addHandler(mem_handler)
-
-    file_handler.setFormatter(mem_handler.formatter)
-
-    mem_handler.setTarget(file_handler)
-
-    logger.removeHandler(mem_handler)
-    logger.addHandler(file_handler)
-
-    logger.setLevel(level)
-
-    if not debug and not quiet:
+        # define a Handler with the given level and outputs to the console
         console = logging.StreamHandler()
-        console.setFormatter(file_handler.formatter)
-        logger.addHandler(console)
+        console.setLevel(log_level)
 
-        # flush memory handler to the console without destroying the buffer
-        if len(mem_handler.buffer) > 0:
-            for record in mem_handler.buffer:
-                console.handle(record)
-
-    # flush what we have stored from the module initialization
-    mem_handler.flush()
+        # set the console format & attach the handler to the root logger with it.
+        console.setFormatter(console_formatter)
+        logging.getLogger().addHandler(console)

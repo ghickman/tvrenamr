@@ -56,9 +56,7 @@ class EpisodeAlreadyExistsInDirectoryException(Exception):
     """
 
     def __init__(self, destination_path):
-        import os
-        path, filename = os.path.split(destination_path)
-        log.error('\'%s\' already exists in: %s' % (filename, path))
+        log.error('File already exists: %s' % destination_path)
 
 
 class EpisodeNotFoundException(Exception):
@@ -85,8 +83,8 @@ class IncorrectCustomRegularExpressionSyntaxException(Exception):
     """
 
     def __init__(self, regex):
-        log.error('The regular expression provided does not contain the \
-                    required custom syntax.')
+        log.error('The regular expression provided does not contain the '
+                    'required custom syntax.')
 
 
 class OutputFormatMissingSyntaxException(Exception):
@@ -173,8 +171,8 @@ class NoNetworkConnectionException(Exception):
     """
 
     def __init__(self, library):
-        log.error('%sTV Renamr could not connect to %s. Please check your \
-                    internet connection and try again.' % (error, library))
+        log.error('%sTV Renamr could not connect to %s. Please check your '
+                    'internet connection and try again.' % (error, library))
 
 
 class UnexpectedFormatException(Exception):
@@ -197,5 +195,5 @@ class XMLEmptyException(Exception):
     """
 
     def __init__(self, library, show):
-        log.error('The XML file retrieved from %s was empty while looking for\
-                    %s.' % (library, show))
+        log.error('The XML file retrieved from %s was empty while looking for '
+                    '%s.' % (library, show))

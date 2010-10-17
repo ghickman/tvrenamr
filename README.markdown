@@ -16,6 +16,13 @@ Make sure you have the python [setuptools](http://pypi.python.org/pypi/setuptool
 
 To install from the Python Package Index: `easy_install tvrenamr` - You may need to be an administrator to run this.
 
+A nice shiny `tvr` script is now installed in the relevant directory.
+
+### Windows
+
+If you are having trouble installing setup tools on windows make sure you have setup environment variables pointing to your python installation and python scripts folder. This will ensure you can run easy_install and tvr from the command line.
+
+
 ## Source: GitHub
 
 `git clone git://github.com/ghickman/tvrenamr.git`
@@ -138,6 +145,8 @@ On the command line use the `-o` switch or set the `format` option in the defaul
 
 
 # Caveats | Known Issues
+
+Please report any bugs or feature requests to the [Tv Renamr Lighthouse](http://tvrenamr.lighthouseapp.com/projects/53048-tvrenamr-core/overview) account.
 
 All colons ':' are converted to commas ',' in both the show name and the episode title. This stops issues that can arise with network shares and gives a cleaner format on windows where python replaces the colon character with a backslash '\'.
 

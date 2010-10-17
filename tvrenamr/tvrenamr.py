@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
 __author__ = 'George Hickman'
-__version__ = '2.2.2'
+__version__ = '2.2.3'
 
 import os
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
 
+from config import Config
 from errors import *
 from logs import start_logging
 from main import TvRenamr
@@ -38,11 +39,11 @@ parser.add_option('--ignore-recursive', action='store_true',
                     dest='ignore_recursive',
                     help='Only use files from the root of a given directory, \
                             not entering any sub-directories.')
-parser.add_option('-l', '--log_file', dest='log_file',
+parser.add_option('--log_file', dest='log_file',
                     help='Set the log file location.')
-parser.add_option('--log_level', dest='log',
-                    help='Set the log level. Options: debug, info, warning, \
-                            error and critical.')
+parser.add_option('-l', '--log_level', dest='log_level',
+                    help='Set the log level. Options: debug, info, minimal, \
+                    short, warning, error and critical.')
 parser.add_option('--library', dest='library', default='thetvdb',
                     help='Set the library to use for retrieving episode \
                             titles. Options: thetvdb & tvrage.')
@@ -85,7 +86,19 @@ class FrontEnd():
 
     def __init__(self, path):
         # start logging
-        start_logging(options.log_file, options.debug, options.quiet)
+        if options.debug:
+            options.log_level = 10
+        start_logging(options.log_file, options.log_level, options.quiet)
+
+        possible_config = (
+            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
+            os.path.join(sys.path[0], 'config.yml'))
+
+        for config in possible_config:
+            if os.path.exists(config):
+                self.config = Config(config)
+        if self.config is None:
+            raise ConfigNotFoundException
 
         # no path was passed in so assuming current directory.
         if not path:
@@ -101,17 +114,19 @@ class FrontEnd():
         except OSError:
             parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
 
+        if options.dry or options.debug:
+            self.__start_dry_run()
+
         # kick off a rename for each file in the list
         for details in file_list:
-            if options.dry or options.debug:
-                self.__start_dry_run()
             self.rename(details)
-            if options.dry or options.debug:
-                self.__stop_dry_run()
-            # if we're not doing a dry run add a blank line to split up the
-            # logs when there are multiple files
-            else:
+
+            # if we're not doing a dry run add a blank line for clarity
+            if options.debug is False and options.dry is False:
                 log.info('')
+
+        if options.dry or options.debug:
+            self.__stop_dry_run()
 
     def __determine_type(self, path, recursive=False, ignore_filelist=None):
         """
@@ -142,7 +157,7 @@ class FrontEnd():
                             (os.path.join(root, fname) in ignore_filelist):
                             continue
                         filelist.append((root, fname))
-                    # Don't want a recusive walk?
+                    # Don't want a recursive walk?
                     if not recursive:
                         break
                 return filelist
@@ -155,8 +170,7 @@ class FrontEnd():
         working, filename = details
 
         try:
-            tv = TvRenamr(working, options.log, options.log_file, \
-                            options.debug, options.quiet, options.dry)
+            tv = TvRenamr(working, self.config, options.debug, options.dry)
             credentials = tv.extract_details_from_file(filename, \
                                                     user_regex=options.regex)
             if options.season:
@@ -175,21 +189,32 @@ class FrontEnd():
                                 organise=options.organise, \
                                 format=options.output_format, **credentials)
             tv.rename(filename, path)
-        except Exception, e:
+        except (ConfigNotFoundException, NoNetworkConnectionException):
+            if options.dry or options.debug:
+                self.__stop_dry_run()
+            exit()
+        except (EmptyEpisodeNameException, \
+                EpisodeAlreadyExistsInDirectoryException, \
+                EpisodeNotFoundException, \
+                IncorrectCustomRegularExpressionSyntaxException, \
+                OutputFormatMissingSyntaxException, ShowNotFoundException, \
+                UnexpectedFormatException, XMLEmptyException):
+            pass
+        except Exception as err:
             if options.debug:
-                log.critical('Critical Failure. %s' % e)
+                log.critical(err)
             pass
 
     def __start_dry_run(self):
-        log.info('Dry Run beginning.')
-        log.info('-' * 70)
-        log.info('')
+        log.log(26, 'Dry Run beginning.')
+        log.log(26, '-' * 70)
+        log.log(26, '')
 
     def __stop_dry_run(self):
-        log.info('')
-        log.info('-' * 70)
-        log.info('Dry Run complete. No files were harmed in the process.')
-        log.info('')
+        log.log(26, '')
+        log.log(26, '-' * 70)
+        log.log(26, 'Dry Run complete. No files were harmed in the process.')
+        log.log(26, '')
 
 
 def run():
