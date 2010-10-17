@@ -6,7 +6,7 @@ from nose.tools import *
 #stub urlopen calls
 import urlopenmock
 
-from main import TvRenamr
+from tvrenamr.main import TvRenamr
 
 class TestMain(object):
     working = 'tests/data/working'
