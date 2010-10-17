@@ -189,11 +189,20 @@ class FrontEnd():
                                 organise=options.organise, \
                                 format=options.output_format, **credentials)
             tv.rename(filename, path)
-        except ConfigNotFoundException:
+        except (ConfigNotFoundException, NoNetworkConnectionException):
             if options.dry or options.debug:
                 self.__stop_dry_run()
             exit()
-        except Exception:
+        except (EmptyEpisodeNameException, \
+                EpisodeAlreadyExistsInDirectoryException, \
+                EpisodeNotFoundException, \
+                IncorrectCustomRegularExpressionSyntaxException, \
+                OutputFormatMissingSyntaxException, ShowNotFoundException, \
+                UnexpectedFormatException, XMLEmptyException):
+            pass
+        except Exception as err:
+            if options.debug:
+                log.critical(err)
             pass
 
     def __start_dry_run(self):
