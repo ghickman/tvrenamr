@@ -137,8 +137,8 @@ class ShowNotInConfigException(Exception):
     """
 
     def __init__(self, show):
-        log.debug('%s is not in the Config. Falling back on name extracted from'
-                    'the filename' % show)
+        log.debug('\'%s\' is not in the Config. Falling back on name extracted from'
+                    ' the filename' % show)
 
 
 class ShowNotInExceptionsList(Exception):
