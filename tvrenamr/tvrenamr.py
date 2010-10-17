@@ -16,7 +16,6 @@ log = logging.getLogger('Core')
 
 parser = OptionParser(usage="tvr [options] <file/folder>",
                         version="Tv Renamr %s" % __version__)
-# parser.add_option('--config', dest='config', help='')
 parser.add_option('-c', '--canonical', dest='canonical',
                     help='Set the show\'s canonical name to use when \
                             performing the online lookup.')
@@ -39,19 +38,17 @@ parser.add_option('--ignore-recursive', action='store_true',
                     dest='ignore_recursive',
                     help='Only use files from the root of a given directory, \
                             not entering any sub-directories.')
-parser.add_option('--log_file', dest='log_file',
+parser.add_option('--log-file', dest='log_file',
                     help='Set the log file location.')
-parser.add_option('-l', '--log_level', dest='log_level',
-                    help='Set the log level. Options: debug, info, minimal, \
-                    short, warning, error and critical.')
+parser.add_option('-l', '--log-level', dest='log_level',
+                    help='Set the log level. Options: short, minimal, info and \
+                            debug.')
 parser.add_option('--library', dest='library', default='thetvdb',
                     help='Set the library to use for retrieving episode \
                             titles. Options: thetvdb & tvrage.')
 parser.add_option('-n', '--name', dest='name',
                     help='Set the show\'s name. This will be used as the \
                             show\'s when the renaming is completed.')
-# parser.add_option('--no-config', dest='no_config', action='store_true',
-                    #help='Ignore the config')
 parser.add_option('-o', '--output', dest='output_format',
                     help='Set the output format for the episodes being \
                             renamed.')
