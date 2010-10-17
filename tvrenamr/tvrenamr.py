@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 __author__ = 'George Hickman'
-__version__ = '2.2.4'
+__version__ = '2.2.5'
 
 import os
 import sys
@@ -16,6 +16,9 @@ log = logging.getLogger('Core')
 
 parser = OptionParser(usage="tvr [options] <file/folder>",
                         version="Tv Renamr %s" % __version__)
+parser.add_option('--config', dest='config', \
+                    help='Select a location for your config file. If the path \
+                            is invalid the default locations will be used.')
 parser.add_option('-c', '--canonical', dest='canonical',
                     help='Set the show\'s canonical name to use when \
                             performing the online lookup.')
@@ -88,12 +91,16 @@ class FrontEnd():
         start_logging(options.log_file, options.log_level, options.quiet)
 
         possible_config = (
+            options.config,
             os.path.expanduser('~/.tvrenamr/config.yml'),
             os.path.join(sys.path[0], 'config.yml'))
 
+        # get the first viable config from the list of possibles
         for config in possible_config:
-            if os.path.exists(config):
+            if config is not None and os.path.exists(config):
+                print config
                 self.config = Config(config)
+                break
         if self.config is None:
             raise ConfigNotFoundException
 
