@@ -6,9 +6,9 @@ from nose.tools import *
 #stub urlopen calls
 import urlopenmock
 
-from main import TvRenamr
-from lib.tvrage import TvRage
-from errors import *
+from tvrenamr.main import TvRenamr
+from tvrenamr.lib.tvrage import TvRage
+from tvrenamr.errors import *
 
 class TestTvRage(object):
     working = 'tests/data/working'

@@ -5,7 +5,7 @@ from nose.tools import *
 #stub urlopen calls
 import urlopenmock
 
-from main import TvRenamr
+from tvrenamr.main import TvRenamr
 
 class TestAutoMoving(object):
     working = 'tests/data/working'

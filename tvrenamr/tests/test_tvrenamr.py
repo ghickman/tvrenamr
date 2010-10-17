@@ -5,7 +5,7 @@ from nose.tools import *
 #stub urlopen calls
 import urlopenmock
 
-from errors import UnexpectedFormatException
+from tvrenamr.errors import UnexpectedFormatException
 
 base = 'python tvrenamr.py'
 working = 'tests/data/working'
