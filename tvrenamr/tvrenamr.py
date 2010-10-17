@@ -91,7 +91,7 @@ class FrontEnd():
         start_logging(options.log_file, options.log_level, options.quiet)
 
         possible_config = (
-            os.path.join(os.path.expanduser('~'), '.tvrenamr', 'config.yml'),
+            os.path.expanduser('~/.tvrenamr/config.yml'),
             os.path.join(sys.path[0], 'config.yml'))
 
         for config in possible_config:
