@@ -98,7 +98,6 @@ class FrontEnd():
         # get the first viable config from the list of possibles
         for config in possible_config:
             if config is not None and os.path.exists(config):
-                print config
                 self.config = Config(config)
                 break
         if self.config is None:

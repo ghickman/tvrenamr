@@ -100,10 +100,14 @@ class TvRenamr():
             from lib.tvrage import TvRage as library
             log.debug('Imported Tv Rage library')
 
-        if canonical is not None:
+        if canonical:
             kwargs['show'] = canonical
-        self.library = library(self.config.get_canonical(kwargs['show']),
-                                kwargs['season'], kwargs['episode'])
+        else:
+            kwargs['show'] = self.config.get_canonical(kwargs['show'])
+        log.debug('Show Name: %s' % kwargs['show'])
+
+        self.library = library(kwargs['show'], kwargs['season'],
+                                kwargs['episode'])
 
         self.title = self.library.get_title()
         log.info('Episode: %s' % self.title)

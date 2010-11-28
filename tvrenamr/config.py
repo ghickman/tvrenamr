@@ -38,6 +38,7 @@ class Config():
         try:
             return self.config[show.lower()]['canonical']
         except KeyError:
+            self.log.debug('No canonical defined, returning: %s' % show)
             return show
 
     def get_output(self, show):
