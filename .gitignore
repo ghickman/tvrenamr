@@ -10,3 +10,9 @@ dist
 tvrenamr.egg-info
 thoughts
 Rakefile
+
+# Virtualenv Items
+bin/
+include/
+lib/
+.Python
