@@ -33,6 +33,7 @@ class FrontEnd():
             os.path.join(sys.path[0], 'config.yml'))
 
         # get the first viable config from the list of possibles
+        self.config = None
         for config in possible_config:
             if config is not None and os.path.exists(config):
                 self.config = Config(config)
