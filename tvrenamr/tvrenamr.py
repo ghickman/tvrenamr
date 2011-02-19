@@ -5,10 +5,10 @@ __version__ = '2.2.7'
 
 import os
 import sys
-from optparse import OptionParser, SUPPRESS_HELP
 
 from config import Config
 from errors import *
+from episode import Episode
 from logs import start_logging
 from main import TvRenamr
 from options import OptionParser
@@ -112,23 +112,16 @@ class FrontEnd():
 
         try:
             tv = TvRenamr(working, self.config, options.debug, options.dry)
-            credentials = tv.extract_details_from_file(filename, \
-                                                    user_regex=options.regex)
+            episode = Episode()
+            episode.show, episode.season, episode.episode, episode.extension = tv.extract_details_from_file(filename, user_regex=options.regex)
             if options.season:
-                credentials['season'] = options.season
+                episode.season = options.season
             if options.episode:
-                credentials['episode'] = options.episode
+                episode.episode = options.episode
 
-            credentials['title'] = tv.retrieve_episode_name( \
-                                                library=options.library, \
-                                                canonical=options.canonical, \
-                                                **credentials)
-            credentials['show'] = tv.format_show_name( \
-                                    show=credentials['show'], the=options.the,\
-                                    override=options.name)
-            path = tv.build_path(rename_dir=options.rename_dir, \
-                                organise=options.organise, \
-                                format=options.output_format, **credentials)
+            episode.title = tv.retrieve_episode_name(episode, library=options.library, canonical=options.canonical)
+            episode.show = tv.format_show_name(show=episode.show, the=options.the, override=options.name)
+            path = tv.build_path(episode, rename_dir=options.rename_dir, organise=options.organise, format=options.output_format)
             tv.rename(filename, path)
         except (ConfigNotFoundException, NoNetworkConnectionException):
             if options.dry or options.debug:
@@ -173,3 +166,4 @@ def run():
 
 if __name__ == "__main__":
     run()
+
