@@ -156,8 +156,8 @@ class TvRenamr():
         name.
         :rtype: A string.
         """
-        episode.show = self.__clean_names(episode.show\
-                .replace(episode.show[:1], episode.show[:1].upper(), 1))
+        episode.show = self.__clean_names(episode.show)
+        episode.title = self.__clean_names(episode.title, '/',)
         if len(episode.episode) == 1:
             episode.episode = '0' + episode.episode
 
@@ -208,8 +208,7 @@ class TvRenamr():
             destination_file = os.path.split(destination_filepath)[1]
             log.log(26, 'Renamed: \"%s\"' % destination_file)
         else:
-            raise EpisodeAlreadyExistsInDirectoryException(\
-                                                        destination_filepath)
+            raise EpisodeAlreadyExistsInDirectoryException(destination_filepath)
 
     def __build_organise_path(self, start_path, show_name, season_number):
         """
@@ -291,8 +290,7 @@ class TvRenamr():
 
         return regex
 
-    def __clean_names(self, filename, character_to_replace=':', \
-                        replacement_character=','):
+    def __clean_names(self, filename, before=':', after=','):
         """
         Cleans the string passed in, making it be safe for all file systems.
         Also allows the user to specify the new characters to be used.
@@ -300,16 +298,16 @@ class TvRenamr():
         :param fn: The string to replace characters in.
         :type fn: A string.
 
-        :param character_to_replace: The character to replace.
-        :type character_to_replace: A string that defaults to a colon ':'.
+        :param original: The character to replace.
+        :type original: A string that defaults to a colon ':'.
 
-        :param replacement_character: The replacement character.
-        :type replacement_character: A string that defaults to a comma ','.
+        :param after: The replacement character.
+        :type after: A string that defaults to a comma ','.
 
         :returns: The file
         :rtype: A string.
         """
-        return filename.replace(character_to_replace, replacement_character)
+        return filename.replace(before, after)
 
     def __move_leading_the_to_trailing_the(self, show_name):
         """
