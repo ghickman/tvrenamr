@@ -1,8 +1,11 @@
 import logging
 import os
 import re
+from xml.parsers.expat import ExpatError
 
 from errors import *
+from lib.thetvdb import TheTvDb as thetvdb
+from lib.tvrage import TvRage as tvrage
 
 log = logging.getLogger('Core')
 
@@ -80,20 +83,19 @@ class TvRenamr():
         """
         Retrieves the name of a given episode. The series name, season and
         episode numbers must be specified to get the episode's name. The
-        library can be specified by the user, but will default to The Tv DB.
+        library specified by the user will be used first but will fall back
+        to the other library if an error occurs.
+
+        The first library defaults to The Tv DB.
 
         :param the:
-        :param library: The library to search in.
+        :param library: The library to search.
 
         :returns: The episode title.
         :rtype: A string.
         """
-        if library == 'thetvdb':
-            from lib.thetvdb import TheTvDb as library
-            log.debug('Imported The Tv Db library')
-        elif library == 'tvrage':
-            from lib.tvrage import TvRage as library
-            log.debug('Imported Tv Rage library')
+        first = thetvdb if library=='thetvdb' else tvrage
+        second = tvrage if library=='thetvdb' else thetvdb
 
         if canonical:
             episode.show = canonical
@@ -101,7 +103,12 @@ class TvRenamr():
             episode.show = self.config.get_canonical(episode.show)
         log.debug('Show Name: %s' % episode.show)
 
-        self.library = library(episode.show, episode.season, episode.episode)
+        try:
+            log.debug('Using %s' % first)
+            self.library = first(episode.show, episode.season, episode.episode)
+        except ExpatError:
+            log.debug('Falling back to %s' % second)
+            self.library = second(episode.show, episode.season, episode.episode)
 
         self.title = self.library.title
         log.info('Episode: %s' % self.title)

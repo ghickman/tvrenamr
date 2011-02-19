@@ -1,6 +1,11 @@
 import logging
 import urllib2
+<<<<<<< HEAD
 from xml.parsers.expat import ExpatError
+=======
+from xml.etree import ElementTree
+#from xml.parsers.expat import ExpatError
+>>>>>>> Try first library then fallback on second library if this fails
 
 from lxml import etree
 
