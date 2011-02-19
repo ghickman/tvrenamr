@@ -1,8 +1,6 @@
-import fileinput
 import logging
 import os
 import re
-import sys
 
 from errors import *
 
@@ -71,17 +69,14 @@ class TvRenamr():
         m = re.compile(regex).match(fn)
         if m is not None:
             show = m.group('show').replace('.', ' ').strip()
-            log.debug('Returned show: %s, season: %s, episode: %s, extension: '
-                        '%s' % (show, m.group('season'), \
-                        m.group('episode'), os.path.splitext(fn)[1]))
-            return {'show': show, 'season': m.group('season'), \
-                    'episode': m.group('episode'), \
-                    'extension': os.path.splitext(fn)[1]}
+            ext = os.path.splitext(fn)[1]
+            details = (show, m.group('season'), m.group('episode'), ext)
+            log.debug('Returned show: %s, season: %s, episode: %s, extension: %s' % details)
+            return details
         else:
             raise UnexpectedFormatException(fn)
 
-    def retrieve_episode_name(self, library='thetvdb', \
-                                canonical=None, **kwargs):
+    def retrieve_episode_name(self, episode, library='thetvdb', canonical=None):
         """
         Retrieves the name of a given episode. The series name, season and
         episode numbers must be specified to get the episode's name. The
@@ -101,13 +96,12 @@ class TvRenamr():
             log.debug('Imported Tv Rage library')
 
         if canonical:
-            kwargs['show'] = canonical
+            episode.show = canonical
         else:
-            kwargs['show'] = self.config.get_canonical(kwargs['show'])
-        log.debug('Show Name: %s' % kwargs['show'])
+            episode.show = self.config.get_canonical(episode.show)
+        log.debug('Show Name: %s' % episode.show)
 
-        self.library = library(kwargs['show'], kwargs['season'],
-                                kwargs['episode'])
+        self.library = library(episode.show, episode.season, episode.episode)
 
         self.title = self.library.get_title()
         log.info('Episode: %s' % self.title)
@@ -137,7 +131,7 @@ class TvRenamr():
 
         return show
 
-    def build_path(self, rename_dir=None, organise=None, format=None, **kwargs):
+    def build_path(self, episode, rename_dir=None, organise=None, format=None):
         """
         Build the full destination path and filename of the renamed file Set
         the output format for the file name of a renamed show.
@@ -162,32 +156,32 @@ class TvRenamr():
         name.
         :rtype: A string.
         """
-        kwargs['show'] = self.__clean_names(kwargs['show']\
-                .replace(kwargs['show'][:1], kwargs['show'][:1].upper(), 1))
-        if len(kwargs['episode']) == 1:
-            kwargs['episode'] = '0' + kwargs['episode']
+        episode.show = self.__clean_names(episode.show\
+                .replace(episode.show[:1], episode.show[:1].upper(), 1))
+        if len(episode.episode) == 1:
+            episode.episode = '0' + episode.episode
 
         if format is None:
-            format = self.config.get(kwargs['show'], 'format')
+            format = self.config.get(episode.show, 'format')
         if '%x' not in format:
             format = format + '%x'
-        format = format.replace('%n', kwargs['show'])\
-                        .replace('%s', str(int(kwargs['season'])))\
-                        .replace('%e', kwargs['episode'])\
-                        .replace('%t', self.__clean_names(kwargs['title'])) \
-                        .replace('%x', kwargs['extension'])
+        format = format.replace('%n', episode.show)\
+                        .replace('%s', str(int(episode.season)))\
+                        .replace('%e', episode.episode)\
+                        .replace('%t', self.__clean_names(episode.title))\
+                        .replace('%x', episode.extension)
 
         if rename_dir is None:
-            rename_dir = self.config.get(kwargs['show'], 'renamed')
+            rename_dir = self.config.get(episode.show, 'renamed')
         if rename_dir is False:
             rename_dir = self.working_dir
 
         if organise is None:
-            organise = self.config.get(kwargs['show'], 'organise')
+            organise = self.config.get(episode.show, 'organise')
 
         if organise is True:
             rename_dir = self.__build_organise_path(rename_dir, \
-                                    kwargs['show'], kwargs['season'])
+                                    episode.show, episode.season)
 
         log.log(22, 'Directory: %s' % rename_dir)
         log.debug('Full path: %s' % rename_dir + format)
