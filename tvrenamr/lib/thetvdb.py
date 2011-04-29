@@ -40,12 +40,6 @@ class TheTvDb():
         self.title = self.__get_episode_name()
         log.debug('Retrieved episode name: %s' % self.title)
 
-    def get_show(self):
-        return self.show
-
-    def get_title(self):
-        return self.title
-
     def __get_show_id(self):
         """
         Retrieves the show ID of the show name passed in when the class is
