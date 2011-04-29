@@ -103,33 +103,33 @@ class TvRenamr():
 
         self.library = library(episode.show, episode.season, episode.episode)
 
-        self.title = self.library.get_title()
+        self.title = self.library.title
         log.info('Episode: %s' % self.title)
 
         return self.title
 
-    def format_show_name(self, show, the=None, override=None):
+    def format_show_name(self, show_name, the=None, override=None):
         if the is None:
-            the = self.config.get(show, 'the')
+            the = self.config.get(show_name, 'the')
 
         try:
-            show = self.config.get_output(show)
-            log.debug('Using config output name: %s' % show)
+            show_name = self.config.get_output(show_name)
+            log.debug('Using config output name: %s' % show_name)
         except ShowNotInConfigException:
-            show = self.library.get_show()
-            log.debug('Using the formatted show name retrieved by the library:'
-                        ' %s' % show)
+            show_name = self.library.show
+            log.debug('Using the formatted show_name name retrieved by the library:'
+                        ' %s' % show_name)
 
         if override is not None:
-            show = override
-            log.debug('Overrode show name with: %s' % show)
+            show_name = override
+            log.debug('Overrode show_name name with: %s' % show_name)
 
         if the is True:
-            show = self.__move_leading_the_to_trailing_the(show)
+            show_name = self.__move_leading_the_to_trailing_the(show_name)
 
-        log.debug('Final show name: %s' % show)
+        log.debug('Final show_name name: %s' % show_name)
 
-        return show
+        return show_name
 
     def build_path(self, episode, rename_dir=None, organise=None, format=None):
         """
