@@ -12,7 +12,4 @@ thoughts
 Rakefile
 
 # Virtualenv Items
-bin/
-include/
-lib/
-.Python
+venv
