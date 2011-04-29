@@ -22,7 +22,6 @@ class TestMain(object):
             copy(join(files, fn), join(self.working, fn))
 
     def tearDown(self):
-        print 'wooo'
         rmtree(self.working)
         mkdir(self.working)
 
