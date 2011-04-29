@@ -1,24 +1,33 @@
-import os
-import shutil
+from os import listdir, mkdir
+from os.path import dirname, join
+from shutil import copy, rmtree
 
-from nose.tools import *
+from nose.tools import assert_equal, assert_true
 
 import urlopenmock
 
-import tvrenamr.config
+from tvrenamr.config import Config
+from tvrenamr.episode import Episode
+from tvrenamr.main import TvRenamr
 
 class TestConfig(object):
     working = 'tests/data/working'
 
     def setUp(self):
         files = 'tests/data/files'
-        #self.tv = TvRenamr(self.working, log_level='critical')
-        for fn in os.listdir(files):
-            shutil.copy(os.path.join(files, fn), os.path.join(self.working, fn))
+        self.config = Config(join(dirname(__file__), 'config.yml'))
+        self.tv = TvRenamr(self.working, self.config)
+        for fn in listdir(files):
+            copy(join(files, fn), join(self.working, fn))
 
     def tearDown(self):
-        for fn in os.listdir(self.working):
-            os.remove(os.path.join(self.working,fn))
+        rmtree(self.working)
+        mkdir(self.working)
+
+        # def test passing in a
+        # test passing in a show not in the config
+        # test passing in a show in the config but with no x option
+        # test passing in a show in the config with x option
 
     def test_defaults_are_used(self):
         # format: '%n - %s%e - %t%x'
@@ -51,10 +60,3 @@ class TestConfig(object):
         # get_canonical(chuck)
         pass
 
-    # def test passing in a
-    # test passing in a show not in the config
-    # test passing in a show in the config but with no x option
-    # test passing in a show in the config with x option
-    #
-    #
-    #

@@ -184,8 +184,9 @@ class TvRenamr():
                                     episode.show, episode.season)
 
         log.log(22, 'Directory: %s' % rename_dir)
-        log.debug('Full path: %s' % rename_dir + format)
-        return os.path.join(rename_dir, format)
+        path = os.path.join(rename_dir, format)
+        log.debug('Full path: %s' % path)
+        return path
 
     def rename(self, current_filepath, destination_filepath):
         """
