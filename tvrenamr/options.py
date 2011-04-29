@@ -5,7 +5,7 @@ class OptionParser(OptParser):
     def __init__(self, usage, version):
         OptParser.__init__(self, usage=usage, version=version)
 
-        self.add_option('--config', dest='config', \
+        self.add_option('--config', dest='config',
                         help='Select a location for your config file. If the '
                         'path is invalid the default locations will be used.')
         self.add_option('-c', '--canonical', dest='canonical',
@@ -39,8 +39,7 @@ class OptionParser(OptParser):
                         help='Set the library to use for retrieving episode '
                         'titles. Options: thetvdb & tvrage.')
         self.add_option('-n', '--name', dest='name',
-                        help='Set the show\'s name. This will be used as the '
-                        'show\'s when the renaming is completed.')
+                        help='Set the episode\'s name.')
         self.add_option('-o', '--output', dest='output_format',
                         help='Set the output format for the episodes being '
                         'renamed.')
@@ -67,9 +66,13 @@ class OptionParser(OptParser):
                         'information from files.')
         self.add_option('-s', '--season', dest='season',
                         help='Set the season number.')
+        self.add_option('--show', dest='show',
+                        help='Set the show\'s name (will search for this name).')
+        self.add_option('--show-override', dest='show_override',
+                        help='Override the show\'s name (only replaces the show\'s name in the final file)')
         self.add_option('-t', '--the', action='store_true', dest='the',
                         help='Set the position of \'The\' in a show\'s name'
-                        ' to the end of the file')
+                        ' to the end of the show name')
 
         def parse_args(self):
             return OptParser.parse_args(self)
