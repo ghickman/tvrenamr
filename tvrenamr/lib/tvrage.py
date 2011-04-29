@@ -1,7 +1,8 @@
 import logging
 import urllib2
-from xml.etree import ElementTree
 from xml.parsers.expat import ExpatError
+
+from lxml import etree
 
 try:
     from tvrenamr.errors import EmptyEpisodeNameException, \
@@ -59,16 +60,16 @@ class TvRage():
 
         log.debug('XML: Attempting to parse')
         try:
-            dom = ElementTree.fromstring(data)
+            tree = etree.fromstring(data)
         except ExpatError:
             log.error('Invalid XML was received from The TvDB. Maybe try querying Tv Rage?')
             exit()
 
-        if dom is None:
+        if tree is None:
             raise XMLEmptyException(log.name, self.show)
         log.debug('XML retrieved, searching for series')
 
-        for name in dom.findall('show'):
+        for name in tree.findall('show'):
             show = name.find('name').text
             if show.lower() == self.show.lower():
                 log.debug('Series chosen %s' % self.show)
@@ -101,13 +102,13 @@ class TvRage():
 
         log.debug('XML: Attempting to parse')
         try:
-            dom = ElementTree.fromstring(temp.read())
+            tree = etree.fromstring(temp.read())
             log.debug('XML: Parsed')
         except ExpatError:
             log.error('XML: Invalid document received from TV Rage. Maybe try querying The Tv DB?')
             exit()
 
-        if dom is None:
+        if tree is None:
             raise XMLEmptyException(log.name, self.show)
         log.debug('XML: Episode document retrived for %s - %s%s' % (self.show, self.season, self.episode))
 
@@ -117,7 +118,7 @@ class TvRage():
 
         log.debug('XML: Attempting to finding the episode name')
         episode = None
-        for s in dom.find('Episodelist'):
+        for s in tree.find('Episodelist'):
             if s.get('no') == self.season:
                 for e in s.findall('episode'):
                     if e.find('seasonnum').text == self.episode:
