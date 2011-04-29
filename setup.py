@@ -23,5 +23,5 @@ setup(
         'Topic :: Multimedia',
         'Topic :: Utilities',
         'Natural Language :: English'],
-    install_requires = 'pyyaml'
+    install_requires = ('pyyaml',)
 )

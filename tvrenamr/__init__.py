@@ -1,3 +1,3 @@
-from tvrenamr import __author__, __version__, run
+from tvrenamr import run
 
 __all__ = ['run']
