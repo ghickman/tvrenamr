@@ -36,7 +36,7 @@ class TestMain(object):
         episode.title = self.tv.retrieve_episode_name(episode)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, 'Avatar, The Last Airbender - 108 - Winter Solstice (2), Avatar Roku.avi')))
+        assert_true(isfile(join(self.working, 'Avatar, The Last Airbender - 108 - Winter Solstice, Avatar Roku (2).avi')))
 
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
         episode = Episode()
@@ -50,7 +50,7 @@ class TestMain(object):
         episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file('chuck.s1e08.avi')
         episode.season = 2
         episode.title = self.tv.retrieve_episode_name(episode)
-        episode.show = self.tv.format_show_name(show=episode.show)
+        episode.show = self.tv.format_show_name(episode.show)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
         assert_true(isfile(join(self.working, 'Chuck - 208 - Chuck Versus the Gravitron.avi')))
@@ -61,7 +61,7 @@ class TestMain(object):
         episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
         episode.episode = '9'
         episode.title = self.tv.retrieve_episode_name(episode)
-        episode.show = self.tv.format_show_name(show=episode.show)
+        episode.show = self.tv.format_show_name(episode.show)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
         assert_true(isfile(join(self.working, 'Chuck - 109 - Chuck Versus the Imported Hard Salami.avi')))
@@ -87,7 +87,7 @@ class TestMain(object):
         episode = Episode()
         episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
         episode.title = self.tv.retrieve_episode_name(episode)
-        episode.show = self.tv.format_show_name(show=episode.show)
+        episode.show = self.tv.format_show_name(episode.show)
         assert_equal(self.tv.build_path(
             episode, rename_dir=self.working, organise=False, format='%n - %s%e - %t%x'),
             'tests/data/working/Chuck - 108 - Chuck Versus the Truth.avi')
@@ -97,7 +97,7 @@ class TestMain(object):
         episode = Episode()
         episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
         episode.title = self.tv.retrieve_episode_name(episode)
-        episode.show = self.tv.format_show_name(show=episode.show)
+        episode.show = self.tv.format_show_name(episode.show)
         assert_equal(self.tv.build_path(
             episode, rename_dir=self.working, organise=False, format='%s - %e - %t - %n%x'),
             'tests/data/working/1 - 08 - Chuck Versus the Truth - Chuck.avi')
@@ -107,7 +107,7 @@ class TestMain(object):
         episode = Episode()
         episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
         episode.title = self.tv.retrieve_episode_name(episode)
-        episode.show = self.tv.format_show_name(show=episode.show)
+        episode.show = self.tv.format_show_name(episode.show)
         assert_equal(self.tv.build_path(
             episode, rename_dir=self.working, organise=False, format='%t - %e - %s - %n%x'),
             'tests/data/working/Chuck Versus the Truth - 08 - 1 - Chuck.avi')
@@ -164,27 +164,10 @@ class TestMain(object):
     #   # need to find a way to force the use of part in the name.
     #   fn = 'stargate.sg-1.s9e03.blah.HDTV.XViD.avi'
     #   credentials = self.tv.extract_details_from_file(fn)
-    #   names = self.tv.retrieve_episode_name(show=episode.show, season=episode.season, episode=episode.episode)
+    #   names = self.tv.retrieve_episode_name(episode.show, season=episode.season, episode=episode.episode)
     #   name = self.tv.remove_part_from_multiple_episodes(names[0])
-    #   new_fn = self.tv.set_output_format(show=names[0], season=episode.season, episode=episode.episode, title=names[1])
+    #   new_fn = self.tv.set_output_format(names[0], season=episode.season, episode=episode.episode, title=names[1])
     #   path = self.tv.build_path(new_filename=new_fn, extension=credentials[3])
     #   self.tv.rename(fn, path)
     #   assert_true(isfile(join(self.working, 'Stargate SG-1 - 903 - Origin (3).avi')))
-
-    # def test_replacing_a_show_name_from_the_exceptions_file_returns_the_correct_show_name(self):
-    #     fn = 'american.dad.s2e08.foo.bar.avi'
-    #     credentials = self.tv.extract_details_from_file(fn)
-    #     show_name = self.tv.convert_show_names_using_exceptions_file('tests/exceptions.txt', episode.show)
-    #     assert_equal(show_name, 'american dad!')
-
-    # def test_replacing_a_show_name_from_the_exceptions_file_renames_a_file_correctly(self):
-    #     fn = 'american.dad.s2e08.foo.bar.avi'
-    #     credentials = self.tv.extract_details_from_file(fn)
-    #     episode.show = self.tv.convert_show_names_using_exceptions_file('tests/exceptions.txt', episode.show)
-    #     title = self.tv.retrieve_episode_name(show=episode.show, season=episode.season, episode=episode.episode)
-    #     episode.show = title['show
-    #     episode.title = title['title
-    #     path = self.tv.build_path(show=episode.show, season=episode.season, episode=episode.episode, title=episode.title, extension=episode.extension)
-    #     self.tv.rename(fn, path)
-    #     assert_true(isfile(join(self.working, 'American Dad! - 208 - Irregarding Steve.avi')))
 

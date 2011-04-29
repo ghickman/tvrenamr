@@ -1,29 +1,32 @@
-import os, shutil
+from os import listdir, mkdir, system
+from os.path import isfile, join
+from shutil import copy, rmtree
 
-from nose.tools import *
+from nose.tools import assert_raises, assert_true
 
 #stub urlopen calls
 import urlopenmock
 
-from tvrenamr.errors import UnexpectedFormatException
+#from tvrenamr.errors import UnexpectedFormatException
 
-base = 'python tvrenamr.py'
+base = 'python tvrenamr.py --config=tests/config.yml --no-organise -q'
 working = 'tests/data/working'
 renamed = 'tests/data/renamed'
 organised = 'tests/data/organised'
-exceptions = 'tests/exceptions.txt'
-logging = 'info'
 
 class TestScript(object):
-    
+
     def setUp(self):
         files = 'tests/data/files'
-        for fn in os.listdir(files): shutil.copy(os.path.join(files, fn), os.path.join(working, fn))
-    
+        for fn in listdir(files):
+            copy(join(files, fn), join(working, fn))
+
     def tearDown(self):
-        shutil.rmtree(working)
-        os.mkdir(working)
-    
+        rmtree(working)
+        mkdir(working)
+        rmtree(renamed)
+        mkdir(renamed)
+
     """
     - use no options
     - use -r
@@ -34,67 +37,50 @@ class TestScript(object):
     - use -t
     - use -o
     - use --regex
-    - use exceptions file
     - use --deluge
     - use --deluge-share-ratio
     - use unexpected format
     """
     def test_single_rename_with_no_options(self):
-        os.system('%s -q %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
-        assert_true(os.path.exists('%s/Chuck - 108 - Chuck Versus The Truth.avi' % working))
-    
+        system('%s %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
+        assert_true(isfile(join(working, 'Chuck - 108 - Chuck Versus the Truth.avi')))
+
     def test_single_rename_with_rename_folder_location_specified(self):
-        os.system('%s -q -r%s %s/chuck.s1e10.blah.HDTV.XViD.avi' % (base, renamed, working))
-        assert_true(os.path.exists('%s/Chuck - 110 - Chuck Versus The Nemesis.avi' % renamed))
-    
+        system('%s --rename-dir=%s %s/chuck.s1e10.blah.HDTV.XViD.avi' % (base, renamed, working))
+        assert_true(isfile(join(renamed, 'Chuck - 110 - Chuck Versus the Nemesis.avi')))
+
     def test_single_rename_with_rename_folder_location_specified_and_organise_option(self):
-        os.system('%s -q --organise -r%s %s/chuck.s1e11.blah.HDTV.XViD.avi' % (base, renamed, working))
-        assert_true(os.path.exists('%s/Chuck/Season 1/Chuck - 111 - Chuck Versus The Crown Vic.avi' % renamed))
-    
-    def test_single_rename_with_name_option(self):
-        os.system('%s -q -n%s %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, '\'Stargate SG-1\'', working))
-        assert_true(os.path.exists('%s/Stargate SG-1 - 108 - The Nox.avi' % working))
-    
+        system('%s --organise --rename-dir=%s %s/chuck.s1e11.blah.HDTV.XViD.avi' % (base, renamed, working))
+        assert_true(isfile(join(renamed, 'Chuck', 'Season 1', 'Chuck - 111 - Chuck Versus the Crown Vic.avi')))
+
+    def test_single_rename_with_show_name_option(self):
+        system('%s --show %s %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, '\'Stargate SG-1\'', working))
+        assert_true(isfile(join(working, 'Stargate SG-1 - 108 - The Nox.avi')))
+
     def test_single_rename_with_season_option(self):
-        os.system('%s -q -s2 %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
-        assert_true(os.path.exists('%s/Chuck - 208 - Chuck Versus The Gravitron.avi' % working))
-    
+        system('%s -s 2 %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
+        assert_true(isfile(join(working, 'Chuck - 208 - Chuck Versus the Gravitron.avi')))
+
     def test_single_rename_with_episode_option(self):
-        os.system('%s -q -e9 %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
-        assert_true(os.path.exists('%s/Chuck - 109 - Chuck Versus The Imported Hard Salami.avi' % working))
-    
+        system('%s -e 9 %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
+        assert_true(isfile(join(working, 'Chuck - 109 - Chuck Versus the Imported Hard Salami.avi')))
+
     def test_single_rename_with_leading_the_moved_to_end_of_show_name_option(self):
-        os.system('%s -q -t %s/The.Big.Bang.Theory.S03E01.HDTV.XViD-NoTV.avi' % (base, working))
-        assert_true(os.path.exists('%s/Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi' % working))
-    
+        system('%s -t %s/The.Big.Bang.Theory.S03E01.HDTV.XViD-NoTV.avi' % (base, working))
+        assert_true(isfile(join(working, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
+
     def test_single_rename_with_output_format_specified(self):
-        os.system('%s -q -o%s %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, '\'%s%e - %n %t\'', working))
-        assert_true(os.path.exists('%s/108 - Chuck Chuck Versus The Truth.avi' % working))
-    
+        system('%s -o %s %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, '\'%s%e - %n - %t%x\'', working))
+        assert_true(isfile(join(working, '108 - Chuck - Chuck Versus the Truth.avi')))
+
     def test_single_rename_with_custom_regular_expression_specified(self):
-        os.system('%s -q %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
-        assert_true(os.path.exists('%s/Chuck - 108 - Chuck Versus The Truth.avi' % working))
-    
-    def test_single_rename_with_exceptions_file_used(self):
-        # os.system('%s -q -x%s %s/avatar.s1e08.blah.HDTV.XViD.avi' % (base, exceptions, working))
-        # assert_true(os.path.exists('%s/Avatar, The Last Airbender - 108 - Winter Solstice (2) - Avatar Roku.avi' % working))
-        pass
-    
-    def test_single_rename_with_deluge_option(self):
-        # os.system('%s -q --deluge %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, working))
-        # assert_true(os.path.exists('%s/Chuck - 108 - Chuck Versus the Truth.avi' % working))
-        pass
-    
-    def test_single_rename_with_deluge_share_ratio_option(self):
-        # os.system('%s -q --deluge-share-ratio%d %s/chuck.s1e08.blah.HDTV.XViD.avi' % (base, 2, working))
-        # assert_true(os.path.exists('%s/Chuck - 108 - Chuck Versus the Truth.avi' % working))
-        pass
+        system('%s --regex=%s %s/e08s1.chuck.blah.HDTV.XViD.avi' % (base, 'e%es%s.%n.blah', working))
+        assert_true(isfile(join(working, 'Chuck - 108 - Chuck Versus the Truth.avi')))
 
-    def test_single_rename_with_an_unexpected_format_raises_an_unexpected_format_exception(self):
-        #assert_raises(UnexpectedFormatException, os.system('%s %s/\'West Wing.avi\'' % (base, working)))
-        pass
+    #def test_single_rename_with_an_unexpected_format_raises_an_unexpected_format_exception(self):
+        #assert_raises(UnexpectedFormatException, system('%s %s/\'West Wing.avi\'' % (base, working)))
+        #pass
 
-    
     """
     - use recursive and no options
     - use recursive and -r
@@ -105,8 +91,8 @@ class TestScript(object):
     - use recursive and -t
     - use recursive and -o
     - use recursive and --regex
-    - use recursive and exceptions file
     - use recursive and --deluge
     - use recursive and --deluge-share-ratio
     - use recursive and unexpected format
     """
+

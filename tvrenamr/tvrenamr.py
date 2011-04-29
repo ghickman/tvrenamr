@@ -114,13 +114,15 @@ class FrontEnd():
             tv = TvRenamr(working, self.config, options.debug, options.dry)
             episode = Episode()
             episode.show, episode.season, episode.episode, episode.extension = tv.extract_details_from_file(filename, user_regex=options.regex)
+            if options.show:
+                episode.show = options.show
             if options.season:
                 episode.season = options.season
             if options.episode:
                 episode.episode = options.episode
 
             episode.title = tv.retrieve_episode_name(episode, library=options.library, canonical=options.canonical)
-            episode.show = tv.format_show_name(show=episode.show, the=options.the, override=options.name)
+            episode.show = tv.format_show_name(episode.show, the=options.the, override=options.show_override)
             path = tv.build_path(episode, rename_dir=options.rename_dir, organise=options.organise, format=options.output_format)
             tv.rename(filename, path)
         except (ConfigNotFoundException, NoNetworkConnectionException):

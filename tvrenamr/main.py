@@ -117,17 +117,17 @@ class TvRenamr():
             log.debug('Using config output name: %s' % show_name)
         except ShowNotInConfigException:
             show_name = self.library.show
-            log.debug('Using the formatted show_name name retrieved by the library:'
+            log.debug('Using the formatted show name retrieved by the library:'
                         ' %s' % show_name)
 
         if override is not None:
             show_name = override
-            log.debug('Overrode show_name name with: %s' % show_name)
+            log.debug('Overrode show name with: %s' % show_name)
 
         if the is True:
             show_name = self.__move_leading_the_to_trailing_the(show_name)
 
-        log.debug('Final show_name name: %s' % show_name)
+        log.debug('Final show name: %s' % show_name)
 
         return show_name
 
