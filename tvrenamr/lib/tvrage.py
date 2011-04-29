@@ -62,7 +62,7 @@ class TvRage():
         try:
             tree = etree.fromstring(data)
         except ExpatError:
-            log.error('Invalid XML was received from The TvDB. Maybe try querying Tv Rage?')
+            log.error('Invalid XML was received from %s. Maybe try querying The Tv DB?' % self.__class__.__name__)
             exit()
 
         if tree is None:
@@ -105,7 +105,7 @@ class TvRage():
             tree = etree.fromstring(temp.read())
             log.debug('XML: Parsed')
         except ExpatError:
-            log.error('XML: Invalid document received from TV Rage. Maybe try querying The Tv DB?')
+            log.error('Invalid XML was received from %s. Maybe try querying The Tv DB?' % self.__class__.__name__)
             exit()
 
         if tree is None:
