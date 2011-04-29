@@ -22,9 +22,7 @@ apikey = 'C4C424B4E9137AFD'
 url_base = 'http://www.thetvdb.com/api/'
 url_series = 'GetSeries.php?seriesname='
 
-
 class TheTvDb():
-
     def __init__(self, show, season, episode):
         """
         :param show_name: The show name of the episode title to be retrieved.
@@ -42,15 +40,11 @@ class TheTvDb():
 
     def __get_show_id(self):
         """
-        Retrieves the show ID of the show name passed in when the class is
-        instantiated.
+        Retrieves the show ID of the show name passed in when the class is instantiated.
 
-        :raises URLError: Raised when a network error occurs. Usually when
-        there is no internet connection.
-        :raises XMLEmptyException: Raised when the XML document returned from
-        The Tv Db is empty.
-        :raises ShowNotFoundException: Raised when the given Show cannot be
-        found on The Tv Db.
+        :raises URLError: Raised when a network error occurs. Usually when there is no internet.
+        :raises XMLEmptyException: Raised when the XML document returned from The Tv Db is empty.
+        :raises ShowNotFoundException: Raised when the Show cannot be found on The Tv Db.
 
         :returns: A show ID.
         :rtype: A string.
@@ -67,9 +61,8 @@ class TheTvDb():
         log.debug('XML: Attempting to parse')
         try:
             dom = ElementTree.fromstring(data)
-        except ExpatError, e:
-            log.error('Invalid XML was received from The TvDB. Maybe try '
-                        'querying Tv Rage?')
+        except ExpatError:
+            log.error('Invalid XML was received from The TvDB. Maybe try querying Tv Rage?')
             exit()
 
         if dom is None:
@@ -86,46 +79,40 @@ class TheTvDb():
 
     def __get_episode_name(self):
         """
-        Retrieves the episode title for the given episode from tvrage.com.
-
-        :param season: The season number of the episode
-        :param episode: The episode number of the episode
+        Retrieves the episode title for the given episode from thetvdb.com.
 
         :raises EpisodeNotFoundException: Raised when the url for an episode
         doesn't exist or the network cannot be reached.
         :raises XMLEmptyException: Raised when the XML document returned from
         The Tv Db is empty.
+        :raises EmptyEpisodeNameException:
 
-        :returns: The series name and title. Series name is returned so that it
-        is formatted correctly.
-        :rtype: A dictionary whose keys are 'series' and 'title'.
+        :returns: The episode title.
+        :rtype: String
         """
         episode_url = '%s%s/series/%s/default/%s/%s/en.xml' % \
-                        (url_base, apikey, self.show_id, \
+                        (url_base, apikey, self.show_id,
                         str(int(self.season)), str(int(self.episode)))
         log.debug('Episode URL: %s' % episode_url)
 
         log.debug('Attempting to retrieve episode name')
         try:
-            tempfile = urllib2.urlopen(episode_url)
+            temp = urllib2.urlopen(episode_url)
             log.debug('XML: Retreived')
         except urllib2.URLError:
-            raise EpisodeNotFoundException(log.name, self.show, self.season, \
-                                            self.episode)
+            raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
 
         log.debug('XML: Attempting to parse')
         try:
-            dom = ElementTree.fromstring(tempfile.read())
+            dom = ElementTree.fromstring(temp.read())
             log.debug('XML: Parsed')
-        except ExpatError, e:
-            log.error('XML: Invalid document received from The TvDB. Maybe try \
-                        querying Tv Rage?')
+        except ExpatError:
+            log.error('XML: Invalid document received from The TvDB. Maybe try querying Tv Rage?')
             exit()
 
         if dom is None:
             raise XMLEmptyException(log.name, self.show)
-        log.debug('XML: Episode document retrived for %s - %s%s' % \
-                    (self.show, self.season, self.episode))
+        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show, self.season, self.episode))
 
         log.debug('XML: Attempting to finding the episode name')
         episode = dom.find("Episode").findtext("EpisodeName")
@@ -133,3 +120,4 @@ class TheTvDb():
             raise EmptyEpisodeNameException
 
         return episode
+

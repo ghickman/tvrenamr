@@ -40,11 +40,9 @@ class EmptyEpisodeNameException(Exception):
     aren't fully known
     """
 
-    def __init__(self):
-        log.error('The episode name was not found. The record on The TvDB is '
-                'likely incomplete. You could update The Tv DB yourself or '
-                'try using the Tv Rage library using --library \'tvrage\'')
-
+    def __init__(self, library):
+        log.error('The episode name was not found. The record on %s is likely '
+                    'incomplete.' % library)
 
 class EpisodeAlreadyExistsInDirectoryException(Exception):
     """

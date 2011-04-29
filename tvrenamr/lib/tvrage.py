@@ -1,6 +1,7 @@
 import logging
 import urllib2
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
+from xml.parsers.expat import ExpatError
 
 try:
     from tvrenamr.errors import EmptyEpisodeNameException, \
@@ -20,7 +21,6 @@ log = logging.getLogger('Tv Rage')
 url_name = "http://services.tvrage.com/feeds/search.php?show="
 url_ep = "http://services.tvrage.com/feeds/full_show_info.php?sid="
 
-
 class TvRage():
     def __init__(self, show, season, episode):
         """
@@ -29,7 +29,7 @@ class TvRage():
         self.show = show
         log.info('Looking up show: %s' % self.show)
         self.season = str(int(season))
-        self.episode = episode
+        self.episode = str(int(episode))
 
         self.show_id, self.show = self.__get_show_id()
         log.debug('Retrieved show id: %s' % self.show_id)
@@ -49,51 +49,82 @@ class TvRage():
         :rtype: A string.
         """
         log.debug('Retrieving series id for %s' % self.show)
-        url = '%s%s' % (url_name, self.show.replace(' ', '%20'))
-        try: data = urllib2.urlopen(url).read()
-        except urllib2.URLError: raise NoNetworkConnectionException('tvrage.com')
-        dom = ET.fromstring(data)
-        if dom is None: raise XMLEmptyException(log.name, self.show)
+        url = '%s%s' % (url_name, urllib2.quote(self.show))
+        log.debug('Series url: %s' % url)
+
+        try:
+            data = urllib2.urlopen(url).read()
+        except urllib2.URLError:
+            raise NoNetworkConnectionException('tvrage.com')
+
+        log.debug('XML: Attempting to parse')
+        try:
+            dom = ElementTree.fromstring(data)
+        except ExpatError:
+            log.error('Invalid XML was received from The TvDB. Maybe try querying Tv Rage?')
+            exit()
+
+        if dom is None:
+            raise XMLEmptyException(log.name, self.show)
         log.debug('XML retrieved, searching for series')
+
         for name in dom.findall('show'):
             show = name.find('name').text
             if show.lower() == self.show.lower():
                 log.debug('Series chosen %s' % self.show)
                 return name.find('showid').text, show
-            else: raise ShowNotFoundException(log.name, self.show)
+            else:
+                raise ShowNotFoundException(log.name, self.show)
 
 
     def __get_episode_name(self):
         """
         Retrieves the episode title for the given episode from tvrage.com.
 
-        :param season: The season number of the episode
-        :param episode: The episode number of the episode
-
-        :raises EpisodeNotFoundException: Raised when the url for an episode doesn't exist or the network cannot be reached.
-        :raises XMLEmptyException: Raised when the XML document returned from Tv Rage is empty.
+        :raises EpisodeNotFoundException: Raised when the url for an episode
+        doesn't exist or the network cannot be reached.
+        :raises XMLEmptyException: Raised when the XML document returned from
+        Tv Rage is empty.
 
         :returns: The series name and title. Series name is returned so that it is formatted correctly.
         :rtype: A dictionary whose keys are 'series' and 'title'.
         """
         episode_url = '%s%s' % (url_ep, self.show_id)
         log.debug('Episode URL: %s' % episode_url)
-        try: data = urllib2.urlopen(episode_url).read()
-        except urllib2.URLError: raise EpisodeNotFoundException(log.name, self.show)
-        dom = ET.fromstring(data)
-        if dom is None: raise XMLEmptyException(log.name, self.show)
-        log.debug('XML retrieved, searching for episode')
+
+        log.debug('Attempting to retrieve episode name')
+        try:
+            temp = urllib2.urlopen(episode_url)
+            log.debug('XML: Retreived')
+        except urllib2.URLError:
+            raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
+
+        log.debug('XML: Attempting to parse')
+        try:
+            dom = ElementTree.fromstring(temp.read())
+            log.debug('XML: Parsed')
+        except ExpatError:
+            log.error('XML: Invalid document received from TV Rage. Maybe try querying The Tv DB?')
+            exit()
+
+        if dom is None:
+            raise XMLEmptyException(log.name, self.show)
+        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show, self.season, self.episode))
 
         # In a single digit episode number add a zero
-        if len(self.episode) == 1 and self.episode[:1] != '0': self.episode = '0' + self.episode
+        if len(self.episode) == 1 and self.episode[:1] != '0':
+            self.episode = '0' + self.episode
 
-        title = None
+        log.debug('XML: Attempting to finding the episode name')
+        episode = None
         for s in dom.find('Episodelist'):
             if s.get('no') == self.season:
                 for e in s.findall('episode'):
                     if e.find('seasonnum').text == self.episode:
-                        title = e.find('title').text
-                        log.info('Retrieved episode: %s' % title)
-        if title is not None: return title
-        else: raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
+                        print e.find('title').text
+                        episode = e.find('title').text
+        if not episode:
+            raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
+
+        return episode
 
