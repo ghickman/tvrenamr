@@ -1,15 +1,13 @@
 from os import listdir, mkdir
 from os.path import dirname, isdir, isfile, join
-from shutil import copy, rmtree
+from shutil import copytree, rmtree
 
 from nose.tools import assert_equal, assert_true
-
-#stub urlopen calls
-import urlopenmock
 
 from tvrenamr.config import Config
 from tvrenamr.episode import Episode
 from tvrenamr.main import TvRenamr
+import urlopenmock
 
 class TestAutoMoving(object):
     organise = True
@@ -20,12 +18,10 @@ class TestAutoMoving(object):
         files = 'tests/data/files'
         self.config = Config(join(dirname(__file__), 'config.yml'))
         self.tv = TvRenamr(self.working, self.config)
-        for fn in listdir(files):
-            copy(join(files, fn), self.working)
+        copytree(files, self.working)
 
     def tearDown(self):
         rmtree(self.working)
-        mkdir(self.working)
         rmtree(self.organised)
         mkdir(self.organised)
 

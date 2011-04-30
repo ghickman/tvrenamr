@@ -1,14 +1,12 @@
-from os import listdir, mkdir
 from os.path import dirname, join
-from shutil import copy, rmtree
+from shutil import copytree, rmtree
 
 from nose.tools import assert_equal, assert_true
-
-import urlopenmock
 
 from tvrenamr.config import Config
 from tvrenamr.episode import Episode
 from tvrenamr.main import TvRenamr
+import urlopenmock
 
 class TestConfig(object):
     working = 'tests/data/working'
@@ -17,12 +15,10 @@ class TestConfig(object):
         files = 'tests/data/files'
         self.config = Config(join(dirname(__file__), 'config.yml'))
         self.tv = TvRenamr(self.working, self.config)
-        for fn in listdir(files):
-            copy(join(files, fn), join(self.working, fn))
+        copytree(files, self.working)
 
     def tearDown(self):
         rmtree(self.working)
-        mkdir(self.working)
 
         # def test passing in a
         # test passing in a show not in the config

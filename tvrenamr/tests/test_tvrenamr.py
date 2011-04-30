@@ -1,10 +1,9 @@
-from os import listdir, mkdir, system
+from os import mkdir, system
 from os.path import isfile, join
-from shutil import copy, rmtree
+from shutil import copytree, rmtree
 
 from nose.tools import assert_raises, assert_true
 
-#stub urlopen calls
 import urlopenmock
 
 #from tvrenamr.errors import UnexpectedFormatException
@@ -14,16 +13,14 @@ working = 'tests/data/working'
 renamed = 'tests/data/renamed'
 organised = 'tests/data/organised'
 
-class TestScript(object):
+class TestFrontEnd(object):
 
     def setUp(self):
         files = 'tests/data/files'
-        for fn in listdir(files):
-            copy(join(files, fn), join(working, fn))
+        copytree(files, working)
 
     def tearDown(self):
         rmtree(working)
-        mkdir(working)
         rmtree(renamed)
         mkdir(renamed)
 
