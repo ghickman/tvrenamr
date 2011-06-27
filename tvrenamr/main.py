@@ -1,7 +1,8 @@
 import logging
 import os
 import re
-from xml.parsers.expat import ExpatError
+
+from lxml.etree import XMLSyntaxError
 
 from errors import *
 from lib.thetvdb import TheTvDb as thetvdb
@@ -94,8 +95,17 @@ class TvRenamr():
         :returns: The episode title.
         :rtype: A string.
         """
-        first = thetvdb if library=='thetvdb' else tvrage
-        second = tvrage if library=='thetvdb' else thetvdb
+        libraries = [
+            ('thetvdb', thetvdb),
+            ('tvrage', tvrage),
+        ]
+        choice = None
+        for i, lib in enumerate(libraries):
+            if lib[0] == library:
+                choice = lib
+                libraries.pop(i)
+                break
+        libraries.insert(0, choice)
 
         if canonical:
             episode.show = canonical
@@ -103,12 +113,16 @@ class TvRenamr():
             episode.show = self.config.get_canonical(episode.show)
         log.debug('Show Name: %s' % episode.show)
 
-        try:
-            log.debug('Using %s' % first)
-            self.library = first(episode.show, episode.season, episode.episode)
-        except ExpatError:
-            log.debug('Falling back to %s' % second)
-            self.library = second(episode.show, episode.season, episode.episode)
+        for lib in libraries:
+            try:
+                log.debug('Using %s' % lib[1].__name__)
+                self.library = lib[1](episode.show, episode.season, episode.episode)
+                break
+            except XMLSyntaxError:
+                if lib == libraries[-1]:
+                    raise NoMoreLibrariesException
+                log.debug('Got broken XML from %s. Falling back to next library' % lib[1].__name__)
+                continue
 
         self.title = self.library.title
         log.info('Episode: %s' % self.title)
