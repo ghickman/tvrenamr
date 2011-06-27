@@ -1,13 +1,7 @@
 import logging
 import urllib2
-<<<<<<< HEAD
-from xml.parsers.expat import ExpatError
-=======
-from xml.etree import ElementTree
-#from xml.parsers.expat import ExpatError
->>>>>>> Try first library then fallback on second library if this fails
 
-from lxml import etree
+from lxml.etree import fromstring
 
 try:
     from tvrenamr.errors import EmptyEpisodeNameException, \
@@ -65,11 +59,8 @@ class TheTvDb():
             raise NoNetworkConnectionException('thetvdb.org')
 
         log.debug('XML: Attempting to parse')
-        try:
-            tree = etree.fromstring(data)
-        except ExpatError:
-            log.error('Invalid XML was received from %s. Maybe try querying Tv Rage?' % self.__class__.__name__)
-            exit()
+        tree = fromstring(data)
+        log.debug('XML: Parsed')
 
         if tree is None:
             raise XMLEmptyException(log.name, self.show)
@@ -103,18 +94,14 @@ class TheTvDb():
 
         log.debug('Attempting to retrieve episode name')
         try:
-            temp = urllib2.urlopen(episode_url)
+            data = urllib2.urlopen(episode_url).read()
             log.debug('XML: Retreived')
         except urllib2.URLError:
             raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
 
         log.debug('XML: Attempting to parse')
-        try:
-            tree = etree.fromstring(temp.read())
-            log.debug('XML: Parsed')
-        except ExpatError:
-            log.error('Invalid XML was received from %s. Maybe try querying Tv Rage?' % self.__class__.__name__)
-            exit()
+        tree = fromstring(data)
+        log.debug('XML: Parsed')
 
         if tree is None:
             raise XMLEmptyException(log.name, self.show)

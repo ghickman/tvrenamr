@@ -1,8 +1,7 @@
 import logging
 import urllib2
-from xml.parsers.expat import ExpatError
 
-from lxml import etree
+from lxml.etree import fromstring, XMLSyntaxError
 
 try:
     from tvrenamr.errors import EmptyEpisodeNameException, \
@@ -59,11 +58,8 @@ class TvRage():
             raise NoNetworkConnectionException('tvrage.com')
 
         log.debug('XML: Attempting to parse')
-        try:
-            tree = etree.fromstring(data)
-        except ExpatError:
-            log.error('Invalid XML was received from %s. Maybe try querying The Tv DB?' % self.__class__.__name__)
-            exit()
+        tree = fromstring(data)
+        log.debug('XML: Parsed')
 
         if tree is None:
             raise XMLEmptyException(log.name, self.show)
@@ -101,12 +97,8 @@ class TvRage():
             raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
 
         log.debug('XML: Attempting to parse')
-        try:
-            tree = etree.fromstring(temp.read())
-            log.debug('XML: Parsed')
-        except ExpatError:
-            log.error('Invalid XML was received from %s. Maybe try querying The Tv DB?' % self.__class__.__name__)
-            exit()
+        tree = fromstring(temp.read())
+        log.debug('XML: Parsed')
 
         if tree is None:
             raise XMLEmptyException(log.name, self.show)
@@ -122,7 +114,6 @@ class TvRage():
             if s.get('no') == self.season:
                 for e in s.findall('episode'):
                     if e.find('seasonnum').text == self.episode:
-                        print e.find('title').text
                         episode = e.find('title').text
         if not episode:
             raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
