@@ -125,7 +125,7 @@ class FrontEnd():
             episode.show = tv.format_show_name(episode.show, the=options.the, override=options.show_override)
             path = tv.build_path(episode, rename_dir=options.rename_dir, organise=options.organise, format=options.output_format)
             tv.rename(filename, path)
-        except (ConfigNotFoundException, NoNetworkConnectionException):
+        except (ConfigNotFoundException, NoNetworkConnectionException, NoMoreLibrariesException):
             if options.dry or options.debug:
                 self.__stop_dry_run()
             exit()

@@ -84,6 +84,13 @@ class IncorrectCustomRegularExpressionSyntaxException(Exception):
         log.error('The regular expression provided does not contain the '
                     'required custom syntax.')
 
+class NoMoreLibrariesException(Exception):
+    """
+    All libraries have returned invalid XML.
+    """
+
+    def __init__(self):
+        log.error('No libraries left to fall back to. Exiting...')
 
 class OutputFormatMissingSyntaxException(Exception):
     """
