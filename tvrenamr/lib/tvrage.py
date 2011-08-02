@@ -61,7 +61,7 @@ class TvRage():
         tree = fromstring(data)
         log.debug('XML: Parsed')
 
-        if tree is None:
+        if tree is None or len(tree) is 0:
             raise XMLEmptyException(log.name, self.show)
         log.debug('XML retrieved, searching for series')
 
