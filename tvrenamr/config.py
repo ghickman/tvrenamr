@@ -36,10 +36,13 @@ class Config():
 
     def get_canonical(self, show):
         try:
-            return self.config[show.lower()]['canonical']
+            return self.config[show]['canonical']
         except KeyError:
-            self.log.debug('No canonical defined, returning: %s' % show)
-            return show
+            try:
+                return self.config[show.lower()]['canonical']
+            except KeyError:
+                self.log.debug('No canonical defined, returning: %s' % show)
+                return show
 
     def get_output(self, show):
         try:
