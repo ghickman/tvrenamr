@@ -48,8 +48,8 @@ class TvRenamr():
         Looks at the file given and extracts from it the show title, it's
         season number and episode number using regular expression magic.
         The default formats accepted are: series.0x00.xxx or series.s0e00.xxx
-        or series.000.xxx A user can specify their own regular expression for
-        a format not already covered.
+        A user can specify their own regular expression for a format not
+        already covered.
 
         :param fn: The file name passed in.
         :type fn: String.
@@ -268,12 +268,12 @@ class TvRenamr():
         :returns: An actual regular expression.
         :rtype: A string.
         """
-        series = '(?P<show>[\w\s.,_-]+)'
+        series = '(?P<show>[\w\s.,_-]+?)'
         season = '(?P<season>[\d]{1,2})'
         episode = '(?P<episode>[\d]{2})'
 
         if regex is None:
-            return series + '\.[Ss]?' + season + '[XxEe]?' + episode
+            return series + '\.[Ss]?' + season + '[XxEe]' + episode + '\.'
         if regex.find('%s') is -1 or regex.find('%e') is -1:
             raise IncorrectCustomRegularExpressionSyntaxException(regex)
 
