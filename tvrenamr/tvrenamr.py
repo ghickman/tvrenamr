@@ -4,7 +4,7 @@ import logging
 import os
 import sys
 
-from . import get_version
+from __init__ import get_version
 from config import Config
 from episode import Episode
 from errors import *
