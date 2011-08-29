@@ -1,19 +1,20 @@
 #!/usr/bin/python
 
+import logging
 import os
 import sys
 
+from . import get_version
 from config import Config
-from errors import *
 from episode import Episode
+from errors import *
 from logs import start_logging
 from main import TvRenamr
 from options import OptionParser
 
 log = logging.getLogger('Core')
 
-parser = OptionParser(usage="tvr [options] <file/folder>",
-                        version="Tv Renamr %s" % __version__)
+parser = OptionParser(usage='tvr [options] <file/folder>', version='Tv Renamr %s' % get_version())
 options, args = parser.parse_args()
 
 class FrontEnd():
