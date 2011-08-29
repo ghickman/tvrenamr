@@ -1,12 +1,17 @@
+from os.path import dirname, join
 from setuptools import setup, find_packages
 
-from tvrenamr import __author__, __version__
+from tvrenamr import get_version
+
+def fread(fname):
+    return open(join(dirname(__file__), fname)).read()
 
 setup(
     name = 'tvrenamr',
-    version = __version__,
+    version = get_version(),
     description = 'Rename tv show files using online databases',
-    author = __author__,
+    long_description = fread('README.markdown'),
+    author = 'George Hickman',
     author_email = 'george@ghickman.co.uk',
     url = 'http://github.com/ghickman/tvrenamr',
     license = 'MIT',
@@ -25,3 +30,4 @@ setup(
         'Natural Language :: English'],
     install_requires = ('lxml', 'pyyaml',)
 )
+

@@ -1,4 +1,5 @@
-from tvrenamr import __author__, __version__, run
+__version__ = (3, 0, 0)
 
-__all__ = ['__author__', '__version__', 'run']
+def get_version():
+    return '.'.join(map(str, __version__))
 
