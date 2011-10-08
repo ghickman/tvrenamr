@@ -273,7 +273,7 @@ class TvRenamr():
         episode = r"(?P<episode>[\d]{2})"
 
         if regex is None:
-            return series + '\.[Ss]?' + season + '[XxEe]' + episode + '\.'
+            return series + r"\.[Ss]?" + season + r"[XxEe]" + episode + r"\.|-"
         if regex.find('%s') is -1 or regex.find('%e') is -1:
             raise IncorrectCustomRegularExpressionSyntaxException(regex)
 
