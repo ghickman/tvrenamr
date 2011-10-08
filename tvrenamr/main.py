@@ -268,7 +268,7 @@ class TvRenamr():
         :returns: An actual regular expression.
         :rtype: A string.
         """
-        series = r"(?P<show>[\w\s.,_-]+?)"
+        series = r"(?P<show>[\w\s.',_-]+?)"
         season = r"(?P<season>[\d]{1,2})"
         episode = r"(?P<episode>[\d]{2})"
 
