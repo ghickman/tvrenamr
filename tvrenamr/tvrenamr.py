@@ -110,8 +110,9 @@ class FrontEnd():
 
         try:
             tv = TvRenamr(working, self.config, options.debug, options.dry)
-            episode = Episode()
-            episode.show, episode.season, episode.episode, episode.extension = tv.extract_details_from_file(filename, user_regex=options.regex)
+            # episode = Episode()
+            # episode.show, episode.season, episode.episode, episode.extension = tv.extract_details_from_file(filename, user_regex=options.regex)
+            episode = Episode(tv.extract_details_from_file(filename, user_regex=options.regex))
             if options.show:
                 episode.show = options.show
             if options.season:

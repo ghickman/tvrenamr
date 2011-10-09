@@ -1,21 +1,13 @@
 class Episode(object):
 
-    def __init__(self, show_name=None, season=None, episode=None, title=None,
-            extension=None, format='%n - %s%e - %t.%x'):
-        self.show_name = show_name
-        self.title = title
-        self.extension = extension
+    # def __init__(self, show_name=None, season=None, episode=None, title=None,
+    #         extension=None, format='%n - %s%e - %t.%x'):
+    def __init__(self, fn_parts, format='%n - %s%e - %t.%x'):
+        self.show_name = fn_parts[0]
+        self.season = fn_parts[1] if not None else str(fn_parts[1])
+        self.episode = fn_parts[2] if not None else str(fn_parts[2])
+        self.extension = fn_parts[3]
         self.format = format
-
-        if season is None:
-            self.season = season
-        else:
-            self.season = str(season)
-
-        if season is None:
-            self.episode = episode
-        else:
-            self.episode = str(episode)
 
     def __getattr__(self, item):
         """
