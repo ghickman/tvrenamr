@@ -124,16 +124,20 @@ class FrontEnd():
             episode.show = tv.format_show_name(episode.show, the=options.the, override=options.show_override)
             path = tv.build_path(episode, rename_dir=options.rename_dir, organise=options.organise, format=options.output_format)
             tv.rename(filename, path)
-        except (ConfigNotFoundException, NoNetworkConnectionException, NoMoreLibrariesException):
+        except (ConfigNotFoundException,
+                NoMoreLibrariesException,
+                NoNetworkConnectionException):
             if options.dry or options.debug:
                 self.__stop_dry_run()
             exit()
-        except (EmptyEpisodeNameException, \
-                EpisodeAlreadyExistsInDirectoryException, \
-                EpisodeNotFoundException, \
-                IncorrectCustomRegularExpressionSyntaxException, \
-                OutputFormatMissingSyntaxException, ShowNotFoundException, \
-                UnexpectedFormatException, XMLEmptyException):
+        except (EmptyEpisodeNameException,
+                EpisodeAlreadyExistsInDirectoryException,
+                EpisodeNotFoundException,
+                IncorrectCustomRegularExpressionSyntaxException,
+                OutputFormatMissingSyntaxException,
+                ShowNotFoundException,
+                UnexpectedFormatException,
+                XMLEmptyException):
             pass
         except Exception as err:
             if options.debug:
