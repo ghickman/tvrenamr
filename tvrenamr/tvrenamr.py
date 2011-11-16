@@ -28,7 +28,8 @@ class FrontEnd():
         possible_config = (
             options.config,
             os.path.expanduser('~/.tvrenamr/config.yml'),
-            os.path.join(sys.path[0], 'config.yml'))
+            os.path.join(sys.path[0], 'config.yml')
+        )
 
         # get the first viable config from the list of possibles
         self.config = None
@@ -110,8 +111,6 @@ class FrontEnd():
 
         try:
             tv = TvRenamr(working, self.config, options.debug, options.dry)
-            # episode = Episode()
-            # episode.show, episode.season, episode.episode, episode.extension = tv.extract_details_from_file(filename, user_regex=options.regex)
             episode = Episode(tv.extract_details_from_file(filename, user_regex=options.regex))
             if options.show:
                 episode.show = options.show
@@ -167,7 +166,6 @@ def run():
         get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
     else:
         FrontEnd(args)
-
 
 if __name__ == "__main__":
     run()
