@@ -9,7 +9,7 @@ class Episode(object):
         self.extension = fn_parts[3]
         self.format = format
 
-    def __getattr__(self, item):
+    def __getattribute__(self, item):
         """
         Allow the retrieval of single digit episode numbers but return
         it with a leading zero.
@@ -17,10 +17,7 @@ class Episode(object):
         if item is 'episode_2':
             return '0%s' % self.episode
         else:
-            try:
-                self.__getitem__(item)
-            except KeyError:
-                raise AttributeError
+            return object.__getattribute__(self, item)
 
     def __repr__(self):
         filename = self.format

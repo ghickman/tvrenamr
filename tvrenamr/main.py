@@ -108,15 +108,15 @@ class TvRenamr():
         libraries.insert(0, choice)
 
         if canonical:
-            episode.show = canonical
+            episode.show_name = canonical
         else:
-            episode.show = self.config.get_canonical(episode.show)
-        log.debug('Show Name: %s' % episode.show)
+            episode.show_name = self.config.get_canonical(episode.show_name)
+        log.debug('Show Name: %s' % episode.show_name)
 
         for lib in libraries:
             try:
                 log.debug('Using %s' % lib[1].__name__)
-                self.library = lib[1](episode.show, episode.season, episode.episode)
+                self.library = lib[1](episode.show_name, episode.season, episode.episode)
                 break
             except XMLSyntaxError:
                 if lib == libraries[-1]:
@@ -177,32 +177,32 @@ class TvRenamr():
         name.
         :rtype: A string.
         """
-        episode.show = self.__clean_names(episode.show)
+        episode.show_name = self.__clean_names(episode.show_name)
         episode.title = self.__clean_names(episode.title, '/',)
         if len(episode.episode) == 1:
             episode.episode = '0' + episode.episode
 
         if format is None:
-            format = self.config.get(episode.show, 'format')
+            format = self.config.get(episode.show_name, 'format')
         if '%x' not in format:
             format = format + '%x'
-        format = format.replace('%n', episode.show)\
+        format = format.replace('%n', episode.show_name)\
                         .replace('%s', str(int(episode.season)))\
                         .replace('%e', episode.episode)\
                         .replace('%t', self.__clean_names(episode.title))\
                         .replace('%x', episode.extension)
 
         if rename_dir is None:
-            rename_dir = self.config.get(episode.show, 'renamed')
+            rename_dir = self.config.get(episode.show_name, 'renamed')
         if rename_dir is False:
             rename_dir = self.working_dir
 
         if organise is None:
-            organise = self.config.get(episode.show, 'organise')
+            organise = self.config.get(episode.show_name, 'organise')
 
         if organise is True:
             rename_dir = self.__build_organise_path(rename_dir, \
-                                    episode.show, episode.season)
+                                    episode.show_name, episode.season)
 
         log.log(22, 'Directory: %s' % rename_dir)
         path = os.path.join(rename_dir, format)
