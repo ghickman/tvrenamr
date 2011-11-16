@@ -96,4 +96,11 @@ class Config():
     def _get_defaults(self):
         if 'defaults' in self.config:
             return self.config['defaults']
+        else:
+            message = """
+            The defaults section of your config is missing.
+
+            For an example see: https://gist.github.com/586062
+            """
+            raise NameError(message)
 
