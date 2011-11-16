@@ -49,13 +49,13 @@ class FrontEnd():
 
         # determine type
         try:
-            file_list = self.__determine_type(path, options.recursive,
+            file_list = self._build_file_list(path, options.recursive,
                                                 options.ignore_filelist)
         except OSError:
             parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
 
         if options.dry or options.debug:
-            self.__start_dry_run()
+            self._start_dry_run()
 
         # kick off a rename for each file in the list
         for details in file_list:
@@ -66,9 +66,9 @@ class FrontEnd():
                 log.info('')
 
         if options.dry or options.debug:
-            self.__stop_dry_run()
+            self._stop_dry_run()
 
-    def __determine_type(self, path, recursive=False, ignore_filelist=None):
+    def _build_file_list(self, path, recursive=False, ignore_filelist=None):
         """
         Determines which files need to be processed for renaming.
 
@@ -127,8 +127,8 @@ class FrontEnd():
                 NoMoreLibrariesException,
                 NoNetworkConnectionException):
             if options.dry or options.debug:
-                self.__stop_dry_run()
             exit()
+                self._stop_dry_run()
         except (EmptyEpisodeNameException,
                 EpisodeAlreadyExistsInDirectoryException,
                 EpisodeNotFoundException,
@@ -143,12 +143,12 @@ class FrontEnd():
                 log.critical(err)
             pass
 
-    def __start_dry_run(self):
+    def _start_dry_run(self):
         log.log(26, 'Dry Run beginning.')
         log.log(26, '-' * 70)
         log.log(26, '')
 
-    def __stop_dry_run(self):
+    def _stop_dry_run(self):
         log.log(26, '')
         log.log(26, '-' * 70)
         log.log(26, 'Dry Run complete. No files were harmed in the process.')
