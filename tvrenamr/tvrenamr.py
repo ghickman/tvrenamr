@@ -133,8 +133,8 @@ class FrontEnd():
                 NoMoreLibrariesException,
                 NoNetworkConnectionException):
             if options.dry or options.debug:
-            exit()
                 self._stop_dry_run()
+            sys.exit(1)
         except (EmptyEpisodeNameException,
                 EpisodeAlreadyExistsInDirectoryException,
                 EpisodeNotFoundException,
