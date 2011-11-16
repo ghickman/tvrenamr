@@ -119,9 +119,15 @@ class FrontEnd():
             if options.episode:
                 episode.episode = options.episode
 
-            episode.title = tv.retrieve_episode_name(episode, library=options.library, canonical=options.canonical)
-            episode.show = tv.format_show_name(episode.show, the=options.the, override=options.show_override)
-            path = tv.build_path(episode, rename_dir=options.rename_dir, organise=options.organise, format=options.output_format)
+            episode.title = tv.retrieve_episode_name(episode, library=options.library,
+                                                        canonical=options.canonical)
+
+            episode.show = tv.format_show_name(episode.show, the=options.the,
+                                                override=options.show_override)
+
+            path = tv.build_path(episode, rename_dir=options.rename_dir,
+                                    organise=options.organise, format=options.output_format)
+
             tv.rename(filename, path)
         except (ConfigNotFoundException,
                 NoMoreLibrariesException,
