@@ -11,11 +11,11 @@ class Config():
     def __init__(self, config):
         self.log = getLogger('Config')
 
-        self.config = self.__load_config(config)
+        self.config = self._load_config(config)
 
         self.log.debug('Config loaded')
 
-        self.defaults = self.__get_defaults()
+        self.defaults = self._get_defaults()
         self.log.debug('Defaults retrieved')
 
     def exists(self, show):
@@ -52,7 +52,7 @@ class Config():
             except KeyError:
                 raise ShowNotInConfigException(show)
 
-    def __load_config(self, config):
+    def _load_config(self, config):
         try:
             return safe_load(file(config))
         except Exception, e:
@@ -93,7 +93,7 @@ class Config():
                 # raise
             exit(1)
 
-    def __get_defaults(self):
+    def _get_defaults(self):
         if 'defaults' in self.config:
             return self.config['defaults']
 
