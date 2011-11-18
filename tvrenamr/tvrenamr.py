@@ -122,7 +122,7 @@ class FrontEnd():
             episode.title = tv.retrieve_episode_name(episode, library=options.library,
                                                         canonical=options.canonical)
 
-            episode.show = tv.format_show_name(episode.show, the=options.the,
+            episode.show_show = tv.format_show_name(episode.show_name, the=options.the,
                                                 override=options.show_override)
 
             path = tv.build_path(episode, rename_dir=options.rename_dir,
