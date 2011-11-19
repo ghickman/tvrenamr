@@ -10,6 +10,5 @@ dist
 tvrenamr.egg-info
 thoughts
 Rakefile
-
-# Virtualenv Items
+docs/_build/
 venv
