@@ -10,5 +10,5 @@ dist
 tvrenamr.egg-info
 thoughts
 Rakefile
-docs/_build/
+tvrenamr/docs/_build/
 venv
