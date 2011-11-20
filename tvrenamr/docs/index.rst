@@ -15,5 +15,6 @@ Contents
     config
     logging
     custom-regexs
+    output-formats
     changelog
 
