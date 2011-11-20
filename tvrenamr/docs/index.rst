@@ -13,5 +13,6 @@ Contents
     installation
     usage
     config
+    logging
     changelog
 
