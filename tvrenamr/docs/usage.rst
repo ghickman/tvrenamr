@@ -40,3 +40,26 @@ Tv Renamr accepts the following options which take precedent over any options se
 -s, --season     Set the season number.
 -t, --the        Set the position of 'The' in a show's name to the end of the file.
 
+Examples
+~~~~~~~~
+
+.. code-block:: bash
+
+    $ tvr
+
+.. code-block:: bash
+
+    $ tvr /path/to/a/directory/
+
+.. code-block:: bash
+
+    $ tvr /path/to/a/file.avi
+
+.. code-block:: bash
+
+    $ tvr --organise -r '/path/to/a/directory/' /path/to/a/directory/[a_file.avi]
+
+.. code-block:: bash
+
+    $ tvr --season '1' --name 'chuck' /path/to/a/file/the_file.avi
+
