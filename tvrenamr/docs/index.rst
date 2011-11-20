@@ -14,5 +14,6 @@ Contents
     usage
     config
     logging
+    custom-regexs
     changelog
 
