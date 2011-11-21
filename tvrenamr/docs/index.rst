@@ -16,5 +16,6 @@ Contents
     logging
     custom-regexs
     output-formats
+    known-issues
     changelog
 
