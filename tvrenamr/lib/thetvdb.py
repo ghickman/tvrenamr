@@ -21,10 +21,10 @@ class TheTvDb():
         :param show_name: The show name of the episode title to be retrieved.
         """
         self.show = show
-        log.info('Searching: %s' % self.show)
         self.season = season
         self.episode = episode
 
+        log.info('Searching: %s' % self.show)
         self.show_id, self.show = self._get_show_id()
         log.debug('Retrieved show id: %s' % self.show_id)
         log.debug('Retrieved canonical show name: %s' % self.show)
