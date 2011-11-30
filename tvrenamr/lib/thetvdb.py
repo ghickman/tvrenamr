@@ -3,18 +3,11 @@ import urllib2
 
 from lxml.etree import fromstring
 
-try:
-    from tvrenamr.errors import EmptyEpisodeNameException, \
-                                EpisodeNotFoundException, \
-                                NoNetworkConnectionException, \
-                                ShowNotFoundException, \
-                                XMLEmptyException
-except ImportError:
-    from . errors import EmptyEpisodeNameException, \
-                            EpisodeNotFoundException, \
-                            NoNetworkConnectionException, \
-                            ShowNotFoundException, \
-                            XMLEmptyException
+from tvrenamr.errors import (EmptyEpisodeNameException,
+                            EpisodeNotFoundException,
+                            NoNetworkConnectionException,
+                            ShowNotFoundException,
+                            XMLEmptyException)
 
 log = logging.getLogger('The Tv DB')
 
