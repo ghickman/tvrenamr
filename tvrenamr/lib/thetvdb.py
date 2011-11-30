@@ -25,13 +25,13 @@ class TheTvDb():
         self.season = season
         self.episode = episode
 
-        self.show_id, self.show = self.__get_show_id()
+        self.show_id, self.show = self._get_show_id()
         log.debug('Retrieved show id: %s' % self.show_id)
         log.debug('Retrieved canonical show name: %s' % self.show)
-        self.title = self.__get_episode_name()
+        self.title = self._get_episode_name()
         log.debug('Retrieved episode name: %s' % self.title)
 
-    def __get_show_id(self):
+    def _get_show_id(self):
         """
         Retrieves the show ID of the show name passed in when the class is instantiated.
 
@@ -67,7 +67,7 @@ class TheTvDb():
             else:
                 raise ShowNotFoundException(log.name, self.show)
 
-    def __get_episode_name(self):
+    def _get_episode_name(self):
         """
         Retrieves the episode title for the given episode from thetvdb.com.
 
