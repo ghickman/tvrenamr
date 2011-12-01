@@ -1,7 +1,6 @@
 import logging
 import urllib2
-
-from lxml.etree import fromstring
+from xml.etree.ElementTree import fromstring
 
 from tvrenamr.errors import (EmptyEpisodeNameException,
                             EpisodeNotFoundException,
