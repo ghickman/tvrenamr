@@ -3,10 +3,10 @@ import urllib2
 from xml.etree.ElementTree import fromstring
 
 from tvrenamr.errors import (EmptyEpisodeNameException,
-                            EpisodeNotFoundException,
-                            NoNetworkConnectionException,
-                            ShowNotFoundException,
-                            XMLEmptyException)
+                             EpisodeNotFoundException,
+                             NoNetworkConnectionException,
+                             ShowNotFoundException,
+                             XMLEmptyException)
 
 log = logging.getLogger('The Tv DB')
 

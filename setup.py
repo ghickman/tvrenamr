@@ -11,7 +11,7 @@ setup(
     url = 'http://github.com/ghickman/tvrenamr',
     license = 'MIT',
     packages = find_packages(exclude=['tests']),
-    entry_points = {'console_scripts': ['tvr = tvrenamr.tvrenamr:run',],},
+    entry_points = {'console_scripts': ['tvr = tvrenamr.frontend:run',],},
     classifiers = [
         'Environment :: Console',
         'Intended Audience :: End Users/Desktop',
