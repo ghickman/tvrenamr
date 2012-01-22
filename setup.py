@@ -23,6 +23,6 @@ setup(
         'Topic :: Multimedia',
         'Topic :: Utilities',
         'Natural Language :: English'],
-    install_requires = ('lxml', 'pyyaml',)
+    install_requires = ('pyyaml',)
 )
 
