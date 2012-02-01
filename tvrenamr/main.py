@@ -183,7 +183,7 @@ class TvRenamr():
             episode.episode = '0' + episode.episode
 
         if format is None:
-            format = self.config.get(episode.show_name, 'format')
+            format = self.config.get(episode.show_name, 'format') or '%n - %s%e - %t%x'
         if '%x' not in format:
             format = format + '%x'
         format = format.replace('%n', episode.show_name)\
