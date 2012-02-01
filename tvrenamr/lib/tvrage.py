@@ -1,5 +1,6 @@
 import logging
-import urllib2
+import urllib
+import requests
 
 from lxml.etree import fromstring, XMLSyntaxError
 
@@ -49,12 +50,13 @@ class TvRage():
         :rtype: A string.
         """
         log.debug('Retrieving series id for %s' % self.show)
-        url = '%s%s' % (url_name, urllib2.quote(self.show))
+        url = '%s%s' % (url_name, urllib.quote(self.show))
         log.debug('Series url: %s' % url)
 
-        try:
-            data = urllib2.urlopen(url).read()
-        except urllib2.URLError:
+        req = requests.get(url)
+        if req.status_code == requests.codes.ok:
+            data = req.content
+        else:
             raise NoNetworkConnectionException('tvrage.com')
 
         log.debug('XML: Attempting to parse')
@@ -90,14 +92,15 @@ class TvRage():
         log.debug('Episode URL: %s' % episode_url)
 
         log.debug('Attempting to retrieve episode name')
-        try:
-            temp = urllib2.urlopen(episode_url)
+        req = requests.get(episode_url)
+        if req.status_code == requests.codes.ok:
+            data = req.content
             log.debug('XML: Retreived')
-        except urllib2.URLError:
+        else:
             raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
 
         log.debug('XML: Attempting to parse')
-        tree = fromstring(temp.read())
+        tree = fromstring(data)
         log.debug('XML: Parsed')
 
         if tree is None:
