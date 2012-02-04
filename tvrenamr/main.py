@@ -3,8 +3,8 @@ import os
 import re
 
 from errors import *
-from lib.thetvdb import TheTvDb as thetvdb
-from lib.tvrage import TvRage as tvrage
+from lib.thetvdb import TheTvDb
+from lib.tvrage import TvRage
 
 log = logging.getLogger('Core')
 
@@ -94,16 +94,11 @@ class TvRenamr():
         :rtype: A string.
         """
         libraries = [
-            ('thetvdb', thetvdb),
-            ('tvrage', tvrage),
+            TheTvDb,
+            TvRage
         ]
-        choice = None
-        for i, lib in enumerate(libraries):
-            if lib[0] == library:
-                choice = lib
-                libraries.pop(i)
-                break
-        libraries.insert(0, choice)
+        [libraries.insert(0, libraries.pop(libraries.index(lib)))
+        for lib in libraries if lib.__name__.lower() == library]
 
         if canonical:
             episode.show_name = canonical
@@ -111,15 +106,18 @@ class TvRenamr():
             episode.show_name = self.config.get_canonical(episode.show_name)
         log.debug('Show Name: %s' % episode.show_name)
 
+        # loop the libraries until one works
         for lib in libraries:
             try:
-                log.debug('Using %s' % lib[1].__name__)
-                self.library = lib[1](episode.show_name, episode.season, episode.episode)
-                break
-            except XMLSyntaxError:
+                log.debug('Using %s' % lib.__name__)
+                self.library = lib(episode.show_name, episode.season, episode.episode)
+                break # first library worked - nothing to see here
+            except (EmptyEpisodeNameException, EpisodeNotFoundException,
+                    NoNetworkConnectionException, ShowNotFoundException,
+                    XMLEmptyException):
                 if lib == libraries[-1]:
                     raise NoMoreLibrariesException
-                log.debug('Got broken XML from %s. Falling back to next library' % lib[1].__name__)
+                log.debug('Got broken XML from %s. Falling back to next library' % lib.__name__)
                 continue
 
         self.title = self.library.title
