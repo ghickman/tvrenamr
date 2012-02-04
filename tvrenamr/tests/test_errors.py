@@ -5,10 +5,13 @@ from nose.tools import assert_raises
 
 from tvrenamr.config import Config
 from tvrenamr.episode import Episode
-from tvrenamr.errors import EpisodeAlreadyExistsInDirectoryException, EpisodeNotFoundException, \
-        IncorrectCustomRegularExpressionSyntaxException, UnexpectedFormatException
+from tvrenamr.errors import (EpisodeAlreadyExistsInDirectoryException,
+                             EpisodeNotFoundException,
+                             IncorrectCustomRegularExpressionSyntaxException,
+                             UnexpectedFormatException)
 from tvrenamr.main import TvRenamr
 import urlopenmock
+
 
 class TestExceptionsAreRaised(object):
     working = 'tests/data/working'
