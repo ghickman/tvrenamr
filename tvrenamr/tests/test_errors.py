@@ -33,6 +33,8 @@ class TestExceptionsAreRaised(object):
         assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, episode)
 
     def test_episode_already_exists_in_folder_exception_is_raised_when_new_file_name_already_exists_in_folder(self):
+        with open(join(self.working, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
+            pass
         fn = 'chuck.s02e05.avi'
         episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
