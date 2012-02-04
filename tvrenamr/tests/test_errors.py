@@ -29,14 +29,12 @@ class TestExceptionsAreRaised(object):
         assert_raises(UnexpectedFormatException, self.tv.extract_details_from_file, 'chuck.avi')
 
     def test_episode_not_found_exception_should_be_raised_when_episode_not_found(self):
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file('chuck.s99e05.avi')
+        episode = Episode(self.tv.extract_details_from_file('chuck.s99e05.avi'))
         assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, episode)
 
     def test_episode_already_exists_in_folder_exception_is_raised_when_new_file_name_already_exists_in_folder(self):
         fn = 'chuck.s02e05.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         path = self.tv.build_path(episode, organise=False)
         assert_raises(EpisodeAlreadyExistsInDirectoryException, self.tv.rename, fn, path)
