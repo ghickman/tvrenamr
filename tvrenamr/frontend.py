@@ -146,8 +146,10 @@ class FrontEnd():
             pass
         except Exception as err:
             if options.debug:
-                log.critical(err)
-            pass
+                # In debug mode, show the full traceback.
+                raise
+            log.critical('tvr: critical error: %s' % str(err))
+            sys.exit(1)
 
     def _start_dry_run(self):
         log.log(26, 'Dry Run beginning.')

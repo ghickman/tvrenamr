@@ -1,6 +1,8 @@
 import logging
-import urllib2
+import urllib
 from xml.etree.ElementTree import fromstring
+
+import requests
 
 from tvrenamr.errors import (EmptyEpisodeNameException,
                              EpisodeNotFoundException,
@@ -42,12 +44,13 @@ class TheTvDb():
         :rtype: A string.
         """
         log.debug('Retrieving series id for %s' % self.show)
-        url = '%s%s%s' % (url_base, url_series, urllib2.quote(self.show))
+        url = '%s%s%s' % (url_base, url_series, urllib.quote(self.show))
         log.debug('Series url: %s' % url)
 
-        try:
-            data = urllib2.urlopen(url).read()
-        except urllib2.URLError:
+        req = requests.get(url)
+        if req.status_code == requests.codes.ok:
+            data = req.content
+        else:
             raise NoNetworkConnectionException('thetvdb.org')
 
         log.debug('XML: Attempting to parse')
@@ -85,10 +88,11 @@ class TheTvDb():
         log.debug('Episode URL: %s' % episode_url)
 
         log.debug('Attempting to retrieve episode name')
-        try:
-            data = urllib2.urlopen(episode_url).read()
+        req = requests.get(episode_url)
+        if req.status_code == requests.codes.ok:
+            data = req.content
             log.debug('XML: Retreived')
-        except urllib2.URLError:
+        else:
             raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
 
         log.debug('XML: Attempting to parse')
