@@ -42,6 +42,6 @@ class TestExceptionsAreRaised(object):
         assert_raises(EpisodeAlreadyExistsInDirectoryException, self.tv.rename, fn, path)
 
     def test_incorrect_custom_regular_expression_syntax_exception_is_raised_when_any_of_the_custom_regular_expression_string_is_missing_the_defined_three_syntax_snippets(self):
-        fn = 'chuck.s02e05.avi'
-        assert_raises(IncorrectCustomRegularExpressionSyntaxException, self.tv.extract_details_from_file, fn, '.')
+        assert_raises(IncorrectCustomRegularExpressionSyntaxException,
+                      self.tv.extract_details_from_file, 'chuck.s02e05.avi', '.')
 
