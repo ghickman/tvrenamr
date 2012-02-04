@@ -2,8 +2,6 @@ import logging
 import os
 import re
 
-from lxml.etree import XMLSyntaxError
-
 from errors import *
 from lib.thetvdb import TheTvDb as thetvdb
 from lib.tvrage import TvRage as tvrage
