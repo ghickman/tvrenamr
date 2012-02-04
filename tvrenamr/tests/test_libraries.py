@@ -32,18 +32,21 @@ class TestLibraries(object):
     def test_searching_the_tv_db_for_an_incorrect_name_returns_a_show_not_found_exception(self):
         episode = Episode(('west, wing', 4, 1, '.avi'))
         for library in self.libs:
-            assert_raises(ShowNotFoundException, self.tv.retrieve_episode_name, episode, library=library)
+            assert_raises(ShowNotFoundException, self.tv.retrieve_episode_name,
+                          episode, library=library)
 
     def test_searching_the_tv_db_for_an_episode_that_does_not_exist_returns_an_episode_not_found_exception(self):
         episode = Episode(('chuck', 1, 99, '.avi'))
         for library in self.libs:
-            assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, episode, library=library)
+            assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name,
+                          episode, library=library)
 
     def test_searching_the_tv_db_for_a_specific_episode_returns_the_correct_episode(self):
         fn = 'the.big.bang.theory.S03E01.HDTV.XviD-NoTV.avi'
         episode = Episode(self.tv.extract_details_from_file(fn))
         for library in self.libs:
-            assert_equal(self.tv.retrieve_episode_name(episode, library=library), 'The Electric Can Opener Fluctuation')
+            assert_equal(self.tv.retrieve_episode_name(episode, library=library),
+                         'The Electric Can Opener Fluctuation')
 
     def test_the_tv_db_returns_a_formatted_show_name(self):
         fn = 'the.big.bang.theory.S03E01.HDTV.XviD-NoTV.avi'

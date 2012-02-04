@@ -13,6 +13,7 @@ working = 'tests/data/working'
 renamed = 'tests/data/renamed'
 organised = 'tests/data/organised'
 
+
 class TestFrontEnd(object):
 
     def setUp(self):

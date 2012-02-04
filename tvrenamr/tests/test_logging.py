@@ -8,6 +8,7 @@ from tvrenamr.episode import Episode
 from tvrenamr.main import TvRenamr
 import urlopenmock
 
+
 class TestLogging(object):
     working = 'tests/data/working'
 
@@ -28,5 +29,6 @@ class TestLogging(object):
         episode.title = 'Winter Solstice (2): Avatar Roku'
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, 'Avatar, The Last Airbender - 108 - Winter Solstice (2), Avatar Roku.avi')))
+        assert_true(isfile(join(self.working,
+                    'Avatar, The Last Airbender - 108 - Winter Solstice (2), Avatar Roku.avi')))
 
