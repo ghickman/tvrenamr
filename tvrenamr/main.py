@@ -273,7 +273,7 @@ class TvRenamr():
         episode = r"(?P<episode>[\d]{2})"
 
         if regex is None:
-            return series + r"\.[Ss]?" + season + r"[XxEe]" + episode + r"\.|-"
+            return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"
         if regex.find('%s') is -1 or regex.find('%e') is -1:
             raise IncorrectCustomRegularExpressionSyntaxException(regex)
 
@@ -349,3 +349,4 @@ class TvRenamr():
             return show_name
         log.debug('Moving leading \'The\' to end of: ' + show_name)
         return show_name[4:] + ', The'
+
