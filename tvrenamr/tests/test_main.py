@@ -108,7 +108,7 @@ class TestMain(object):
         assert_equal(self.tv.extract_details_from_file('chuck.s2e05.avi')[2], '05')
 
     def test_extracting_episode_from_file_format_s00e00(self):
-        assert_equal(self.tv.extract_details_from_file('chuck.s20e05')[2], '05')
+        assert_equal(self.tv.extract_details_from_file('chuck.s20e05.avi')[2], '05')
 
     def test_extracting_season_from_file_format_0x00(self):
         assert_equal(self.tv.extract_details_from_file('chuck.2x05.avi')[1], '2')
@@ -120,7 +120,7 @@ class TestMain(object):
         assert_equal(self.tv.extract_details_from_file('chuck.2x05.avi')[2], '05')
 
     def test_extracting_episode_from_file_format_00x00(self):
-        assert_equal(self.tv.extract_details_from_file('chuck.20x05')[2], '05')
+        assert_equal(self.tv.extract_details_from_file('chuck.20x05.avi')[2], '05')
 
     def test_extracting_season_from_file_format_000(self):
         assert_equal(self.tv.extract_details_from_file('chuck.205.avi')[1], '2')
@@ -132,7 +132,7 @@ class TestMain(object):
         assert_equal(self.tv.extract_details_from_file('chuck.205.avi')[2], '05')
 
     def test_extracting_episode_from_file_format_0000(self):
-        assert_equal(self.tv.extract_details_from_file('chuck.2005')[2], '05')
+        assert_equal(self.tv.extract_details_from_file('chuck.2005.avi')[2], '05')
 
     def test_extracting_season_with_custom_regular_expression_passing_in_season_and_episode_digit_lengths_from_file_format_000(self):
         assert_equal(self.tv.extract_details_from_file('chuck.025', user_regex='%n.%s{2}%e{1}')[1], '02')
