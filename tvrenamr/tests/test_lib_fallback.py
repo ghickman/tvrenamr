@@ -10,6 +10,7 @@ from tvrenamr.errors import NoMoreLibrariesException
 from tvrenamr.main import TvRenamr
 import urlopenmock
 
+
 class TestLibrariesFallback(object):
     invalid_xml_file = join(dirname(__file__), 'mocked_xml', 'invalid.xml')
     working = 'tests/data/working'
@@ -25,7 +26,6 @@ class TestLibrariesFallback(object):
 
     @patch('urllib2.urlopen', new=urlopenmock.invalid_xml)
     def test_rename_with_all_libraries_returning_invalid_xml(self):
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file('chuck.s1e08.blah.HDTV.XViD.avi')
+        episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.blah.HDTV.XViD.avi'))
         assert_raises(NoMoreLibrariesException, self.tv.retrieve_episode_name, episode)
 
