@@ -15,7 +15,7 @@ class TestAutoMoving(object):
     working = 'tests/data/working'
 
     def setUp(self):
-        files = 'tests/data/files'
+        files = 'tests/files'
         self.config = Config(join(dirname(__file__), 'config.yml'))
         self.tv = TvRenamr(self.working, self.config)
         copytree(files, self.working)

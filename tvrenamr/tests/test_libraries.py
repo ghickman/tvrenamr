@@ -13,8 +13,8 @@ class TestLibraries(object):
     libs = ('thetvdb', 'tvrage')
     working = 'tests/data/working'
 
-    def setup(self):
-        files = 'tests/data/files'
+    def setUp(self):
+        files = 'tests/files'
         self.config = Config(join(dirname(__file__), 'config.yml'))
         self.tv = TvRenamr(self.working, self.config)
         copytree(files, self.working)
