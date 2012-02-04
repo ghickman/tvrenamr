@@ -13,10 +13,11 @@ working = 'tests/data/working'
 renamed = 'tests/data/renamed'
 organised = 'tests/data/organised'
 
+
 class TestFrontEnd(object):
 
     def setUp(self):
-        files = 'tests/data/files'
+        files = 'tests/files'
         copytree(files, working)
 
     def tearDown(self):
