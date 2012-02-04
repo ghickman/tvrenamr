@@ -25,24 +25,21 @@ class TestMain(object):
 
     def test_passing_in_a_show_name_renames_a_file_using_that_name(self):
         fn = 'avatar.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
         episode.show = 'Avatar: The Last Airbender'
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
         assert_true(isfile(join(self.working, 'Avatar, The Last Airbender - 108 - Winter Solstice, Avatar Roku (2).avi')))
 
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file('chuck.s1e08.avi')
+        episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.avi'))
         episode.season = 2
         assert_equal(self.tv.retrieve_episode_name(episode), 'Chuck Versus the Gravitron')
 
     def test_passing_in_a_season_number_renames_a_file_using_that_season_number(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file('chuck.s1e08.avi')
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.season = 2
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show = self.tv.format_show_name(episode.show)
@@ -52,8 +49,7 @@ class TestMain(object):
 
     def test_passing_in_an_episode_number_returns_the_correct_episode_title(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.episode = '9'
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show = self.tv.format_show_name(episode.show)
@@ -62,15 +58,13 @@ class TestMain(object):
         assert_true(isfile(join(self.working, 'Chuck - 109 - Chuck Versus the Imported Hard Salami.avi')))
 
     def test_passing_in_an_episode_number_renames_a_file_using_that_episode_number(self):
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file('chuck.s1e08.blah.HDTV.XViD.avi')
+        episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.blah.HDTV.XViD.avi'))
         episode.episode = 9
         assert_equal(self.tv.retrieve_episode_name(episode), 'Chuck Versus the Imported Hard Salami')
 
     def test_setting_the_position_of_a_shows_leading_the_to_the_end_of_the_file_name(self):
         fn = 'The.Big.Bang.Theory.S03E01.HDTV.XviD-NoTV.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show = self.tv.format_show_name(episode.show, the=True)
         path = self.tv.build_path(episode, organise=False)
@@ -79,8 +73,7 @@ class TestMain(object):
 
     def test_setting_an_episodes_format_as_name_season_episode_title(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show = self.tv.format_show_name(episode.show)
         assert_equal(self.tv.build_path(
@@ -89,8 +82,7 @@ class TestMain(object):
 
     def test_setting_an_episodes_format_as_season_episode_title_name(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show = self.tv.format_show_name(episode.show)
         assert_equal(self.tv.build_path(
@@ -99,8 +91,7 @@ class TestMain(object):
 
     def test_setting_an_episodes_format_as_title_episode_season_name(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode()
-        episode.show, episode.season, episode.episode, episode.extension = self.tv.extract_details_from_file(fn)
+        episode = Episode(self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show = self.tv.format_show_name(episode.show)
         assert_equal(self.tv.build_path(
