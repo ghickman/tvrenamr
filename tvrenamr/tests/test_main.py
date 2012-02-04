@@ -24,13 +24,14 @@ class TestMain(object):
         assert_true(isinstance(TvRenamr("/", self.config), TvRenamr))
 
     def test_passing_in_a_show_name_renames_a_file_using_that_name(self):
-        fn = 'avatar.s1e08.blah.HDTV.XViD.avi'
-        episode.show = 'Avatar: The Last Airbender'
+        fn = 'doctor.who.s5e10.blah.HDTV.XViD.avi'
+        final_fn = 'Doctor Who (2005) - 510 - Vincent and the Doctor.avi'
         episode = Episode(self.tv.extract_details_from_file(fn))
+        episode.show_name = 'Doctor Who (2005)'
         episode.title = self.tv.retrieve_episode_name(episode)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, 'Avatar, The Last Airbender - 108 - Winter Solstice, Avatar Roku (2).avi')))
+        assert_true(isfile(join(self.working, final_fn)))
 
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
         episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.avi'))
