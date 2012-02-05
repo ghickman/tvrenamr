@@ -28,11 +28,11 @@ class TestExceptionsAreRaised(object):
     def test_unexpected_format_exception_should_be_raised_when_unrecognised_file_format(self):
         assert_raises(UnexpectedFormatException, self.tv.extract_details_from_file, 'chuck.avi')
 
-    def test_episode_not_found_exception_should_be_raised_when_episode_not_found(self):
+    def test_nonexistant_episode_doesnt_work_on_any_library(self):
         episode = Episode(self.tv.extract_details_from_file('chuck.s99e05.avi'))
         assert_raises(NoMoreLibrariesException, self.tv.retrieve_episode_name, episode)
 
-    def test_episode_already_exists_in_folder_exception_is_raised_when_new_file_name_already_exists_in_folder(self):
+    def test_episode_already_exists_raise_exception(self):
         with open(join(self.working, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
             pass
         fn = 'chuck.s02e05.avi'
@@ -41,7 +41,7 @@ class TestExceptionsAreRaised(object):
         path = self.tv.build_path(episode, organise=False)
         assert_raises(EpisodeAlreadyExistsInDirectoryException, self.tv.rename, fn, path)
 
-    def test_incorrect_custom_regular_expression_syntax_exception_is_raised_when_any_of_the_custom_regular_expression_string_is_missing_the_defined_three_syntax_snippets(self):
+    def test_custom_syntax_snippets_missing_raises_exception(self):
         assert_raises(IncorrectCustomRegularExpressionSyntaxException,
                       self.tv.extract_details_from_file, 'chuck.s02e05.avi', '.')
 
