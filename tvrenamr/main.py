@@ -117,7 +117,6 @@ class TvRenamr():
                     XMLEmptyException):
                 if lib == libraries[-1]:
                     raise NoMoreLibrariesException
-                log.debug('Got broken XML from %s. Falling back to next library' % lib.__name__)
                 continue
 
         self.title = self.library.title
