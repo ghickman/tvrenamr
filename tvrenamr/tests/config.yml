@@ -4,9 +4,6 @@ defaults:
   organise: yes
   renamed: tests/data/working
   the: true
-  deluge:
-    share ratio: "2.0"
-    finished: yes
 
 american dad:
   canonical: American Dad!
