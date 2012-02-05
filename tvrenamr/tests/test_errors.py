@@ -6,7 +6,7 @@ from nose.tools import assert_raises
 from tvrenamr.config import Config
 from tvrenamr.episode import Episode
 from tvrenamr.errors import (EpisodeAlreadyExistsInDirectoryException,
-                             EpisodeNotFoundException,
+                             NoMoreLibrariesException,
                              IncorrectCustomRegularExpressionSyntaxException,
                              UnexpectedFormatException)
 from tvrenamr.main import TvRenamr
@@ -30,7 +30,7 @@ class TestExceptionsAreRaised(object):
 
     def test_episode_not_found_exception_should_be_raised_when_episode_not_found(self):
         episode = Episode(self.tv.extract_details_from_file('chuck.s99e05.avi'))
-        assert_raises(EpisodeNotFoundException, self.tv.retrieve_episode_name, episode)
+        assert_raises(NoMoreLibrariesException, self.tv.retrieve_episode_name, episode)
 
     def test_episode_already_exists_in_folder_exception_is_raised_when_new_file_name_already_exists_in_folder(self):
         with open(join(self.working, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
