@@ -8,7 +8,10 @@ Requirements
 
 * Python 2.6+
 * PyYaml
+* `Requests`_
 * The Interwebs
+
+.. _Requests: http://docs.python-requests.org/en/latest/index.html
 
 
 Python Package Index
