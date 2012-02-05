@@ -70,8 +70,7 @@ class EpisodeNotFoundException(Exception):
     """
 
     def __init__(self, library, show, season, episode):
-        log.error('%s - %s%s could not be found on %s' % \
-                    (show, season, episode, library))
+        log.error('"%s - %s%s" could not be found on %s' % (show, season, episode, library))
 
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
