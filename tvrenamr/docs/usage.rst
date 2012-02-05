@@ -15,6 +15,13 @@ or
 
     $ tvr folder
 
+or
+
+.. code-block:: bash
+
+    $ tvr .avi
+
+
 Options
 -------
 
@@ -49,11 +56,7 @@ Examples
 
 .. code-block:: bash
 
-    $ tvr /path/to/a/directory/
-
-.. code-block:: bash
-
-    $ tvr /path/to/a/file.avi
+    $ tvr --recursive /path/to/a/directory/
 
 .. code-block:: bash
 
