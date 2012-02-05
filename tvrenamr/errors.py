@@ -44,6 +44,7 @@ class EmptyEpisodeNameException(Exception):
         log.error('The episode name was not found. The record on %s is likely '
                     'incomplete.' % library)
 
+
 class EpisodeAlreadyExistsInDirectoryException(Exception):
     """
     Exception that is raised when a file with the same name as the renamed file
@@ -84,6 +85,7 @@ class IncorrectCustomRegularExpressionSyntaxException(Exception):
         log.error('The regular expression provided does not contain the '
                     'required custom syntax.')
 
+
 class NoMoreLibrariesException(Exception):
     """
     All libraries have returned invalid XML.
@@ -91,6 +93,7 @@ class NoMoreLibrariesException(Exception):
 
     def __init__(self):
         log.error('No libraries left to fall back to. Exiting...')
+
 
 class OutputFormatMissingSyntaxException(Exception):
     """
