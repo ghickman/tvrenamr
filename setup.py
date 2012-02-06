@@ -8,7 +8,7 @@ setup(
     description = 'Rename tv show files using online databases',
     author = 'George Hickman',
     author_email = 'george@ghickman.co.uk',
-    url = 'http://github.com/ghickman/tvrenamr',
+    url = 'http://tvrenamr.info',
     license = 'MIT',
     packages = find_packages(exclude=['tests']),
     entry_points = {'console_scripts': ['tvr = tvrenamr.frontend:run',],},
