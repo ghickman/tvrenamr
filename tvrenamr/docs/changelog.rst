@@ -3,11 +3,42 @@
 Changelog
 =========
 
+v3.2.0
+
+- Remove lxml and thus it's C building dependencies
+
+- Tidy up the tests
+
+- Clean up the library fallback logic and it's error handling
+
+
+v3.1.0
+------
+
+- Show unhandled exceptions
+
+- Provide a default filenmae format to fall back to
+
+- Use Requests instead of urllib2
+
+- Thanks to sampsyo for his work on this release
+
+
+v3.0.3
+------
+
+- Add documentation and push to Read the Docs
+
+- Fix another silly typo. Regretting the state of the tests now...
+
+
+
 v3.0.2
 ------
 
 - Fix a silly naming bug that broke everything and brown bagged the last
   release.
+
 
 v3.0.1
 ------
@@ -24,6 +55,7 @@ v3.0.1
 - Give more sensible output when the config's defaults are missing.
 
 - Return the correct error code when exiting from an error.
+
 
 v3.0.0
 ------
