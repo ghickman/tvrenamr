@@ -8,6 +8,7 @@ Install it straight from the PyPI
 Run it from the command line
 
     $ tvr file
+
     $ tvr folder
 
 
