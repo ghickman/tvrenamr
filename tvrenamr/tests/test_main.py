@@ -1,27 +1,14 @@
-from os.path import dirname, isfile, join
-from shutil import copytree, rmtree
+from os.path import isfile, join
 
 from nose.tools import assert_equal, assert_true
 
-from tvrenamr.config import Config
 from tvrenamr.episode import Episode
 from tvrenamr.main import TvRenamr
-import urlopenmock
+from tvrenamr.tests.base import BaseTest
 
-class TestMain(object):
-    working = 'tests/data/working'
-
-    def setUp(self):
-        files = 'tests/files'
-        self.config = Config(join(dirname(__file__), 'config.yml'))
-        self.tv = TvRenamr(self.working, self.config)
-        copytree(files, self.working)
-
-    def tearDown(self):
-        rmtree(self.working)
-
+class TestMain(BaseTest):
     def test_instantiate_core(self):
-        assert_true(isinstance(TvRenamr("/", self.config), TvRenamr))
+        assert_true(isinstance(TvRenamr('/', self.config), TvRenamr))
 
     def test_passing_in_a_show_name_renames_a_file_using_that_name(self):
         fn = 'doctor.who.s5e10.blah.HDTV.XViD.avi'
