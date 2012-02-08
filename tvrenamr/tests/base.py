@@ -1,4 +1,4 @@
-from os import makedirs
+from os import mkdir
 from os.path import abspath, dirname, exists, join
 from shutil import rmtree
 
@@ -13,7 +13,7 @@ class BaseTest(object):
     def setup(self):
         # if `file` isn't there, make it
         if not exists(self.files):
-            makedirs(self.files)
+            mkdir(self.files)
 
         # absolute path to the file is pretty useful
         self.path = abspath(dirname(__file__))
