@@ -26,7 +26,6 @@ class BaseTest(object):
 
         # instantiate tvr
         self.config = Config(join(self.path, 'config.yml'))
-        print self.files
         self.tv = TvRenamr(self.files, self.config)
 
     def teardown(self):
