@@ -2,7 +2,7 @@ defaults:
   format: '%n - %s%e - %t%x'
   library: thetvdb
   organise: yes
-  renamed: tests/data/working
+  renamed: tests/files
   the: true
 
 american dad:

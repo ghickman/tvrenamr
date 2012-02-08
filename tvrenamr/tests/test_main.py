@@ -18,7 +18,7 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, final_fn)))
+        assert_true(isfile(join(self.files, final_fn)))
 
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
         episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.avi'))
@@ -33,7 +33,7 @@ class TestMain(BaseTest):
         episode.show_name = self.tv.format_show_name(episode.show_name)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, 'Chuck - 208 - Chuck Versus the Gravitron.avi')))
+        assert_true(isfile(join(self.files, 'Chuck - 208 - Chuck Versus the Gravitron.avi')))
 
     def test_passing_in_an_episode_number_returns_the_correct_episode_title(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
@@ -43,7 +43,7 @@ class TestMain(BaseTest):
         episode.show_name = self.tv.format_show_name(episode.show_name)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, 'Chuck - 109 - Chuck Versus the Imported Hard Salami.avi')))
+        assert_true(isfile(join(self.files, 'Chuck - 109 - Chuck Versus the Imported Hard Salami.avi')))
 
     def test_passing_in_an_episode_number_renames_a_file_using_that_episode_number(self):
         episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.blah.HDTV.XViD.avi'))
@@ -57,7 +57,7 @@ class TestMain(BaseTest):
         episode.show_name = self.tv.format_show_name(episode.show_name, the=True)
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
-        assert_true(isfile(join(self.working, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
+        assert_true(isfile(join(self.files, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
 
     def test_setting_an_episodes_format_as_name_season_episode_title(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
@@ -65,8 +65,8 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         assert_equal(self.tv.build_path(
-            episode, rename_dir=self.working, organise=False, format='%n - %s%e - %t%x'),
-            'tests/data/working/Chuck - 108 - Chuck Versus the Truth.avi')
+            episode, rename_dir=self.files, organise=False, format='%n - %s%e - %t%x'),
+            join(self.files, 'Chuck - 108 - Chuck Versus the Truth.avi'))
 
     def test_setting_an_episodes_format_as_season_episode_title_name(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
@@ -74,8 +74,8 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         assert_equal(self.tv.build_path(
-            episode, rename_dir=self.working, organise=False, format='%s - %e - %t - %n%x'),
-            'tests/data/working/1 - 08 - Chuck Versus the Truth - Chuck.avi')
+            episode, rename_dir=self.files, organise=False, format='%s - %e - %t - %n%x'),
+            join(self.files, '1 - 08 - Chuck Versus the Truth - Chuck.avi'))
 
     def test_setting_an_episodes_format_as_title_episode_season_name(self):
         fn = 'chuck.s1e08.blah.HDTV.XViD.avi'
@@ -83,8 +83,8 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         assert_equal(self.tv.build_path(
-            episode, rename_dir=self.working, organise=False, format='%t - %e - %s - %n%x'),
-            'tests/data/working/Chuck Versus the Truth - 08 - 1 - Chuck.avi')
+            episode, rename_dir=self.files, organise=False, format='%t - %e - %s - %n%x'),
+            join(self.files, 'Chuck Versus the Truth - 08 - 1 - Chuck.avi'))
 
     def test_extracting_season_from_file_format_s0e00(self):
         assert_equal(self.tv.extract_details_from_file('chuck.s2e06.avi')[1], '2')
@@ -143,5 +143,5 @@ class TestMain(BaseTest):
     #   new_fn = self.tv.set_output_format(names[0], season=episode.season, episode=episode.episode, title=names[1])
     #   path = self.tv.build_path(new_filename=new_fn, extension=credentials[3])
     #   self.tv.rename(fn, path)
-    #   assert_true(isfile(join(self.working, 'Stargate SG-1 - 903 - Origin (3).avi')))
+    #   assert_true(isfile(join(self.files, 'Stargate SG-1 - 903 - Origin (3).avi')))
 
