@@ -1,27 +1,19 @@
 from os import listdir, mkdir
-from os.path import dirname, isdir, isfile, join
-from shutil import copytree, rmtree
+from os.path import isdir, isfile, join
+from shutil import rmtree
 
 from nose.tools import assert_equal, assert_true
 
-from tvrenamr.config import Config
 from tvrenamr.episode import Episode
-from tvrenamr.main import TvRenamr
-import urlopenmock
+from tvrenamr.tests.base import BaseTest
 
-class TestAutoMoving(object):
+
+class TestAutoMoving(BaseTest):
     organise = True
     organised = 'tests/data/organised'
-    working = 'tests/data/working'
 
-    def setUp(self):
-        files = 'tests/files'
-        self.config = Config(join(dirname(__file__), 'config.yml'))
-        self.tv = TvRenamr(self.working, self.config)
-        copytree(files, self.working)
-
-    def tearDown(self):
-        rmtree(self.working)
+    def teardown(self):
+        super(TestAutoMoving, self).teardown()
         rmtree(self.organised)
         mkdir(self.organised)
 
