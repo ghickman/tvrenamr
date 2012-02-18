@@ -1,9 +1,17 @@
 from hashlib import md5
 from re import compile
 from os.path import dirname, join
-from urllib2 import Request, urlopen
 
 from minimock import mock, restore
+import requests
+
+
+class MockFile(file):
+    status_code = 0
+
+    @property
+    def content(self):
+        return self.read()
 
 
 def invalid_xml(url, **kwargs):
@@ -11,6 +19,7 @@ def invalid_xml(url, **kwargs):
     bad_xml = join(dirname(__file__), 'mocked_xml', 'invalid.xml')
     with open(bad_xml, 'r') as f:
         return f
+
 
 def mocked_xml(url, data=None, timeout=30):
     """Mock urllib2.urlopen and return """
@@ -32,27 +41,30 @@ def mocked_xml(url, data=None, timeout=30):
     if lib == 'tvrage':
         return open(join(dirname(__file__), 'invalid.xml'), 'r')
 
-def urlopen_stub(url, data=None, timeout=30):
+
+def mock_get(url, **kwargs):
     """
-    Mock urllib2.urlopen and return a local file handle or create file if
+    Mock requets.get and return a local file handle or create file if
     not existent and then return it.
     """
 
-    if isinstance(url, Request):
-        key = md5(url.get_full_url()).hexdigest()
-    else:
-        key = md5(url).hexdigest()
-    data_file = join(dirname(__file__), 'cache', '%s.xml' % key)
+    key = md5(url).hexdigest()
+    file_path = join(dirname(__file__), 'cache', '{0}.xml'.format(key))
     try:
-        f = open(data_file, 'r')
+        f = MockFile(file_path, 'r')
     except IOError:
         restore() # restore normal function
-        data = urlopen(url, data).read()
-        mock('urlopen', returns_func=urlopen_stub, tracker=None) # re-mock it.
-        with open(data_file, 'w') as f:
-            f.write(data)
-        f = open(data_file, 'r')
+        tmp = MockFile(file_path, 'w')
+        tmp.write(requests.get(url).content)
+        tmp.close()
+        mock('requests.get', returns_func=mock_get, tracker=None) # re-mock it.
+        f = MockFile(file_path, 'r')
+
+    f.status_code = requests.codes.ok
+    if len(f.content) < 1:
+        f.status_code = requests.codes.not_found
     return f
 
-mock('urlopen', returns_func=urlopen_stub, tracker=None)
+
+mock('requests.get', returns_func=mock_get, tracker=None)
 
