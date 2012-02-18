@@ -8,7 +8,8 @@ from minimock import mock, restore
 
 def invalid_xml(url, **kwargs):
     """Mock requests' get() and return a local file handle to invalid.xml"""
-    with open(join(dirname(__file__), 'mocked_xml', 'invalid.xml'), 'r') as f:
+    bad_xml = join(dirname(__file__), 'mocked_xml', 'invalid.xml')
+    with open(bad_xml, 'r') as f:
         return f
 
 def mocked_xml(url, data=None, timeout=30):
