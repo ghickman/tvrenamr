@@ -9,6 +9,8 @@ from tvrenamr.tests import urlopenmock
 
 class BaseTest(object):
     files = 'tests/files'
+    organised = 'tests/data/organised'
+    renamed = 'tests/data/renamed'
 
     def setup(self):
         # if `file` isn't there, make it
