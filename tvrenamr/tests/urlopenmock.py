@@ -6,8 +6,8 @@ from urllib2 import Request, urlopen
 from minimock import mock, restore
 
 
-def invalid_xml(url, data=None, timeout=30):
-    """Mock urllib2.urlopen and return a local file handle to invalid.xml"""
+def invalid_xml(url, **kwargs):
+    """Mock requests' get() and return a local file handle to invalid.xml"""
     with open(join(dirname(__file__), 'mocked_xml', 'invalid.xml'), 'r') as f:
         return f
 
