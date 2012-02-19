@@ -139,10 +139,10 @@ class FrontEnd():
                 EpisodeAlreadyExistsInDirectoryException,
                 EpisodeNotFoundException,
                 IncorrectCustomRegularExpressionSyntaxException,
+                InvalidXMLException,
                 OutputFormatMissingSyntaxException,
                 ShowNotFoundException,
-                UnexpectedFormatException,
-                XMLEmptyException):
+                UnexpectedFormatException):
             pass
         except Exception as err:
             if options.debug:

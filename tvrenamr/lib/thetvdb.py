@@ -1,14 +1,15 @@
 import logging
 import urllib
 from xml.etree.ElementTree import fromstring
+from xml.parsers.expat import ExpatError
 
 import requests
 
 from tvrenamr.errors import (EmptyEpisodeNameException,
                              EpisodeNotFoundException,
+                             InvalidXMLException,
                              NoNetworkConnectionException,
-                             ShowNotFoundException,
-                             XMLEmptyException)
+                             ShowNotFoundException)
 
 log = logging.getLogger('The Tv DB')
 
@@ -34,7 +35,8 @@ class TheTvDb():
 
     def _get_show_id(self):
         """
-        Retrieves the show ID of the show name passed in when the class is instantiated.
+        Retrieves the show ID of the show name passed in when the class is
+        instantiated.
 
         :raises URLError: Raised when a network error occurs. Usually when there is no internet.
         :raises XMLEmptyException: Raised when the XML document returned from The Tv Db is empty.
@@ -48,21 +50,20 @@ class TheTvDb():
         log.debug('Series url: %s' % url)
 
         req = requests.get(url)
-        if req.status_code == requests.codes.ok:
-            data = req.content
-        else:
+        if req.status_code is not requests.codes.ok:
             raise NoNetworkConnectionException('thetvdb.org')
 
         log.debug('XML: Attempting to parse')
-        tree = fromstring(data)
+        try:
+            tree = fromstring(req.content)
+        except ExpatError:
+            raise InvalidXMLException(log.name, self.show)
+        if tree is None or len(tree) is 0:
+            raise InvalidXMLException(log.name, self.show)
         log.debug('XML: Parsed')
 
-        if tree is None or len(tree) is 0:
-            raise XMLEmptyException(log.name, self.show)
-        log.debug('XML retrieved, searching for series')
-
-        for name in tree.findall("Series"):
-            show = name.findtext("SeriesName")
+        for name in tree.findall('Series'):
+            show = name.findtext('SeriesName')
             if show.lower() == self.show.lower():
                 log.debug('Series chosen: %s' % show)
                 return name.findtext('seriesid'), show
@@ -89,22 +90,24 @@ class TheTvDb():
 
         log.debug('Attempting to retrieve episode name')
         req = requests.get(episode_url)
-        if req.status_code == requests.codes.ok:
-            data = req.content
-            log.debug('XML: Retreived')
-        else:
-            raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
+        if req.status_code is not requests.codes.ok:
+            raise EpisodeNotFoundException(log.name, self.show, self.season,
+                                           self.episode)
+        log.debug('XML: Retreived')
 
         log.debug('XML: Attempting to parse')
-        tree = fromstring(data)
-        log.debug('XML: Parsed')
-
+        try:
+            tree = fromstring(req.content)
+        except ExpatError:
+            raise InvalidXMLException(log.name, self.show)
         if tree is None:
-            raise XMLEmptyException(log.name, self.show)
-        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show, self.season, self.episode))
+            raise InvalidXMLException(log.name, self.show)
+        log.debug('XML: Parsed')
+        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show,
+                  self.season, self.episode))
 
-        log.debug('XML: Attempting to finding the episode name')
-        episode = tree.find("Episode").findtext("EpisodeName")
+        log.debug('XML: Attempting to find the episode name')
+        episode = tree.find('Episode').findtext('EpisodeName')
         if not episode:
             raise EmptyEpisodeNameException
 

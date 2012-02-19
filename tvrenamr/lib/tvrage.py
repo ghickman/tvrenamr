@@ -1,13 +1,14 @@
 import logging
 import urllib
 from xml.etree.ElementTree import fromstring
+from xml.parsers.expat import ExpatError
 
 import requests
 
 from tvrenamr.errors import (EpisodeNotFoundException,
+                             InvalidXMLException,
                              NoNetworkConnectionException,
-                             ShowNotFoundException,
-                             XMLEmptyException)
+                             ShowNotFoundException)
 
 log = logging.getLogger('Tv Rage')
 
@@ -46,17 +47,17 @@ class TvRage():
         log.debug('Series url: %s' % url)
 
         req = requests.get(url)
-        if req.status_code == requests.codes.ok:
-            data = req.content
-        else:
+        if req.status_code is not requests.codes.ok:
             raise NoNetworkConnectionException('tvrage.com')
 
         log.debug('XML: Attempting to parse')
-        tree = fromstring(data)
-        log.debug('XML: Parsed')
-
+        try:
+            tree = fromstring(req.content)
+        except ExpatError:
+            raise InvalidXMLException(log.name, self.show)
         if tree is None or len(tree) is 0:
-            raise XMLEmptyException(log.name, self.show)
+            raise InvalidXMLException(log.name, self.show)
+        log.debug('XML: Parsed')
         log.debug('XML retrieved, searching for series')
 
         for name in tree.findall('show'):
@@ -85,19 +86,21 @@ class TvRage():
 
         log.debug('Attempting to retrieve episode name')
         req = requests.get(episode_url)
-        if req.status_code == requests.codes.ok:
-            data = req.content
-            log.debug('XML: Retreived')
-        else:
-            raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
+        if req.status_code is not requests.codes.ok:
+            raise EpisodeNotFoundException(log.name, self.show, self.season,
+                                           self.episode)
+        log.debug('XML: Retreived')
 
         log.debug('XML: Attempting to parse')
-        tree = fromstring(data)
-        log.debug('XML: Parsed')
-
+        try:
+            tree = fromstring(req.content)
+        except ExpatError:
+            raise InvalidXMLException(log.name, self.show)
         if tree is None:
-            raise XMLEmptyException(log.name, self.show)
-        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show, self.season, self.episode))
+            raise InvalidXMLException(log.name, self.show)
+        log.debug('XML: Parsed')
+        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show,
+                  self.season, self.episode))
 
         # In a single digit episode number add a zero
         if len(self.episode) == 1 and self.episode[:1] != '0':
@@ -111,7 +114,8 @@ class TvRage():
                     if e.find('seasonnum').text == self.episode:
                         episode = e.find('title').text
         if not episode:
-            raise EpisodeNotFoundException(log.name, self.show, self.season, self.episode)
+            raise EpisodeNotFoundException(log.name, self.show, self.season,
+                                           self.episode)
 
         return episode
 

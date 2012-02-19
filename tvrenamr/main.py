@@ -113,10 +113,10 @@ class TvRenamr():
                 self.library = lib(episode.show_name, episode.season, episode.episode)
                 break # first library worked - nothing to see here
             except (EmptyEpisodeNameException, EpisodeNotFoundException,
-                    NoNetworkConnectionException, ShowNotFoundException,
-                    XMLEmptyException):
+                    InvalidXMLException, NoNetworkConnectionException,
+                    ShowNotFoundException) as e:
                 if lib == libraries[-1]:
-                    raise NoMoreLibrariesException
+                    raise NoMoreLibrariesException(lib, e)
                 continue
 
         self.title = self.library.title

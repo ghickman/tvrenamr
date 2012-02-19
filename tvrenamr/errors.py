@@ -85,13 +85,28 @@ class IncorrectCustomRegularExpressionSyntaxException(Exception):
                     'required custom syntax.')
 
 
+class InvalidXMLException(Exception):
+    """
+    Raised when the XML document retrieved from a library is empty.
+
+    :param library: The library the exception was raised in.
+    :param show: The show name.
+    """
+
+    def __init__(self, library, show):
+        log.error('The XML file retrieved from %s was empty or invalid while '
+                  'looking for %s.' % (library, show))
+        log.error('This could be indicative of a Show or Episode not being found.')
+
+
 class NoMoreLibrariesException(Exception):
     """
     All libraries have returned invalid XML.
     """
 
-    def __init__(self):
-        log.error('No libraries left to fall back to. Exiting...')
+    def __init__(self, lib, lib_err):
+        # display the error of the last lib
+        log.error('No libraries left to fall back to.')
 
 
 class OutputFormatMissingSyntaxException(Exception):
@@ -192,15 +207,3 @@ class UnexpectedFormatException(Exception):
     def __init__(self, fn):
         log.error('File in an unexpected format: %s' % fn)
 
-
-class XMLEmptyException(Exception):
-    """
-    Raised when the XML document retrieved from a library is empty.
-
-    :param library: The library the exception was raised in.
-    :param show: The show name.
-    """
-
-    def __init__(self, library, show):
-        log.error('The XML file retrieved from %s was empty while looking for '
-                    '%s.' % (library, show))
