@@ -1,4 +1,3 @@
-import os
 from os.path import dirname, exists, join
 
 from mock import patch
@@ -31,5 +30,4 @@ class TestLibrariesFallback(BaseTest):
         path = self.tv.build_path(episode, organise=False)
         self.tv.rename(fn, path)
         assert_true(exists(join(self.files, final_fn)))
-
 
