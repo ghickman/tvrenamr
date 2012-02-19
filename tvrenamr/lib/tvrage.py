@@ -68,7 +68,6 @@ class TvRage():
             else:
                 raise ShowNotFoundException(log.name, self.show)
 
-
     def __get_episode_name(self):
         """
         Retrieves the episode title for the given episode from tvrage.com.

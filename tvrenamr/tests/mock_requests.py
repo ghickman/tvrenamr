@@ -1,5 +1,4 @@
 from hashlib import md5
-from re import compile
 from os.path import dirname, join
 
 from minimock import mock, restore
@@ -23,25 +22,25 @@ def invalid_xml(url, **kwargs):
     return f
 
 
-def mocked_xml(url, data=None, timeout=30):
-    """Mock urllib2.urlopen and return """
-    def return_file(lib, file_type):
-        files = {'episode': '108', 'series': 'chuck'}
-        mocked_xml = join(dirname(__file__), 'mocked_xml', lib, files[file_type] + '.xml')
-        return open(mocked_xml, 'r')
+def initially_bad_xml(url, **kwargs):
+    """
+    Mock requests.get and return invalid xml from thetvdb to simulate one library
+    falling over.
+    """
+    def get_file(filename):
+        f = MockFile(join(dirname(__file__), 'mocked_xml',
+                          '{0}.xml'.format(filename)), 'r')
+        f.status_code = requests.codes.ok
+        f.populate_content()
+        return f
 
-    # workout the library we're working with
-    m = compile('http:\/\/(www\.)?([\w]+)\.com').match(url)
-    lib = m.group(2)
-    if lib == 'thetvdb':
-        if str.find(url, 'GetSeries') > 0:
-            return return_file(lib, 'series')
+    if 'thetvdb' in url:
+        return get_file('invalid')
 
-        if str.find(url, 'en.xml') > 0:
-            return_file(lib, 'episode')
-
-    if lib == 'tvrage':
-        return open(join(dirname(__file__), 'invalid.xml'), 'r')
+    if 'tvrage' in url:
+        if 'search' in url:
+            return get_file('show_id')
+        return get_file('episode')
 
 
 def mock_get(url, **kwargs):
