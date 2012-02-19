@@ -7,11 +7,11 @@ import requests
 
 
 class MockFile(file):
+    content = None
     status_code = 0
 
-    @property
-    def content(self):
-        return self.read()
+    def populate_content(self):
+        self.content = self.read()
 
 
 def invalid_xml(url, **kwargs):
@@ -60,8 +60,9 @@ def mock_get(url, **kwargs):
         mock('requests.get', returns_func=mock_get, tracker=None) # re-mock it.
         f = MockFile(file_path, 'r')
 
+    f.populate_content()
     f.status_code = requests.codes.ok
-    if len(f.content) < 1:
+    if not f.content:
         f.status_code = requests.codes.not_found
     return f
 
