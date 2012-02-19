@@ -4,7 +4,9 @@ from shutil import rmtree
 
 from tvrenamr.config import Config
 from tvrenamr.main import TvRenamr
-from tvrenamr.tests import urlopenmock
+from tvrenamr.tests import mock_requests
+# make pyflakes STFU
+assert mock_requests
 
 
 class BaseTest(object):
