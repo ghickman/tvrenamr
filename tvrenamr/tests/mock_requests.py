@@ -17,8 +17,10 @@ class MockFile(file):
 def invalid_xml(url, **kwargs):
     """Mock requests' get() and return a local file handle to invalid.xml"""
     bad_xml = join(dirname(__file__), 'mocked_xml', 'invalid.xml')
-    with open(bad_xml, 'r') as f:
-        return f
+    f = MockFile(bad_xml, 'r')
+    f.status_code = requests.codes.ok
+    f.populate_content()
+    return f
 
 
 def mocked_xml(url, data=None, timeout=30):
