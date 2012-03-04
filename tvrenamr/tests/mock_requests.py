@@ -1,8 +1,11 @@
 from hashlib import md5
-from os.path import dirname, join
+from os.path import abspath, dirname, join
 
 from minimock import mock, restore
 import requests
+
+
+test_dir = abspath(dirname(__file__))
 
 
 class MockFile(file):
@@ -15,7 +18,7 @@ class MockFile(file):
 
 def invalid_xml(url, **kwargs):
     """Mock requests' get() and return a local file handle to invalid.xml"""
-    bad_xml = join(dirname(__file__), 'mocked_xml', 'invalid.xml')
+    bad_xml = join(test_dir, 'mocked_xml', 'invalid.xml')
     f = MockFile(bad_xml, 'r')
     f.status_code = requests.codes.ok
     f.populate_content()
@@ -28,8 +31,7 @@ def initially_bad_xml(url, **kwargs):
     falling over.
     """
     def get_file(filename):
-        f = MockFile(join(dirname(__file__), 'mocked_xml',
-                          '{0}.xml'.format(filename)), 'r')
+        f = MockFile(join(test_dir, 'mocked_xml', '{0}.xml'.format(filename)), 'r')
         f.status_code = requests.codes.ok
         f.populate_content()
         return f
@@ -50,7 +52,7 @@ def mock_get(url, **kwargs):
     """
 
     key = md5(url).hexdigest()
-    file_path = join(dirname(__file__), 'cache', '{0}.xml'.format(key))
+    file_path = join(test_dir, 'cache', '{0}.xml'.format(key))
     try:
         f = MockFile(file_path, 'r')
     except IOError:
