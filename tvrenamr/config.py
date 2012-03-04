@@ -55,7 +55,7 @@ class Config():
     def _load_config(self, config):
         try:
             return safe_load(file(config))
-        except Exception, e:
+        except Exception as e:
             self.log.critical(e)
             print ''
             print '-' * 79
