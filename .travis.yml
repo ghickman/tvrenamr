@@ -9,4 +9,4 @@ install:
   - pip install . --use-mirrors
   - pip install -r requirements.txt --use-mirrors
 # command to run tests
-script: nosetests
+script: nosetests --with-spec
