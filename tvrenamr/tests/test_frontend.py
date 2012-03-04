@@ -1,5 +1,5 @@
 from os import mkdir, system
-from os.path import exists, join
+from os.path import exists, join, pardir
 from shutil import rmtree
 
 from nose.tools import assert_equals, assert_true
@@ -8,8 +8,6 @@ from tvrenamr.tests.base import BaseTest
 
 
 class TestFrontEnd(BaseTest):
-    base = 'python frontend.py --config=tests/config.yml --no-organise -q'
-
     def setup(self):
         super(TestFrontEnd, self).setup()
         if exists(self.renamed):
@@ -21,10 +19,12 @@ class TestFrontEnd(BaseTest):
         rmtree(self.renamed)
 
     def command(self, filename, extra_option=False):
+        command = join(self.path, pardir, 'frontend.py')
         extra_option_str = extra_option if extra_option else ''
-        tvr = '{0} {1} {2}/{3}'.format(self.base, extra_option_str,
-                                               self.files, filename)
-        return system(tvr)
+        config = join(self.path, 'config.yml')
+        options = '--config={0} --no-organise -q {1}'.format(config, extra_option_str)
+        file_path = '{0}/{1}'.format(self.files, filename)
+        return system('python {0} {1} {2}'.format(command, options, file_path))
 
     """
     - use no options
@@ -78,13 +78,13 @@ class TestFrontEnd(BaseTest):
         assert_equals(cmd, 0)
         assert_true(exists(join(self.files, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
 
-    # def test_single_rename_with_output_format_specified(self):
+    def test_single_rename_with_output_format_specified(self):
         cmd = self.command('chuck.s1e08.blah.HDTV.XViD.avi',
                            '-o {0}'.format('\'%s%e - %n - %t%x\''))
         assert_equals(cmd, 0)
         assert_true(exists(join(self.files, '108 - Chuck - Chuck Versus the Truth.avi')))
 
-    # def test_single_rename_with_custom_regular_expression_specified(self):
+    def test_single_rename_with_custom_regular_expression_specified(self):
         cmd = self.command('e08s1.chuck.blah.HDTV.XViD.avi',
                            '--regex={0}'.format('e%es%s.%n.blah'))
         assert_equals(cmd, 0)

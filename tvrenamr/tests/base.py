@@ -10,17 +10,17 @@ assert mock_requests
 
 
 class BaseTest(object):
-    files = 'tests/files'
-    organised = 'tests/data/organised'
-    renamed = 'tests/data/renamed'
-
     def setup(self):
         # absolute path to the file is pretty useful
         self.path = abspath(dirname(__file__))
 
+        self.files = join(self.path, 'files')
+        self.organised = join(self.path, 'organised')
+        self.renamed = join(self.path, 'renamed')
+
         # if `file` isn't there, make it
-        if not exists(join(self.path, self.files)):
-            mkdir(join(self.path, self.files))
+        if not exists(self.files):
+            mkdir(self.files)
 
         # build the file list
         with open(join(self.path, 'file_list'), 'r') as f:
