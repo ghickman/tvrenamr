@@ -1,6 +1,6 @@
 import logging
 import urllib
-from xml.etree.ElementTree import fromstring
+from xml.etree.ElementTree import fromstring, ParseError
 from xml.parsers.expat import ExpatError
 
 import requests
@@ -56,7 +56,7 @@ class TheTvDb():
         log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(req.content)
-        except ExpatError:
+        except (ExpatError, ParseError):
             raise InvalidXMLException(log.name, self.show)
         if tree is None or len(tree) is 0:
             raise InvalidXMLException(log.name, self.show)
@@ -98,7 +98,7 @@ class TheTvDb():
         log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(req.content)
-        except ExpatError:
+        except (ExpatError, ParseError):
             raise InvalidXMLException(log.name, self.show)
         if tree is None:
             raise InvalidXMLException(log.name, self.show)
