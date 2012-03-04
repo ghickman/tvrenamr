@@ -15,12 +15,12 @@ class BaseTest(object):
     renamed = 'tests/data/renamed'
 
     def setup(self):
-        # if `file` isn't there, make it
-        if not exists(self.files):
-            mkdir(self.files)
-
         # absolute path to the file is pretty useful
         self.path = abspath(dirname(__file__))
+
+        # if `file` isn't there, make it
+        if not exists(join(self.path, self.files)):
+            mkdir(join(self.path, self.files))
 
         # build the file list
         with open(join(self.path, 'file_list'), 'r') as f:
