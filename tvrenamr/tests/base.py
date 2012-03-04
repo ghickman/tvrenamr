@@ -33,6 +33,7 @@ class BaseTest(object):
 
         # instantiate tvr
         self.config = Config(join(self.path, 'config.yml'))
+        self.config.defaults['renamed'] = self.files
         self.tv = TvRenamr(self.files, self.config)
 
     def teardown(self):
