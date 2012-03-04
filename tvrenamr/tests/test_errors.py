@@ -1,30 +1,16 @@
-from os.path import dirname, join
-from shutil import copytree, rmtree
+from os.path import join
 
 from nose.tools import assert_raises
 
-from tvrenamr.config import Config
 from tvrenamr.episode import Episode
 from tvrenamr.errors import (EpisodeAlreadyExistsInDirectoryException,
                              NoMoreLibrariesException,
                              IncorrectCustomRegularExpressionSyntaxException,
                              UnexpectedFormatException)
-from tvrenamr.main import TvRenamr
-import urlopenmock
+from tvrenamr.tests.base import BaseTest
 
 
-class TestExceptionsAreRaised(object):
-    working = 'tests/data/working'
-
-    def setUp(self):
-        files = 'tests/files'
-        self.config = Config(join(dirname(__file__), 'config.yml'))
-        self.tv = TvRenamr(self.working, self.config)
-        copytree(files, self.working)
-
-    def tearDown(self):
-        rmtree(self.working)
-
+class TestExceptionsAreRaised(BaseTest):
     def test_unexpected_format_exception_should_be_raised_when_unrecognised_file_format(self):
         assert_raises(UnexpectedFormatException, self.tv.extract_details_from_file, 'chuck.avi')
 
@@ -33,7 +19,7 @@ class TestExceptionsAreRaised(object):
         assert_raises(NoMoreLibrariesException, self.tv.retrieve_episode_name, episode)
 
     def test_episode_already_exists_raise_exception(self):
-        with open(join(self.working, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
+        with open(join(self.files, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
             pass
         fn = 'chuck.s02e05.avi'
         episode = Episode(self.tv.extract_details_from_file(fn))
