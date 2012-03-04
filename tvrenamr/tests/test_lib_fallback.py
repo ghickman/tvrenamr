@@ -1,4 +1,4 @@
-from os.path import dirname, exists, join
+from os.path import exists, join
 
 from mock import patch
 from nose.tools import assert_true, assert_raises
@@ -13,8 +13,6 @@ from tvrenamr.tests.mock_requests import initially_bad_xml, invalid_xml
 
 
 class TestLibrariesFallback(BaseTest):
-    invalid_xml_file = join(dirname(__file__), 'mocked_xml', 'invalid.xml')
-
     @patch('requests.get', new=invalid_xml)
     def test_rename_with_all_libraries_returning_invalid_xml(self):
         episode = Episode(self.tv.extract_details_from_file('chuck.s1e08.blah.HDTV.XViD.avi'))
