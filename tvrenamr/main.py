@@ -9,8 +9,7 @@ from lib.tvrage import TvRage
 log = logging.getLogger('Core')
 
 
-class TvRenamr():
-
+class TvRenamr(object):
     def __init__(self, working_dir, config, debug=False, dry=False):
         """
         :param working_dir: The working directory.
