@@ -1,2 +1,2 @@
 minimock
-http://darcs.idyll.org/~t/projects/pinocchio-latest.tar.gz
+git+git://github.com/mkwiatkowski/pinocchio.git#egg=pinocchio
