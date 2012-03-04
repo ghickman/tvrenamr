@@ -1,11 +1,19 @@
 from hashlib import md5
-from os.path import abspath, dirname, join
+from os import mkdir
+from os.path import abspath, dirname, exists, join
 
 from minimock import mock, restore
 import requests
 
 
 test_dir = abspath(dirname(__file__))
+
+
+def cache_folder_check(func):
+    cache = join(test_dir, 'cache')
+    if not exists(cache):
+        mkdir(cache)
+    return func
 
 
 class MockFile(file):
@@ -16,6 +24,7 @@ class MockFile(file):
         self.content = self.read()
 
 
+@cache_folder_check
 def invalid_xml(url, **kwargs):
     """Mock requests' get() and return a local file handle to invalid.xml"""
     bad_xml = join(test_dir, 'mocked_xml', 'invalid.xml')
@@ -25,6 +34,7 @@ def invalid_xml(url, **kwargs):
     return f
 
 
+@cache_folder_check
 def initially_bad_xml(url, **kwargs):
     """
     Mock requests.get and return invalid xml from thetvdb to simulate one library
@@ -45,12 +55,12 @@ def initially_bad_xml(url, **kwargs):
         return get_file('episode')
 
 
+@cache_folder_check
 def mock_get(url, **kwargs):
     """
     Mock requets.get and return a local file handle or create file if
     not existent and then return it.
     """
-
     key = md5(url).hexdigest()
     file_path = join(test_dir, 'cache', '{0}.xml'.format(key))
     try:
