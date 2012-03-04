@@ -14,9 +14,12 @@ class BaseTest(object):
         # absolute path to the file is pretty useful
         self.path = abspath(dirname(__file__))
 
-        self.files = join(self.path, 'files')
-        self.organised = join(self.path, 'organised')
-        self.renamed = join(self.path, 'renamed')
+        def join_path(path):
+            return join(self.path, path)
+
+        self.files = join_path('files')
+        self.organised = join_path('organised')
+        self.renamed = join_path('renamed')
 
         # if `file` isn't there, make it
         if not exists(self.files):
