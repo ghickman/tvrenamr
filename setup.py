@@ -1,35 +1,36 @@
-from os.path import dirname, join
-from setuptools import setup, find_packages
+from setuptools import setup
 
-from tvrenamr import get_version
+import tvrenamr
 
 
-def fread(fn):
-    with open(join(dirname(__file__), fn), 'r') as f:
-        return f.read()
+requires = ('pyyaml', 'requests',)
+packages = ('tvrenamr',)
 
 setup(
-    name = 'tvrenamr',
-    version = get_version(),
+    name = tvrenamr.__title__,
+    version = tvrenamr.__version__,
     description = 'Rename tv show files using online databases',
-    long_description = fread('README.md'),
-    author = 'George Hickman',
+    long_description = open('README.rst').read(),
+    author = tvrenamr.__author__,
     author_email = 'george@ghickman.co.uk',
     url = 'http://tvrenamr.info',
-    license = 'MIT',
-    packages = find_packages(exclude=['tests']),
+    license = open('LICENSE').read(),
+    packages = packages,
     entry_points = {'console_scripts': ['tvr = tvrenamr.frontend:run',],},
-    classifiers = [
+    classifiers = (
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
+        'Natural Language :: English'
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Multimedia',
         'Topic :: Utilities',
-        'Natural Language :: English'],
-    install_requires = ('pyyaml', 'requests',)
+    ),
+    install_requires = requires
 )
 
