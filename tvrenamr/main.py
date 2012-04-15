@@ -261,7 +261,7 @@ class TvRenamr():
             log.debug('Directories created for path: ' + path)
         return path
 
-    def __build_regex(self, regex=None):
+    def __build_regex(self, regex=None, partial=False):
         """
         Builds the regular expression to extract a files details. Custom syntax
         can be used in the regular expression to help specify parts of the

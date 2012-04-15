@@ -22,6 +22,7 @@ class OptionParser(OptParser):
         self.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
         self.add_option('--organise', action='store_true', dest='organise', help='Organise renamed files into folders based on their show name and season number.')
         self.add_option('--no-organise', action='store_false', dest='organise', help='Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.')
+        self.add_option('-p', '--partial', action='store_true', dest='partial', help='Allow partial regex matching of the filename.')
         self.add_option('-q', '--quiet', action='store_true', dest='quiet', help='Don\'t output logs to the command line')
         self.add_option('-r', '--recursive', action='store_true', dest='recursive', help='Recursively lookup files in a given directory')
         self.add_option('--rename-dir', dest='rename_dir', help='The directory to move renamed files to, if not specified the working directory is used.')
