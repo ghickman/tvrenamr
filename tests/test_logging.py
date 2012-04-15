@@ -9,7 +9,7 @@ from .base import BaseTest
 class TestLogging(BaseTest):
     def test_passing_in_a_series_name_renames_a_file_using_that_name(self):
         fn = 'avatar.s1e08.blah.HDTV.XViD.avi'
-        episode = Episode(self.tv.extract_details_from_file(fn,
+        episode = Episode(**self.tv.extract_details_from_file(fn,
                           user_regex='%n.s%s{1}e%e{2}.blah'))
         episode.show_name = 'Avatar: The Last Airbender'
         episode.title = 'Winter Solstice (2): Avatar Roku'
