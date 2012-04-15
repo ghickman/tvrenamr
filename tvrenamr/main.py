@@ -69,14 +69,28 @@ class TvRenamr():
         regex = self.__build_regex(user_regex)
         log.debug('Renaming using: ' + regex)
         m = re.compile(regex).match(fn)
-        if m is not None:
-            show = m.group('show').replace('.', ' ').strip()
-            ext = os.path.splitext(fn)[1]
-            details = (show, m.group('season'), m.group('episode'), ext)
-            log.debug('Returned show: %s, season: %s, episode: %s, extension: %s' % details)
-            return details
-        else:
+        if not m:
             raise UnexpectedFormatException(fn)
+
+        credentials = {}
+        try:
+            credentials.update({'show_name': m.group('show_name').replace('.', ' ').strip()})
+        except IndexError:
+            pass
+        try:
+            credentials.update({'season': m.group('season')})
+        except IndexError:
+            pass
+        try:
+            credentials.update({'episode': m.group('episode')})
+        except IndexError:
+            pass
+        credentials.update({'extension': os.path.splitext(fn)[1]})
+        log.debug('Filename yielded: {0}'.format(
+            ', '.join('{0}: {1}'.format(key, value)
+            for key, value in credentials.iteritems())
+        ))
+        return credentials
 
     def retrieve_episode_name(self, episode, library='thetvdb', canonical=None):
         """

@@ -112,9 +112,11 @@ class FrontEnd():
 
         try:
             tv = TvRenamr(working, self.config, options.debug, options.dry)
-            episode = Episode(tv.extract_details_from_file(filename, user_regex=options.regex))
-            if options.show:
-                episode.show_name = options.show
+            episode = Episode(**tv.extract_details_from_file(filename,
+                                                    user_regex=options.regex))
+
+            if options.show_name:
+                episode.show_name = options.show_name
             if options.season:
                 episode.season = options.season
             if options.episode:
@@ -136,14 +138,17 @@ class FrontEnd():
             if options.dry or options.debug:
                 self._stop_dry_run()
             sys.exit(1)
-        except (EmptyEpisodeNameException,
+        except (AttributeError,
+                EmptyEpisodeNameException,
                 EpisodeAlreadyExistsInDirectoryException,
                 EpisodeNotFoundException,
                 IncorrectCustomRegularExpressionSyntaxException,
                 InvalidXMLException,
                 OutputFormatMissingSyntaxException,
                 ShowNotFoundException,
-                UnexpectedFormatException):
+                UnexpectedFormatException) as e:
+            if e.args:
+                log.critical(e)
             pass
         except Exception as err:
             if options.debug:
