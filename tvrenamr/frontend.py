@@ -4,7 +4,7 @@ import logging
 import os
 import sys
 
-from __init__ import get_version
+from __init__ import __version__
 from config import Config
 from episode import Episode
 from errors import *
@@ -14,7 +14,8 @@ from options import OptionParser
 
 log = logging.getLogger('Core')
 
-parser = OptionParser(usage='tvr [options] <file/folder>', version='Tv Renamr %s' % get_version())
+parser = OptionParser(usage='tvr [options] <file/folder>',
+                      version='Tv Renamr {0}'.format(__version__))
 options, args = parser.parse_args()
 
 class FrontEnd():
