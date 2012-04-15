@@ -2,7 +2,9 @@ from nose.tools import assert_equal, assert_raises
 
 from tvrenamr.episode import Episode
 from tvrenamr.errors import NoMoreLibrariesException
-from tvrenamr.tests.base import BaseTest
+
+from .base import BaseTest
+
 
 class TestLibraries(BaseTest):
     libs = ('thetvdb', 'tvrage')

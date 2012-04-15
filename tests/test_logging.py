@@ -1,9 +1,9 @@
 from os.path import isfile, join
 
 from nose.tools import assert_true
-
 from tvrenamr.episode import Episode
-from tvrenamr.tests.base import BaseTest
+
+from .base import BaseTest
 
 
 class TestLogging(BaseTest):

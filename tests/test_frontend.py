@@ -4,7 +4,7 @@ from shutil import rmtree
 
 from nose.tools import assert_equals, assert_true
 
-from tvrenamr.tests.base import BaseTest
+from .base import BaseTest
 
 
 class TestFrontEnd(BaseTest):

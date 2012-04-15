@@ -1,10 +1,11 @@
 from os.path import isfile, join
 
 from nose.tools import assert_equal, assert_true
-
 from tvrenamr.episode import Episode
 from tvrenamr.main import TvRenamr
-from tvrenamr.tests.base import BaseTest
+
+from .base import BaseTest
+
 
 class TestMain(BaseTest):
     def test_instantiate_core(self):

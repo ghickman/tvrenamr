@@ -5,11 +5,11 @@ from nose.tools import assert_true, assert_raises
 import requests
 # make pyflakes STFU
 assert requests
-
 from tvrenamr.episode import Episode
 from tvrenamr.errors import NoMoreLibrariesException
-from tvrenamr.tests.base import BaseTest
-from tvrenamr.tests.mock_requests import initially_bad_xml, invalid_xml
+
+from .base import BaseTest
+from .mock_requests import initially_bad_xml, invalid_xml
 
 
 class TestLibrariesFallback(BaseTest):

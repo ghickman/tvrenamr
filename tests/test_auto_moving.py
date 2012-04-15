@@ -3,9 +3,9 @@ from os.path import isdir, isfile, join
 from shutil import rmtree
 
 from nose.tools import assert_equal, assert_true
-
 from tvrenamr.episode import Episode
-from tvrenamr.tests.base import BaseTest
+
+from .base import BaseTest
 
 
 class TestAutoMoving(BaseTest):
