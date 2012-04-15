@@ -1,5 +1,6 @@
 from optparse import OptionParser as OptParser, SUPPRESS_HELP
 
+
 class OptionParser(OptParser):
 
     def __init__(self, usage, version):
@@ -27,7 +28,7 @@ class OptionParser(OptParser):
         self.add_option('--no-rename-dir', action='store_false', dest='rename_dir', help='Explicity tell Tv Renamr not to move renamed files. Used to override the config.')
         self.add_option('--regex', dest='regex', help='The regular expression to use when extracting information from files.')
         self.add_option('-s', '--season', dest='season', help='Set the season number.')
-        self.add_option('--show', dest='show', help='Set the show\'s name (will search for this name).')
+        self.add_option('--show', dest='show_name', help='Set the show\'s name (will search for this name).')
         self.add_option('--show-override', dest='show_override', help='Override the show\'s name (only replaces the show\'s name in the final file)')
         self.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the show name')
 

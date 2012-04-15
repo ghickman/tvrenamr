@@ -263,13 +263,14 @@ class TvRenamr():
         :returns: An actual regular expression.
         :rtype: A string.
         """
-        series = r"(?P<show>[\w\s.',_-]+)"
+        series = r"(?P<show_name>[\w\s.',_-]+)"
         season = r"(?P<season>[\d]{1,2})"
         episode = r"(?P<episode>[\d]{2})"
 
         if regex is None:
             return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"
-        if regex.find('%s') is -1 or regex.find('%e') is -1:
+
+        if not partial and not ('%n' in regex or '%s' in regex or '%e' in regex):
             raise IncorrectCustomRegularExpressionSyntaxException(regex)
 
         # series name
@@ -277,7 +278,7 @@ class TvRenamr():
 
         # season number
         # %s{n}
-        if regex.find('%s{') is not -1:
+        if '%s{' in regex:
             log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
             log.debug('Specified ' + r + ' season digits')
@@ -286,13 +287,13 @@ class TvRenamr():
             log.debug('Season regex set: %s' % s)
 
         # %s
-        if regex.find('%s') is not -1:
+        if '%s' in regex:
             regex = regex.replace('%s', season)
             log.debug('Default season regex set: %s' % regex)
 
         # episode number
         # %e{n}
-        if regex.find('%e{') is not -1:
+        if '%e{' in regex:
             log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
             log.debug('User specified' + r + ' episode digits')
@@ -301,7 +302,7 @@ class TvRenamr():
             log.debug('Episode regex set: %s' % e)
 
         # %e
-        if regex.find('%e') is not -1:
+        if '%e' in regex:
             regex = regex.replace('%e', episode)
             log.debug('Default episode regex set: %s' % regex)
 
