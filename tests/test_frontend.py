@@ -19,7 +19,7 @@ class TestFrontEnd(BaseTest):
         rmtree(self.renamed)
 
     def command(self, filename, extra_option=False):
-        command = join(self.path, pardir, 'frontend.py')
+        command = join(self.path, pardir, 'tvrenamr', 'frontend.py')
         extra_option_str = extra_option if extra_option else ''
         config = join(self.path, 'config.yml')
         options = '--config={0} --no-organise -q {1}'.format(config, extra_option_str)
