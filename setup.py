@@ -10,7 +10,8 @@ setup(
     name = tvrenamr.__title__,
     version = tvrenamr.__version__,
     description = 'Rename tv show files using online databases',
-    long_description = open('README.rst').read(),
+    long_description = open('README.rst').read() + '\n\n' +
+                       open('CHANGELOG.rst').read(),
     author = tvrenamr.__author__,
     author_email = 'george@ghickman.co.uk',
     url = 'http://tvrenamr.info',
