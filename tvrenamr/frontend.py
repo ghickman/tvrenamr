@@ -57,11 +57,9 @@ class FrontEnd():
         :rtype: A list of dictionaries, with the keys directory and filename.
         """
         filelist = []
-        if len(path) > 1:
+        if len(path):
             # must have used wildcards
-            for fn in path:
-                filelist.append(os.path.split(fn))
-            return filelist
+            return [os.path.split(fn) for fn in path]
         else:
             if os.path.isdir(path[0]):
                 for root, dirs, files in os.walk(path[0]):
@@ -175,6 +173,7 @@ class FrontEnd():
 
 
 if __name__ == "__main__":
-    frontend = FrontEnd(args)
+    frontend = FrontEnd()
+    frontend.build_file_list(args)
     frontend.run()
 
