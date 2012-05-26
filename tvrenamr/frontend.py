@@ -173,18 +173,6 @@ class FrontEnd():
         log.log(26, '')
 
 
-def run():
-    # Need to capture the Deluge arguments here, before we enter rename so
-    # we can instead pass it as a callback to be called once we've fetched
-    # the required information from deluge.
-    if options.deluge or options.deluge_ratio:
-        if options.deluge and not options.deluge_ratio:
-            options.deluge_ratio = 0
-        from lib.filter_deluge import get_deluge_ignore_file_list
-        get_deluge_ignore_file_list(rename, options.deluge_ratio, args[0])
-    else:
-        FrontEnd(args)
-
 if __name__ == "__main__":
-    run()
+    frontend = FrontEnd(args)
 
