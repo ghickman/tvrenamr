@@ -26,20 +26,7 @@ class FrontEnd():
             options.log_level = 10
         start_logging(options.log_file, options.log_level, options.quiet)
 
-        possible_config = (
-            options.config,
-            os.path.expanduser('~/.tvrenamr/config.yml'),
-            os.path.join(sys.path[0], 'config.yml')
-        )
-
-        # get the first viable config from the list of possibles
-        self.config = None
-        for config in possible_config:
-            if config is not None and os.path.exists(config):
-                self.config = Config(config)
-                break
-        if self.config is None:
-            raise ConfigNotFoundException
+        self.config = self._get_config()
 
         # no path was passed in so assuming current directory.
         if not path:
@@ -106,6 +93,23 @@ class FrontEnd():
                 return [os.path.split(path[0])]
             else:
                 raise OSError
+
+    def _get_config(self):
+        possible_config = (
+            options.config,
+            os.path.expanduser('~/.tvrenamr/config.yml'),
+            os.path.join(sys.path[0], 'config.yml')
+        )
+
+        # get the first viable config from the list of possibles
+        _config = None
+        for config in possible_config:
+            if config is not None and os.path.exists(config):
+                _config = Config(config)
+                break
+        if _config is None:
+            raise ConfigNotFoundException
+        return _config
 
     def rename(self, details):
         working, filename = details
