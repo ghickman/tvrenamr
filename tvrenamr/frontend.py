@@ -37,24 +37,10 @@ class FrontEnd():
 
         # determine type
         try:
-            file_list = self._build_file_list(path, options.recursive,
-                                                options.ignore_filelist)
+            self.file_list = self._build_file_list(path, options.recursive,
+                                                   options.ignore_filelist)
         except OSError:
             parser.error('\'%s\' is not a file or directory. Ruh Roe!' % path)
-
-        if options.dry or options.debug:
-            self._start_dry_run()
-
-        # kick off a rename for each file in the list
-        for details in file_list:
-            self.rename(details)
-
-            # if we're not doing a dry run add a blank line for clarity
-            if options.debug is False and options.dry is False:
-                log.info('')
-
-        if options.dry or options.debug:
-            self._stop_dry_run()
 
     def _build_file_list(self, path, recursive=False, ignore_filelist=None):
         """
@@ -161,6 +147,21 @@ class FrontEnd():
             log.critical('tvr: critical error: %s' % str(err))
             sys.exit(1)
 
+    def run(self):
+        if options.dry or options.debug:
+            self._start_dry_run()
+
+        # kick off a rename for each file in the list
+        for details in self.file_list:
+            self.rename(details)
+
+            # if we're not doing a dry run add a blank line for clarity
+            if options.debug is False and options.dry is False:
+                log.info('')
+
+        if options.dry or options.debug:
+            self._stop_dry_run()
+
     def _start_dry_run(self):
         log.log(26, 'Dry Run beginning.')
         log.log(26, '-' * 70)
@@ -175,4 +176,5 @@ class FrontEnd():
 
 if __name__ == "__main__":
     frontend = FrontEnd(args)
+    frontend.run()
 
