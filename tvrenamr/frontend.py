@@ -156,7 +156,7 @@ class FrontEnd():
             self.rename(details)
 
             # if we're not doing a dry run add a blank line for clarity
-            if options.debug is False and options.dry is False:
+            if not (options.debug and options.dry):
                 log.info('')
 
         if options.dry or options.debug:
