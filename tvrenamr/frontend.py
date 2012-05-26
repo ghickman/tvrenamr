@@ -50,33 +50,33 @@ class FrontEnd():
         :param recursive: Do a recursive search for files if 'path' is a
         directory. Default is False.
         :param ignore_filelist: Optional set of files to ignore from renaming.
-        Often used by filtering
-        methods such as Deluge.
+        Often used by filtering methods such as Deluge.
 
         :returns: A list of files to be renamed.
-        :rtype: A list of dictionaries, with the keys directory and filename.
+        :rtype: A list of tuples
         """
         filelist = []
         if len(path):
             # must have used wildcards
             return [os.path.split(fn) for fn in path]
+
+        path = path[0] # only one item, add some convenience
+        if os.path.isdir(path):
+            for root, dirs, files in os.walk(path):
+                for fname in files:
+                    # If we have a file we should be ignoring and skipping.
+                    if ignore_filelist is not None and \
+                        (os.path.join(root, fname) in ignore_filelist):
+                        continue
+                    filelist.append((root, fname))
+                # Don't want a recursive walk?
+                if not recursive:
+                    break
+            return filelist
+        elif os.path.isfile(path):
+            return [os.path.split(path)]
         else:
-            if os.path.isdir(path[0]):
-                for root, dirs, files in os.walk(path[0]):
-                    for fname in files:
-                        # If we have a file we should be ignoring and skipping.
-                        if ignore_filelist is not None and \
-                            (os.path.join(root, fname) in ignore_filelist):
-                            continue
-                        filelist.append((root, fname))
-                    # Don't want a recursive walk?
-                    if not recursive:
-                        break
-                return filelist
-            elif os.path.isfile(path[0]):
-                return [os.path.split(path[0])]
-            else:
-                raise OSError
+            raise OSError
 
     def _get_config(self):
         possible_config = (
