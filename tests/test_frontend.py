@@ -1,107 +1,44 @@
-from os import mkdir, system
-from os.path import exists, join, pardir
-from shutil import rmtree
+import os
+import random
 
-from nose.tools import assert_equals, assert_true
+from nose.tools import assert_true
 
 from .base import BaseTest
+from tvrenamr.frontend import FrontEnd
 
 
 class TestFrontEnd(BaseTest):
     def setup(self):
         super(TestFrontEnd, self).setup()
-        if exists(self.renamed):
-            rmtree(self.renamed)
-        mkdir(self.renamed)
+        self.frontend = FrontEnd()
 
-    def teardown(self):
-        super(TestFrontEnd, self).setup()
-        rmtree(self.renamed)
+    def test_config_variable_exists(self):
+        assert_true(hasattr(self.frontend, 'config'))
 
-    def command(self, filename, extra_option=False):
-        command = join(self.path, pardir, 'tvrenamr', 'frontend.py')
-        extra_option_str = extra_option if extra_option else ''
-        config = join(self.path, 'config.yml')
-        options = '--config={0} --no-organise -q {1}'.format(config, extra_option_str)
-        file_path = '{0}/{1}'.format(self.files, filename)
-        return system('python {0} {1} {2}'.format(command, options, file_path))
+    def test_file_list_contains_files_from_test_dir(self):
+        self.frontend.build_file_list([self.files])
+        for fn in os.listdir(self.files):
+            assert_true((self.files, fn) in self.frontend.file_list)
 
-    """
-    - use no options
-    - use -r
-    - use -a and -r
-    - use -n
-    - use -s
-    - use -e
-    - use -t
-    - use -o
-    - use --regex
-    - use --deluge
-    - use --deluge-share-ratio
-    - use unexpected format
-    """
-    def test_single_rename_with_no_options(self):
-        cmd = self.command('chuck.s1e08.blah.HDTV.XViD.avi')
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, 'Chuck - 108 - Chuck Versus the Truth.avi')))
+    def test_passing_current_dir_makes_file_list_a_list(self):
+        self.frontend.build_file_list([self.files])
+        assert_true(isinstance(self.frontend.file_list, list))
 
-    def test_single_rename_with_rename_folder_location_specified(self):
-        cmd = self.command('chuck.s1e10.blah.HDTV.XViD.avi',
-                           '--rename-dir={0}'.format(self.renamed))
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.renamed, 'Chuck - 110 - Chuck Versus the Nemesis.avi')))
+    def test_passing_multiple_files_are_added_to_file_list(self):
+        possible_files = os.listdir(self.files)
+        files = [os.path.join(self.files, random.choice(possible_files)) for choice in range(3)]
+        self.frontend.build_file_list(files)
+        assert_true(all(os.path.split(fn) in self.frontend.file_list for fn in files))
 
-    def test_single_rename_with_rename_folder_and_organise_options(self):
-        cmd = self.command('chuck.s1e11.blah.HDTV.XViD.avi',
-                           '--organise --rename-dir={0}'.format(self.renamed))
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.renamed, 'Chuck', 'Season 1',
-                                'Chuck - 111 - Chuck Versus the Crown Vic.avi')))
+    def test_passing_single_file_is_added_to_file_list(self):
+        fn = random.choice(os.listdir(self.files))
+        self.frontend.build_file_list([os.path.join(self.files, fn)])
+        assert_true((self.files, fn) in self.frontend.file_list)
 
-    def test_single_rename_with_show_name_option(self):
-        cmd = self.command('chuck.s1e08.blah.HDTV.XViD.avi', '--show "Stargate SG-1"')
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, 'Stargate SG-1 - 108 - The Nox.avi')))
-
-    def test_single_rename_with_season_option(self):
-        cmd = self.command('chuck.s1e08.blah.HDTV.XViD.avi', '-s 2')
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, 'Chuck - 208 - Chuck Versus the Gravitron.avi')))
-
-    def test_single_rename_with_episode_option(self):
-        cmd = self.command('chuck.s1e08.blah.HDTV.XViD.avi', '-e 9')
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, 'Chuck - 109 - Chuck Versus the Imported Hard Salami.avi')))
-
-    def test_single_rename_with_leading_the_moved_to_end_of_show_name_option(self):
-        cmd = self.command('The.Big.Bang.Theory.S03E01.HDTV.XViD-NoTV.avi', '-t')
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, 'Big Bang Theory, The - 301 - The Electric Can Opener Fluctuation.avi')))
-
-    def test_single_rename_with_output_format_specified(self):
-        cmd = self.command('chuck.s1e08.blah.HDTV.XViD.avi',
-                           '-o {0}'.format('\'%s%e - %n - %t%x\''))
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, '108 - Chuck - Chuck Versus the Truth.avi')))
-
-    def test_single_rename_with_custom_regular_expression_specified(self):
-        cmd = self.command('e08s1.chuck.blah.HDTV.XViD.avi',
-                           '--regex={0}'.format('e%es%s.%n.blah'))
-        assert_equals(cmd, 0)
-        assert_true(exists(join(self.files, 'Chuck - 108 - Chuck Versus the Truth.avi')))
 
     """
-    - use recursive and no options
-    - use recursive and -r
-    - use recursive and -a and -r
-    - use recursive and -n
-    - use recursive and -s
-    - use recursive and -e
-    - use recursive and -t
-    - use recursive and -o
-    - use recursive and --regex
-    - use recursive and --deluge
-    - use recursive and --deluge-share-ratio
-    - use recursive and unexpected format
+    recursively walking a directory
+    ignoring files
+    tidy up the file resolution code after this!
     """
 
