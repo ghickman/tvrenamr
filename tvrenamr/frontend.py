@@ -42,7 +42,7 @@ class FrontEnd(object):
         :returns: A list of files to be renamed.
         :rtype: A list of tuples
         """
-        if len(glob):
+        if len(glob) > 1:
             # must have used wildcards
             self.file_list = [os.path.split(fn) for fn in glob]
             return
