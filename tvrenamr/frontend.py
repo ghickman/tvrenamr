@@ -18,7 +18,8 @@ parser = OptionParser(usage='tvr [options] <file/folder>',
                       version='Tv Renamr {0}'.format(__version__))
 options, args = parser.parse_args()
 
-class FrontEnd():
+
+class FrontEnd(object):
 
     def __init__(self):
         # start logging
