@@ -35,10 +35,25 @@ class TestFrontEnd(BaseTest):
         self.frontend.build_file_list([os.path.join(self.files, fn)])
         assert_true((self.files, fn) in self.frontend.file_list)
 
+    def test_setting_recursive_adds_all_files_below_the_folder(self):
+        new_folders = ('herp', 'derp', 'test')
+        os.makedirs(os.path.join(self.files, *new_folders))
+        def build_folder(folder):
+            new_files = ('foo', 'bar', 'blah')
+            for fn in new_files:
+                with open(os.path.join(self.files, folder, fn), 'w') as f:
+                    f.write('')
+        build_folder('herp')
+        build_folder('herp/derp')
+        build_folder('herp/derp/test')
+        self.frontend.build_file_list([self.files], recursive=True)
+        for root, dirs, files in os.walk(self.files):
+            for fn in files:
+                assert_true((root, fn) in self.frontend.file_list)
 
-    """
-    recursively walking a directory
-    ignoring files
-    tidy up the file resolution code after this!
-    """
+    def test_ignoring_files(self):
+        ignore = [random.choice(os.listdir(self.files)) for i in range(3)]
+        self.frontend.build_file_list([self.files], ignore_filelist=ignore)
+        for fn in [fn for fn in os.listdir(self.files) if fn not in ignore]:
+            assert_true((self.files, fn) in self.frontend.file_list)
 
