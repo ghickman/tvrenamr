@@ -7,7 +7,7 @@ release:
 	python setup.py register sdist upload
 
 simpleci:
-	nosetests --with-spec
+	nosetests
 
 test:
 	nosetests --with-spec --spec-color
