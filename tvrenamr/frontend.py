@@ -107,6 +107,8 @@ class FrontEnd(object):
                                     organise=options.organise, format=options.output_format)
 
             tv.rename(filename, path)
+        except KeyboardInterrupt:
+            sys.exit()
         except (ConfigNotFoundException,
                 NoMoreLibrariesException,
                 NoNetworkConnectionException):
