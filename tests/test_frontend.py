@@ -11,6 +11,7 @@ class TestFrontEnd(BaseTest):
     def setup(self):
         super(TestFrontEnd, self).setup()
         self.frontend = FrontEnd()
+        self.frontend.get_config(os.path.join(self.path, 'config.yml'))
 
     def test_config_variable_exists(self):
         assert_true(hasattr(self.frontend, 'config'))

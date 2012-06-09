@@ -26,8 +26,6 @@ class FrontEnd(object):
             options.log_level = 10
         start_logging(options.log_file, options.log_level, options.quiet)
 
-        self.config = self._get_config()
-
     def build_file_list(self, glob, recursive=False, ignore_filelist=None):
         """
         Determines which files need to be processed for renaming.
@@ -64,9 +62,10 @@ class FrontEnd(object):
         else:
             parser.error("'{0}' is not a file or directory. Ruh Roe!".format(args))
 
-    def _get_config(self):
+    def get_config(self, path):
         possible_config = (
             options.config,
+            path,
             os.path.expanduser('~/.tvrenamr/config.yml'),
             os.path.join(sys.path[0], 'config.yml')
         )
@@ -79,7 +78,7 @@ class FrontEnd(object):
                 break
         if _config is None:
             raise ConfigNotFoundException
-        return _config
+        self.config = _config
 
     def rename(self, details):
         working, filename = details
@@ -168,6 +167,7 @@ if __name__ == "__main__":
         args = [os.getcwd()]
 
     frontend = FrontEnd()
+    frontend.get_config()
     frontend.build_file_list(args, options.recursive, options.ignore_filelist)
     frontend.run()
 
