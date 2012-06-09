@@ -12,3 +12,4 @@ thoughts
 Rakefile
 tvrenamr/docs/_build/
 venv
+.tox

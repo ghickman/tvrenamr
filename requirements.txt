@@ -1,2 +1,3 @@
 minimock
 git+git://github.com/mkwiatkowski/pinocchio.git#egg=pinocchio
+PyYAML
