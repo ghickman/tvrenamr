@@ -1,5 +1,6 @@
 from os.path import join
 
+from mock import patch
 from nose.tools import assert_raises
 from tvrenamr.episode import Episode
 from tvrenamr.errors import (EpisodeAlreadyExistsInDirectoryException,
@@ -8,12 +9,14 @@ from tvrenamr.errors import (EpisodeAlreadyExistsInDirectoryException,
                              UnexpectedFormatException)
 
 from .base import BaseTest
+from .mock_requests import bad_response
 
 
 class TestExceptionsAreRaised(BaseTest):
     def test_unexpected_format_exception_should_be_raised_when_unrecognised_file_format(self):
         assert_raises(UnexpectedFormatException, self.tv.extract_details_from_file, 'chuck.avi')
 
+    @patch('requests.get', new=bad_response)
     def test_nonexistant_episode_doesnt_work_on_any_library(self):
         episode = Episode(**self.tv.extract_details_from_file('chuck.s99e05.avi'))
         assert_raises(NoMoreLibrariesException, self.tv.retrieve_episode_name, episode)
