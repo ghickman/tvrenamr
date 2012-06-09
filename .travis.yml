@@ -5,6 +5,5 @@ python:
   - 3.2
 script: make test
 install:
-  - pip install -q nose
   - pip install -q . --use-mirrors
   - pip install -q -r requirements.txt --use-mirrors
