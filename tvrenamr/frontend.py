@@ -20,7 +20,6 @@ options, args = parser.parse_args()
 
 
 class FrontEnd(object):
-
     def __init__(self):
         # start logging
         if options.debug:
@@ -124,14 +123,15 @@ class FrontEnd(object):
                 OutputFormatMissingSyntaxException,
                 ShowNotFoundException,
                 UnexpectedFormatException) as e:
-            if e.args:
+            for msg in e.args:
                 log.critical(e)
             pass
-        except Exception as err:
+        except Exception as e:
             if options.debug:
                 # In debug mode, show the full traceback.
                 raise
-            log.critical('tvr: critical error: %s' % str(err))
+            for msg in e.args:
+                log.critical('Error: {0}'.format(msg))
             sys.exit(1)
 
     def run(self):
