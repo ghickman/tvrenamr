@@ -50,7 +50,7 @@ class TheTvDb():
         log.debug('Series url: %s' % url)
 
         req = requests.get(url)
-        if req.status_code is not requests.codes.ok:
+        if not req.ok:
             raise NoNetworkConnectionException('thetvdb.org')
 
         log.debug('XML: Attempting to parse')
@@ -90,7 +90,7 @@ class TheTvDb():
 
         log.debug('Attempting to retrieve episode name')
         req = requests.get(episode_url)
-        if req.status_code is not requests.codes.ok:
+        if not req.ok:
             raise EpisodeNotFoundException(log.name, self.show, self.season,
                                            self.episode)
         log.debug('XML: Retreived')

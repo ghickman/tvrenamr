@@ -18,10 +18,17 @@ def cache_folder_check(func):
 
 class MockFile(file):
     content = None
+    ok = True
     status_code = 0
 
     def populate_content(self):
         self.content = self.read()
+
+
+def bad_response(url, **kwargs):
+    class Response(object):
+        ok = False
+    return Response()
 
 
 @cache_folder_check
