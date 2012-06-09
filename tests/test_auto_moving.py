@@ -3,9 +3,9 @@ from os.path import isdir, isfile, join
 from shutil import rmtree
 
 from nose.tools import assert_equal, assert_true
-
 from tvrenamr.episode import Episode
-from tvrenamr.tests.base import BaseTest
+
+from .base import BaseTest
 
 
 class TestAutoMoving(BaseTest):
@@ -18,7 +18,7 @@ class TestAutoMoving(BaseTest):
 
     def test_using_organise_renames_the_file_correctly(self):
         fn = 'chuck.s1e06.foo.HD.avi'
-        episode = Episode(self.tv.extract_details_from_file(fn))
+        episode = Episode(**self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         path = self.tv.build_path(episode, organise=self.organise, rename_dir=self.organised)
@@ -27,7 +27,7 @@ class TestAutoMoving(BaseTest):
 
     def test_using_organise_moves_the_file_to_the_correct_folder(self):
         fn = 'stargate.sg-1.s10e18.xvid.avi'
-        episode = Episode(self.tv.extract_details_from_file(fn))
+        episode = Episode(**self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         path = self.tv.build_path(episode, organise=self.organise, rename_dir=self.organised)
@@ -43,7 +43,7 @@ class TestAutoMoving(BaseTest):
         assert_equal(full_path, 'Stargate SG-1/Season 10/Stargate SG-1 - 1018 - Family Ties.avi')
 
     def test_using_organise_returns_the_correct_path_based_on_the_episode(self):
-        episode = Episode(self.tv.extract_details_from_file('true.blood.0205.avi'))
+        episode = Episode(**self.tv.extract_details_from_file('true.blood.0205.avi'))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name, the=False)
         path = self.tv.build_path(episode, organise=self.organise, rename_dir=self.organised)
@@ -51,7 +51,7 @@ class TestAutoMoving(BaseTest):
 
     def test_moving_the_leading_the_to_the_end_of_a_show_name_causes_the_show_folder_name_to_follow_suit_when_using_organise(self):
         fn = 'The.Big.Bang.Theory.S03E01.HDTV.XviD-NoTV.avi'
-        episode = Episode(self.tv.extract_details_from_file(fn))
+        episode = Episode(**self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name, the=True)
         path = self.tv.build_path(episode, organise=self.organise, rename_dir=self.organised)

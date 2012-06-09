@@ -1,13 +1,34 @@
+import logging
+
+
+log = logging.getLogger('Episode')
+
+
 class Episode(object):
 
-    # def __init__(self, show_name=None, season=None, episode=None, title=None,
-    #         extension=None, format='%n - %s%e - %t.%x'):
-    def __init__(self, fn_parts, format='%n - %s%e - %t.%x'):
-        self.show_name = fn_parts[0]
-        self.season = fn_parts[1] if not None else str(fn_parts[1])
-        self.episode = fn_parts[2] if not None else str(fn_parts[2])
-        self.extension = fn_parts[3]
+    def __init__(self, format='%n - %s%e - %t.%x', **kwargs):
+        if kwargs.get('show_name'):
+            self.show_name = kwargs.get('show_name')
+        if kwargs.get('season'):
+            self.season = kwargs.get('season')
+        if kwargs.get('episode'):
+            self.episode = kwargs.get('episode')
+        self.extension = kwargs.get('extension')
         self.format = format
+
+    def __getattr__(self, item):
+        msg = 'Missing {0}: Set it with {1} or use {2} in your --regex string'
+
+        if item is 'show_name':
+            log.error(msg.format('show name', '--show', '%n'))
+
+        if item is 'season':
+            log.error(msg.format('season', '--season', '%s'))
+
+        if item is 'episode':
+            log.error(msg.format('episode', '--episode', '%e'))
+
+        raise AttributeError
 
     def __getattribute__(self, item):
         """
@@ -16,8 +37,7 @@ class Episode(object):
         """
         if item is 'episode_2':
             return '0%s' % self.episode
-        else:
-            return object.__getattribute__(self, item)
+        return object.__getattribute__(self, item)
 
     def __repr__(self):
         filename = self.format

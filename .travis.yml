@@ -1,12 +1,10 @@
 language: python
 python:
-  - "2.6"
-  - "2.7"
-  - "3.1"
-  - "3.2"
-# command to install dependencies
+  - 2.6
+  - 2.7
+  - 3.2
+script: make test
 install:
-  - pip install . --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
-# command to run tests
-script: nosetests --with-spec
+  - pip install -q nose
+  - pip install -q . --use-mirrors
+  - pip install -q -r requirements.txt --use-mirrors

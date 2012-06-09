@@ -68,14 +68,28 @@ class TvRenamr(object):
         regex = self.__build_regex(user_regex)
         log.debug('Renaming using: ' + regex)
         m = re.compile(regex).match(fn)
-        if m is not None:
-            show = m.group('show').replace('.', ' ').strip()
-            ext = os.path.splitext(fn)[1]
-            details = (show, m.group('season'), m.group('episode'), ext)
-            log.debug('Returned show: %s, season: %s, episode: %s, extension: %s' % details)
-            return details
-        else:
+        if not m:
             raise UnexpectedFormatException(fn)
+
+        credentials = {}
+        try:
+            credentials.update({'show_name': m.group('show_name').replace('.', ' ').strip()})
+        except IndexError:
+            pass
+        try:
+            credentials.update({'season': m.group('season')})
+        except IndexError:
+            pass
+        try:
+            credentials.update({'episode': m.group('episode')})
+        except IndexError:
+            pass
+        credentials.update({'extension': os.path.splitext(fn)[1]})
+        log.debug('Filename yielded: {0}'.format(
+            ', '.join('{0}: {1}'.format(key, value)
+            for key, value in credentials.iteritems())
+        ))
+        return credentials
 
     def retrieve_episode_name(self, episode, library='thetvdb', canonical=None):
         """
@@ -246,7 +260,7 @@ class TvRenamr(object):
             log.debug('Directories created for path: ' + path)
         return path
 
-    def __build_regex(self, regex=None):
+    def __build_regex(self, regex=None, partial=False):
         """
         Builds the regular expression to extract a files details. Custom syntax
         can be used in the regular expression to help specify parts of the
@@ -262,13 +276,14 @@ class TvRenamr(object):
         :returns: An actual regular expression.
         :rtype: A string.
         """
-        series = r"(?P<show>[\w\s.',_-]+)"
+        series = r"(?P<show_name>[\w\s.',_-]+)"
         season = r"(?P<season>[\d]{1,2})"
         episode = r"(?P<episode>[\d]{2})"
 
         if regex is None:
             return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"
-        if regex.find('%s') is -1 or regex.find('%e') is -1:
+
+        if not partial and not ('%n' in regex or '%s' in regex or '%e' in regex):
             raise IncorrectCustomRegularExpressionSyntaxException(regex)
 
         # series name
@@ -276,7 +291,7 @@ class TvRenamr(object):
 
         # season number
         # %s{n}
-        if regex.find('%s{') is not -1:
+        if '%s{' in regex:
             log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
             log.debug('Specified ' + r + ' season digits')
@@ -285,13 +300,13 @@ class TvRenamr(object):
             log.debug('Season regex set: %s' % s)
 
         # %s
-        if regex.find('%s') is not -1:
+        if '%s' in regex:
             regex = regex.replace('%s', season)
             log.debug('Default season regex set: %s' % regex)
 
         # episode number
         # %e{n}
-        if regex.find('%e{') is not -1:
+        if '%e{' in regex:
             log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
             log.debug('User specified' + r + ' episode digits')
@@ -300,7 +315,7 @@ class TvRenamr(object):
             log.debug('Episode regex set: %s' % e)
 
         # %e
-        if regex.find('%e') is not -1:
+        if '%e' in regex:
             regex = regex.replace('%e', episode)
             log.debug('Default episode regex set: %s' % regex)
 

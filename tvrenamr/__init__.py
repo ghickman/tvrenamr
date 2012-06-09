@@ -1,5 +1,6 @@
-__version__ = (3, 2, 1)
-
-def get_version():
-    return '.'.join(map(str, __version__))
+__author__ = 'George Hickman'
+__copyright__ = 'Copyright 2012 George Hickman'
+__license__ = 'MIT'
+__title__ = 'tvrenamr'
+__version__ = '3.2.1'
 
