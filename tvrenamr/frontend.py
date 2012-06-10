@@ -62,7 +62,7 @@ class FrontEnd(object):
         else:
             parser.error("'{0}' is not a file or directory. Ruh Roe!".format(args))
 
-    def get_config(self, path):
+    def get_config(self, path=None):
         possible_config = (
             options.config,
             path,
