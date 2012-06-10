@@ -17,7 +17,7 @@ setup(
     url = 'http://tvrenamr.info',
     license = open('LICENSE').read(),
     packages = packages,
-    entry_points = {'console_scripts': ['tvr = tvrenamr.frontend:run',],},
+    entry_points = {'console_scripts': ['tvr = tvrenamr.frontend:run']},
     classifiers = (
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
