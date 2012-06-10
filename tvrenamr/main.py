@@ -3,8 +3,8 @@ import os
 import re
 
 from .errors import *
-from lib.thetvdb import TheTvDb
-from lib.tvrage import TvRage
+from .lib.thetvdb import TheTvDb
+from .lib.tvrage import TvRage
 
 log = logging.getLogger('Core')
 
