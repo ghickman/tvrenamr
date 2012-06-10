@@ -160,14 +160,18 @@ class FrontEnd(object):
         log.log(26, '')
 
 
-if __name__ == "__main__":
+def run():
     # use current directory if no args specified
+    files = args
     if not args:
         log.debug('No file or directory specified, using current directory')
-        args = [os.getcwd()]
+        files = [os.getcwd()]
 
     frontend = FrontEnd()
     frontend.get_config()
-    frontend.build_file_list(args, options.recursive, options.ignore_filelist)
+    frontend.build_file_list(files, options.recursive, options.ignore_filelist)
     frontend.run()
+
+if __name__ == "__main__":
+    run()
 
