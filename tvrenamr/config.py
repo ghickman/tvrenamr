@@ -3,7 +3,7 @@ import sys
 
 import yaml
 
-from errors import ShowNotInConfigException
+from .errors import ShowNotInConfigException
 
 
 error = """
