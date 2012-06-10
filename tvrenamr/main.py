@@ -2,7 +2,7 @@ import logging
 import os
 import re
 
-from errors import *
+from .errors import *
 from lib.thetvdb import TheTvDb
 from lib.tvrage import TvRage
 
