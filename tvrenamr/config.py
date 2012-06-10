@@ -1,7 +1,7 @@
-from logging import getLogger
-from sys import exit
+import logging
+import sys
 
-from yaml import safe_load
+import yaml
 
 from errors import ShowNotInConfigException
 
@@ -23,7 +23,7 @@ o If text contains any of :[]{}% characters it must be single-quoted ('')"
 class Config():
 
     def __init__(self, config):
-        self.log = getLogger('Config')
+        self.log = logging.getLogger('Config')
 
         self.config = self._load_config(config)
 
@@ -68,7 +68,7 @@ class Config():
 
     def _load_config(self, config):
         try:
-            return safe_load(file(config))
+            return yaml.safe_load(file(config))
         except Exception as e:
             self.log.critical(e)
             self.log.critical(error)
@@ -89,7 +89,7 @@ class Config():
                 self.log.critical('Fault is almost always in this or previous line')
             if lines == 2:
                 self.log.critical('Fault is almost always in one of these lines or previous ones')
-            exit(1)
+            sys.exit(1)
 
     def _get_defaults(self):
         if 'defaults' in self.config:
