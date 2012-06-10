@@ -22,8 +22,8 @@ class TestExceptionsAreRaised(BaseTest):
         assert_raises(NoMoreLibrariesException, self.tv.retrieve_episode_name, episode)
 
     def test_episode_already_exists_raise_exception(self):
-        with open(join(self.files, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
-            pass
+        with open(join(self.files, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w') as f:
+            f.write('')
         fn = 'chuck.s02e05.avi'
         episode = Episode(**self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
