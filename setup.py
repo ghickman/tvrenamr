@@ -4,7 +4,7 @@ import tvrenamr
 
 
 requires = ('pyyaml', 'requests',)
-packages = ('tvrenamr',)
+packages = ('tvrenamr', 'tvrenamr.lib')
 
 setup(
     name = tvrenamr.__title__,
