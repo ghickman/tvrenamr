@@ -233,8 +233,8 @@ class TvRenamr(object):
             log.debug(os.path.join(self.working_dir, current_filepath))
             log.debug(destination_filepath)
             if not self.dry and not self.debug:
-                os.rename(os.path.join(self.working_dir, current_filepath), \
-                            destination_filepath)
+                source_filepath = os.path.join(self.working_dir, current_filepath)
+                os.rename(source_filepath, destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
             log.log(26, 'Renamed: \"%s\"' % destination_file)
         else:
