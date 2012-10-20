@@ -237,6 +237,7 @@ class TvRenamr(object):
                 os.rename(source_filepath, destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
             log.log(26, 'Renamed: \"%s\"' % destination_file)
+            return destination_filepath
         else:
             raise EpisodeAlreadyExistsInDirectoryException(destination_filepath)
 
