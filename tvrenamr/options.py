@@ -12,6 +12,7 @@ class OptionParser(OptParser):
         self.add_option('--deluge', action='store_true', dest='deluge', help='Checks Deluge to make sure the file has been completed before renaming.')
         self.add_option('--deluge-ratio', dest='deluge_ratio', help='Checks Deluge for completed and that the file has at least reached X share ratio.')
         self.add_option('-d', '--dry-run', dest='dry', action='store_true', help='Dry run your renaming.')
+        self.add_option('--date', dest='date', action='store_true', help='Rename a file with date formatted episodes.')
         self.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file.')
         self.add_option('--ignore-filelist', dest='ignore_filelist', help=SUPPRESS_HELP)
         self.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', help='Only use files from the root of a given directory, not entering any sub-directories.')

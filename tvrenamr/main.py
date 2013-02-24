@@ -280,6 +280,7 @@ class TvRenamr(object):
         series = r"(?P<show_name>[\w\s.',_-]+)"
         season = r"(?P<season>[\d]{1,2})"
         episode = r"(?P<episode>[\d]{2})"
+        date = r'(?P<date>\d{4}\.\d{2}\.\d{2})'
 
         if regex is None:
             return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"

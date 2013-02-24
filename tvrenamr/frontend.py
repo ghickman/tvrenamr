@@ -84,7 +84,7 @@ class FrontEnd(object):
         working, filename = details
 
         try:
-            tv = TvRenamr(working, self.config, options.debug, options.dry)
+            tv = TvRenamr(working, self.config, options.debug, options.dry, date=options.date)
             episode = Episode(**tv.extract_details_from_file(filename,
                                                     user_regex=options.regex))
 
