@@ -45,7 +45,12 @@ class TheTvDb():
         :rtype: A string.
         """
         log.debug('Retrieving series id for %s' % self.show)
-        url = '%s%s%s' % (url_base, url_series, urllib.quote(self.show))
+        try:
+            quoted_show = urllib.quote(self.show)
+        except AttributeError:
+            # python 3
+            quoted_show = urllib.parse.quote(self.show)
+        url = '%s%s%s' % (url_base, url_series, quoted_show)
         log.debug('Series url: %s' % url)
 
         req = requests.get(url)
