@@ -2,9 +2,9 @@ import logging
 import os
 import re
 
-from errors import *
-from lib.thetvdb import TheTvDb
-from lib.tvrage import TvRage
+from . import errors
+from .lib.thetvdb import TheTvDb
+from .lib.tvrage import TvRage
 
 log = logging.getLogger('Core')
 
@@ -69,7 +69,7 @@ class TvRenamr(object):
         log.debug('Renaming using: ' + regex)
         m = re.compile(regex).match(fn)
         if not m:
-            raise UnexpectedFormatException(fn)
+            raise errors.UnexpectedFormatException(fn)
 
         credentials = {}
         try:
@@ -125,11 +125,11 @@ class TvRenamr(object):
                 log.debug('Using %s' % lib.__name__)
                 self.library = lib(episode.show_name, episode.season, episode.episode)
                 break # first library worked - nothing to see here
-            except (EmptyEpisodeNameException, EpisodeNotFoundException,
-                    InvalidXMLException, NoNetworkConnectionException,
-                    ShowNotFoundException) as e:
+            except (errors.EmptyEpisodeNameException, errors.EpisodeNotFoundException,
+                    errors.InvalidXMLException, errors.NoNetworkConnectionException,
+                    errors.ShowNotFoundException) as e:
                 if lib == libraries[-1]:
-                    raise NoMoreLibrariesException(lib, e)
+                    raise errors.NoMoreLibrariesException(lib, e)
                 continue
 
         self.title = self.library.title
@@ -144,7 +144,7 @@ class TvRenamr(object):
         try:
             show_name = self.config.get_output(show_name)
             log.debug('Using config output name: %s' % show_name)
-        except ShowNotInConfigException:
+        except errors.sShowNotInConfigException:
             show_name = self.library.show
             log.debug('Using the formatted show name retrieved by the library:'
                         ' %s' % show_name)
@@ -239,7 +239,7 @@ class TvRenamr(object):
             log.log(26, 'Renamed: \"%s\"' % destination_file)
             return destination_filepath
         else:
-            raise EpisodeAlreadyExistsInDirectoryException(destination_filepath)
+            raise errors.EpisodeAlreadyExistsInDirectoryException(destination_filepath)
 
     def __build_organise_path(self, start_path, show_name, season_number):
         """
@@ -285,7 +285,7 @@ class TvRenamr(object):
             return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"
 
         if not partial and not ('%n' in regex or '%s' in regex or '%e' in regex):
-            raise IncorrectCustomRegularExpressionSyntaxException(regex)
+            raise errors.IncorrectCustomRegularExpressionSyntaxException(regex)
 
         # series name
         regex = regex.replace('%n', series)
@@ -359,4 +359,3 @@ class TvRenamr(object):
             return show_name
         log.debug('Moving leading \'The\' to end of: ' + show_name)
         return show_name[4:] + ', The'
-
