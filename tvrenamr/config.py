@@ -6,7 +6,7 @@ from yaml import safe_load
 from .errors import ShowNotInConfigException
 
 
-class Config():
+class Config(object):
 
     def __init__(self, config):
         self.log = logging.getLogger('Config')
