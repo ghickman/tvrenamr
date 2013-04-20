@@ -1,3 +1,4 @@
+import io
 import logging
 import sys
 
@@ -54,7 +55,8 @@ class Config(object):
 
     def _load_config(self, config):
         try:
-            return yaml.safe_load(file(config))
+            with open(config, 'r') as f:
+                return yaml.safe_load(f)
         except yaml.YAMLError as e:
             self.log.critical(e)
             print('')
