@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from yaml import safe_load
+import yaml
 
 from .errors import ShowNotInConfigException
 
@@ -54,8 +54,8 @@ class Config(object):
 
     def _load_config(self, config):
         try:
-            return safe_load(file(config))
-        except Exception as e:
+            return yaml.safe_load(file(config))
+        except yaml.YAMLError as e:
             self.log.critical(e)
             print('')
             print('-'*79)
@@ -68,17 +68,17 @@ class Config(object):
             print(" o If text contains any of :[]{}% characters it must be \
                     single-quoted ('')\n")
             lines = 0
-            if e.problem is not None:
+            if hasattr(e, 'problem') and e.problem is not None:
                 print(' Reason: %s\n'.format(e.problem))
                 if e.problem == 'mapping values are not allowed here':
                     print(' ----> MOST LIKELY REASON: Missing : from end of \
                             the line!')
                     print('')
-            if e.context_mark is not None:
+            if hasattr(e, 'context_mark') and e.context_mark is not None:
                 args = (e.context_mark.line, e.context_mark.column)
                 print(' Check configuration near line {}, column {}'.format(*args))
                 lines += 1
-            if e.problem_mark is not None:
+            if hasattr(e, 'problem_mark') and e.problem_mark is not None:
                 args = (e.problem_mark.line, e.problem_mark.column)
                 print(' Check configuration near line {}, column {}'.format(*args))
                 lines += 1
