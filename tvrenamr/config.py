@@ -1,5 +1,5 @@
-from logging import getLogger
-from sys import exit
+import logging
+import sys
 
 from yaml import safe_load
 
@@ -9,7 +9,7 @@ from .errors import ShowNotInConfigException
 class Config():
 
     def __init__(self, config):
-        self.log = getLogger('Config')
+        self.log = logging.getLogger('Config')
 
         self.config = self._load_config(config)
 
@@ -91,7 +91,7 @@ class Config():
                         previous ones\n'
             # if self.options.debug:
                 # raise
-            exit(1)
+            sys.exit(1)
 
     def _get_defaults(self):
         if 'defaults' in self.config:
