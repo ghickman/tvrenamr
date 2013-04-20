@@ -87,7 +87,7 @@ class TvRenamr(object):
         credentials.update({'extension': os.path.splitext(fn)[1]})
         log.debug('Filename yielded: {0}'.format(
             ', '.join('{0}: {1}'.format(key, value)
-            for key, value in credentials.iteritems())
+            for key, value in credentials.items())
         ))
         return credentials
 
