@@ -1,9 +1,14 @@
 from optparse import OptionParser as OptParser, SUPPRESS_HELP
 
+from . import __version__
+
 
 class OptionParser(OptParser):
 
-    def __init__(self, usage, version):
+    def __init__(self):
+        usage = 'tvr [options] <file/folder>'
+        version = 'Tv Renamr {0}'.format(__version__)
+
         OptParser.__init__(self, usage=usage, version=version)
 
         self.add_option('--config', dest='config', help='Select a location for your config file. If the path is invalid the default locations will be used.')

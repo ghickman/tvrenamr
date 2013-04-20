@@ -4,7 +4,6 @@ import logging
 import os
 import sys
 
-from . import __version__
 from .config import Config
 from .episode import Episode
 from .errors import *
@@ -12,10 +11,11 @@ from .logs import start_logging
 from .main import TvRenamr
 from .options import OptionParser
 
+
 log = logging.getLogger('Core')
 
-parser = OptionParser(usage='tvr [options] <file/folder>',
-                      version='Tv Renamr {0}'.format(__version__))
+
+parser = OptionParser()
 options, args = parser.parse_args()
 
 
@@ -174,4 +174,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
