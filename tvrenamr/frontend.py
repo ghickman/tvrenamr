@@ -4,13 +4,13 @@ import logging
 import os
 import sys
 
-from __init__ import __version__
-from config import Config
-from episode import Episode
-from errors import *
-from logs import start_logging
-from main import TvRenamr
-from options import OptionParser
+from . import __version__
+from .config import Config
+from .episode import Episode
+from .errors import *
+from .logs import start_logging
+from .main import TvRenamr
+from .options import OptionParser
 
 log = logging.getLogger('Core')
 

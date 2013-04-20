@@ -1,6 +1,7 @@
 import logging
 
-from lib.log_utils import *
+from .lib.log_utils import convert_log_level, get_log_file
+
 
 def start_logging(filename, log_level, quiet=False):
     """
