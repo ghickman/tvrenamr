@@ -68,7 +68,7 @@ def mock_get(url, **kwargs):
     Mock requets.get and return a local file handle or create file if
     not existent and then return it.
     """
-    key = hashlib.md5(url).hexdigest()
+    key = hashlib.md5(url.encode('utf-8')).hexdigest()
     file_path = os.path.join(test_dir, 'cache', '{0}.xml'.format(key))
     try:
         f = MockFile(file_path, 'r')
