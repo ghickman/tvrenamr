@@ -3,7 +3,7 @@ from sys import exit
 
 from yaml import safe_load
 
-from errors import ShowNotInConfigException
+from .errors import ShowNotInConfigException
 
 
 class Config():
