@@ -1,5 +1,4 @@
 minimock
 mock
 nose
-pinocchio
-PyYAML
+pyyaml
