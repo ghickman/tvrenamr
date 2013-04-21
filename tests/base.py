@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 
@@ -7,6 +8,9 @@ from tvrenamr.main import TvRenamr
 from . import mock_requests
 # make pyflakes STFU
 assert mock_requests
+
+
+logging.disable(logging.CRITICAL)
 
 
 class BaseTest(object):
