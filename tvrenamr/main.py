@@ -144,7 +144,7 @@ class TvRenamr(object):
         try:
             show_name = self.config.get_output(show_name)
             log.debug('Using config output name: %s' % show_name)
-        except errors.sShowNotInConfigException:
+        except errors.ShowNotInConfigException:
             show_name = self.library.show
             log.debug('Using the formatted show name retrieved by the library:'
                         ' %s' % show_name)
