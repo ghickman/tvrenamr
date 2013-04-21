@@ -7,5 +7,5 @@ release:
 	python setup.py register sdist upload
 
 test:
-	nosetests --quiet
+	python setup.py test
 
