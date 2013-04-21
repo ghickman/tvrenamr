@@ -1,4 +1,5 @@
 import hashlib
+import io
 import os
 
 from minimock import mock, restore
@@ -15,7 +16,7 @@ def cache_folder_check(func):
     return func
 
 
-class MockFile(file):
+class MockFile(io.FileIO):
     content = None
     ok = True
     status_code = 0
