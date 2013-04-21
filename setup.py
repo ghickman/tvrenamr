@@ -1,3 +1,4 @@
+import multiprocessing  # stop tests breaking tox
 from setuptools import setup
 
 import tvrenamr
@@ -5,6 +6,8 @@ import tvrenamr
 
 requires = ('pyyaml', 'requests',)
 packages = ('tvrenamr', 'tvrenamr.lib')
+
+setup_requires = ('minimock', 'mock', 'nose', 'pyyaml')
 
 setup(
     name = tvrenamr.__title__,
@@ -32,6 +35,8 @@ setup(
         'Topic :: Multimedia',
         'Topic :: Utilities',
     ),
-    install_requires = requires
+    install_requires = requires,
+    setup_requires=setup_requires,
+    test_suite='nose.collector',
 )
 
