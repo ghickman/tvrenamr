@@ -25,6 +25,7 @@ class TestExceptionsAreRaised(BaseTest):
         fn = 'chuck.s02e05.avi'
         episode = Episode(**self.tv.extract_details_from_file(fn))
         episode.title = self.tv.retrieve_episode_name(episode)
+        episode.show_name = self.tv.format_show_name(episode.show_name)
         path = self.tv.build_path(episode, organise=False)
         with open(join(self.files, 'Chuck - 205 - Chuck Versus Tom Sawyer.avi'), 'w'):
             assert_raises(EpisodeAlreadyExistsInDirectoryException, self.tv.rename, fn, path)
@@ -32,4 +33,3 @@ class TestExceptionsAreRaised(BaseTest):
     def test_custom_syntax_snippets_missing_raises_exception(self):
         assert_raises(IncorrectCustomRegularExpressionSyntaxException,
                       self.tv.extract_details_from_file, 'chuck.s02e05.avi', '.')
-
