@@ -227,17 +227,17 @@ class TvRenamr(object):
         destination file already
         exists in chosen directory.
         """
-        if not os.path.exists(destination_filepath):
-            log.debug(os.path.join(self.working_dir, current_filepath))
-            log.debug(destination_filepath)
-            if not self.dry and not self.debug:
-                source_filepath = os.path.join(self.working_dir, current_filepath)
-                os.rename(source_filepath, destination_filepath)
-            destination_file = os.path.split(destination_filepath)[1]
-            log.log(26, 'Renamed: \"{0}\"'.format(destination_file))
-            return destination_filepath
-        else:
+        if os.path.exists(destination_filepath):
             raise errors.EpisodeAlreadyExistsInDirectoryException(destination_filepath)
+
+        log.debug(os.path.join(self.working_dir, current_filepath))
+        log.debug(destination_filepath)
+        if not self.dry and not self.debug:
+            source_filepath = os.path.join(self.working_dir, current_filepath)
+            os.rename(source_filepath, destination_filepath)
+        destination_file = os.path.split(destination_filepath)[1]
+        log.log(26, 'Renamed: \"{0}\"'.format(destination_file))
+        return destination_filepath
 
     def __build_organise_path(self, start_path, show_name, season_number):
         """
