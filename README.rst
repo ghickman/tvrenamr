@@ -1,6 +1,6 @@
 TV Renamr is a utility to rename TV shows based upon filenames or user input.
 
-.. image:: https://secure.travis-ci.org/ghickman/tvrenamr.png?branch=develop
+.. image:: https://travis-ci.org/ghickman/tvrenamr.png
 
 Install it straight from the PyPI: ::
 
