@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.3.3
+------
+
+- Bring back Python 2.6 support!
+
+
 v3.3.0
 ------
 
