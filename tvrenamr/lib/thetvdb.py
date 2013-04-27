@@ -115,6 +115,6 @@ class TheTvDb(object):
         log.debug('XML: Attempting to find the episode name')
         episode = tree.find('Episode').findtext('EpisodeName')
         if not episode:
-            raise errorsEmptyEpisodeNameException
+            raise errors.EmptyEpisodeNameException
 
         return episode
