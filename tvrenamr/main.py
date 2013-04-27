@@ -64,7 +64,7 @@ class TvRenamr(object):
         'extension'.
         """
         fn = fn.replace("_", ".").replace(" ", ".")
-        log.log(22, 'Renaming: %s' % fn)
+        log.log(22, 'Renaming: {0}'.format(fn))
         regex = self.__build_regex(user_regex)
         log.debug('Renaming using: ' + regex)
         m = re.compile(regex).match(fn)
@@ -85,10 +85,8 @@ class TvRenamr(object):
         except IndexError:
             pass
         credentials.update({'extension': os.path.splitext(fn)[1]})
-        log.debug('Filename yielded: {0}'.format(
-            ', '.join('{0}: {1}'.format(key, value)
-            for key, value in credentials.items())
-        ))
+        msg = ', '.join('{0}: {1}'.format(key, value) for key, value in credentials.items())
+        log.debug('Filename yielded: {0}'.format(msg))
         return credentials
 
     def retrieve_episode_name(self, episode, library='thetvdb', canonical=None):
@@ -117,12 +115,12 @@ class TvRenamr(object):
             episode.show_name = canonical
         else:
             episode.show_name = self.config.get_canonical(episode.show_name)
-        log.debug('Show Name: %s' % episode.show_name)
+        log.debug('Show Name: {0}'.format(episode.show_name))
 
         # loop the libraries until one works
         for lib in libraries:
             try:
-                log.debug('Using %s' % lib.__name__)
+                log.debug('Using {0}'.format(lib.__name__))
                 self.library = lib(episode.show_name, episode.season, episode.episode)
                 break # first library worked - nothing to see here
             except (errors.EmptyEpisodeNameException, errors.EpisodeNotFoundException,
@@ -133,7 +131,7 @@ class TvRenamr(object):
                 continue
 
         self.title = self.library.title
-        log.info('Episode: %s' % self.title)
+        log.info('Episode: {0}'.format(self.title))
 
         return self.title
 
@@ -143,20 +141,20 @@ class TvRenamr(object):
 
         try:
             show_name = self.config.get_output(show_name)
-            log.debug('Using config output name: %s' % show_name)
+            log.debug('Using config output name: {0}'.format(show_name))
         except errors.ShowNotInConfigException:
             show_name = self.library.show
-            log.debug('Using the formatted show name retrieved by the library:'
-                        ' %s' % show_name)
+            msg = 'Using the formatted show name retrieved by the library: {0}'
+            log.debug(msg.format(show_name))
 
         if override is not None:
             show_name = override
-            log.debug('Overrode show name with: %s' % show_name)
+            log.debug('Overrode show name with: {0}'.format(show_name))
 
         if the is True:
             show_name = self.__move_leading_the_to_trailing_the(show_name)
 
-        log.debug('Final show name: %s' % show_name)
+        log.debug('Final show name: {0}'.format(show_name))
 
         return show_name
 
@@ -212,9 +210,9 @@ class TvRenamr(object):
             rename_dir = self.__build_organise_path(rename_dir, \
                                     episode.show_name, episode.season)
 
-        log.log(22, 'Directory: %s' % rename_dir)
+        log.log(22, 'Directory: {0}'.format(rename_dir))
         path = os.path.join(rename_dir, format)
-        log.debug('Full path: %s' % path)
+        log.debug('Full path: {0}'.format(path))
         return path
 
     def rename(self, current_filepath, destination_filepath):
@@ -236,7 +234,7 @@ class TvRenamr(object):
                 source_filepath = os.path.join(self.working_dir, current_filepath)
                 os.rename(source_filepath, destination_filepath)
             destination_file = os.path.split(destination_filepath)[1]
-            log.log(26, 'Renamed: \"%s\"' % destination_file)
+            log.log(26, 'Renamed: \"{0}\"'.format(destination_file))
             return destination_filepath
         else:
             raise errors.EpisodeAlreadyExistsInDirectoryException(destination_filepath)
@@ -298,12 +296,12 @@ class TvRenamr(object):
             log.debug('Specified ' + r + ' season digits')
             s = season.replace('1,2', r)
             regex = regex.replace('%s{' + r + '}', s)
-            log.debug('Season regex set: %s' % s)
+            log.debug('Season regex set: {0}'.format(s))
 
         # %s
         if '%s' in regex:
             regex = regex.replace('%s', season)
-            log.debug('Default season regex set: %s' % regex)
+            log.debug('Default season regex set: {0}'.format(regex))
 
         # episode number
         # %e{n}
@@ -313,12 +311,12 @@ class TvRenamr(object):
             log.debug('User specified' + r + ' episode digits')
             e = episode.replace('2', r)
             regex = regex.replace('%e{' + r + '}', e)
-            log.debug('Episode regex set: %s' % e)
+            log.debug('Episode regex set: {0}'.format(e))
 
         # %e
         if '%e' in regex:
             regex = regex.replace('%e', episode)
-            log.debug('Default episode regex set: %s' % regex)
+            log.debug('Default episode regex set: {0}'.format(regex))
 
         return regex
 

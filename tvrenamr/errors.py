@@ -1,6 +1,8 @@
 import logging
 
+
 log = logging.getLogger('Error')
+
 
 error = 'Alert: '
 
@@ -12,9 +14,8 @@ class AlreadyNamedException(Exception):
 
     :param fn: The file that is already in the correct naming format.
     """
-
     def __init__(self, fn):
-        log.error('Already in correct naming format: %s' % fn)
+        log.error('Already in correct naming format: {0}'.format(fn))
 
 
 class ConfigNotFoundException(Exception):
@@ -25,11 +26,10 @@ class ConfigNotFoundException(Exception):
     :param fn: The destination file name.
     :param dest: The destination directory.
     """
-
     def __init__(self):
         log.error('A config could not be found. Please place one in either '
-                    '~/.tvrenamr/config.yml or the tvrenamr root directory. '
-                    'An example config: http://gist.github.com/586062')
+                  '~/.tvrenamr/config.yml or the tvrenamr root directory. '
+                  'An example config: http://gist.github.com/586062')
 
 
 class EmptyEpisodeNameException(Exception):
@@ -39,10 +39,9 @@ class EmptyEpisodeNameException(Exception):
     This is usually seen when a season is new enough that the episode names
     aren't fully known
     """
-
     def __init__(self, library):
-        log.error('The episode name was not found. The record on %s is likely '
-                    'incomplete.' % library)
+        log.error('The episode name was not found. The record on {0} is likely '
+                  'incomplete.'.format(library))
 
 
 class EpisodeAlreadyExistsInDirectoryException(Exception):
@@ -53,9 +52,8 @@ class EpisodeAlreadyExistsInDirectoryException(Exception):
     :param fn: The destination file name.
     :param dest: The destination directory.
     """
-
     def __init__(self, destination_path):
-        log.error('File already exists: %s' % destination_path)
+        log.error('File already exists: {0}'.format(destination_path))
 
 
 class EpisodeNotFoundException(Exception):
@@ -68,9 +66,9 @@ class EpisodeNotFoundException(Exception):
     :param season: The season number that was searched for.
     :param episode: The episode number that was searched for.
     """
-
     def __init__(self, library, show, season, episode):
-        log.error('"%s - %s%s" could not be found on %s' % (show, season, episode, library))
+        args = (show, season, episode, library)
+        log.error('"{0} - {1}{2}" could not be found on {3}'.format(*args))
 
 
 class IncorrectCustomRegularExpressionSyntaxException(Exception):
@@ -79,10 +77,9 @@ class IncorrectCustomRegularExpressionSyntaxException(Exception):
 
     :param regex: The regular expression.
     """
-
     def __init__(self, regex):
         log.error('The regular expression provided does not contain the '
-                    'required custom syntax.')
+                  'required custom syntax.')
 
 
 class InvalidXMLException(Exception):
@@ -92,10 +89,9 @@ class InvalidXMLException(Exception):
     :param library: The library the exception was raised in.
     :param show: The show name.
     """
-
     def __init__(self, library, show):
-        log.error('The XML file retrieved from %s was empty or invalid while '
-                  'looking for %s.' % (library, show))
+        log.error('The XML file retrieved from {0} was empty or invalid while '
+                  'looking for {1}.'.format(library, show))
         log.error('This could be indicative of a Show or Episode not being found.')
 
 
@@ -103,9 +99,8 @@ class NoMoreLibrariesException(Exception):
     """
     All libraries have returned invalid XML.
     """
-
     def __init__(self, lib, lib_err):
-        # display the error of the last lib
+        # TODO: display the error of the last lib
         log.error('No libraries left to fall back to.')
 
 
@@ -115,7 +110,6 @@ class OutputFormatMissingSyntaxException(Exception):
 
     :param syntax: The syntax string required.
     """
-
     def __init__(self, syntax):
         if len(syntax) > 1:
             t = ', '
@@ -123,20 +117,7 @@ class OutputFormatMissingSyntaxException(Exception):
         else:
             errors = syntax[0]
         log.error('The output format is missing the following format elements: '
-                    '%s' % errors)
-
-
-class SeriesIdNotFoundException(Exception):
-    """
-    SUPERFLOUOUS!
-
-    :param library:
-    :param show: The show name searched for.
-    """
-
-    def __init__(self, library, show):
-        log.error('Id could not be found for \'%s\' while searching %s' % \
-                    (show, library))
+                  '{0}'.format(errors))
 
 
 class ShowNotFoundException(Exception):
@@ -146,9 +127,8 @@ class ShowNotFoundException(Exception):
     :param library: The library that was searched.
     :param show: The show name searched for.
     """
-
     def __init__(self, library, show):
-        log.error('\'%s\' could not be found on %s' % (show, library))
+        log.error('"{0}" could not be found on {1}'.format(show, library))
 
 
 class ShowNotInConfigException(Exception):
@@ -157,10 +137,9 @@ class ShowNotInConfigException(Exception):
 
     :param show: The show name not found.
     """
-
     def __init__(self, show):
-        log.debug('\'%s\' is not in the Config. Falling back on name extracted from'
-                    ' the filename' % show)
+        log.debug('"{0}" is not in the Config. Falling back on name extracted from'
+                  ' the filename'.format(show))
 
 
 class ShowNotInExceptionsList(Exception):
@@ -169,9 +148,8 @@ class ShowNotInExceptionsList(Exception):
 
     :param show: The show name not found.
     """
-
     def __init__(self, show):
-        log.warning('%s is not in the Exceptions list' % show)
+        log.warning('{0} is not in the Exceptions list'.format(show))
 
 
 class NoLeadingTheException(Exception):
@@ -180,21 +158,20 @@ class NoLeadingTheException(Exception):
 
     :param show: The show name with no leading The.
     """
-
     def __init__(self, show):
-        log.warning('%s has no leading The' % show)
+        log.warning('{0} has no leading The'.format(show))
 
 
 class NoNetworkConnectionException(Exception):
     """
     Raised when no connection to the desired library is detected
-    This will be raised if either the library or the internet connection itself
-    is down
-    """
 
+    This will be raised if either the library or the internet connection itself
+    is down.
+    """
     def __init__(self, library):
-        log.error('%sTV Renamr could not connect to %s. Please check your '
-                    'internet connection and try again.' % (error, library))
+        log.error('{0}TV Renamr could not connect to {1}. Please check your '
+                  'internet connection and try again.'.format(error, library))
 
 
 class UnexpectedFormatException(Exception):
@@ -203,7 +180,5 @@ class UnexpectedFormatException(Exception):
 
     :param fn: The file name that was in an unexpected format.
     """
-
     def __init__(self, fn):
-        log.error('File in an unexpected format: %s' % fn)
-
+        log.error('File in an unexpected format: {0}'.format(fn))

@@ -50,8 +50,8 @@ class FrontEnd(object):
             for root, dirs, files in os.walk(glob):
                 for fname in files:
                     # If we have a file we should be ignoring and skipping.
-                    if ignore_filelist is not None and \
-                        (os.path.join(root, fname) in ignore_filelist):
+                    full_path = os.path.join(root, fname)
+                    if ignore_filelist is not None and (full_path in ignore_filelist):
                         continue
                     self.file_list.append((root, fname))
                 # Don't want a recursive walk?

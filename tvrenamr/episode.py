@@ -36,7 +36,7 @@ class Episode(object):
         it with a leading zero.
         """
         if item is 'episode_2':
-            return '0%s' % self.episode
+            return '0{0}'.format(self.episode)
         return object.__getattribute__(self, item)
 
     def __repr__(self):

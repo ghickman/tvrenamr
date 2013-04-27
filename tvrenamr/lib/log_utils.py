@@ -1,5 +1,5 @@
 import os
-import os.path
+
 
 def convert_log_level(level=26):
     """
@@ -20,11 +20,15 @@ def convert_log_level(level=26):
 
     return level
 
+
 def get_log_file(filename=None):
     # make sure the log directory exists and place the log file there
     if filename == None:
-        filename = os.path.join(os.path.expanduser('~'), \
-                                    '.tvrenamr', 'tvrenamr.log')
+        filename = os.path.join(
+            os.path.expanduser('~'),
+            '.tvrenamr',
+            'tvrenamr.log'
+        )
     filename = filename.replace('~', os.path.expanduser('~'))
     try:
         os.makedirs(os.path.split(filename)[0])

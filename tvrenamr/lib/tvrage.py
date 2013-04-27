@@ -4,33 +4,33 @@ from xml.etree.ElementTree import fromstring, ParseError
 
 import requests
 
-from tvrenamr.errors import (EpisodeNotFoundException,
-                             InvalidXMLException,
-                             NoNetworkConnectionException,
-                             ShowNotFoundException)
+from .. import errors
+
 
 log = logging.getLogger('Tv Rage')
+
 
 url_name = "http://services.tvrage.com/feeds/search.php?show="
 url_ep = "http://services.tvrage.com/feeds/full_show_info.php?sid="
 
-class TvRage():
+
+class TvRage(object):
     def __init__(self, show, season, episode):
         """
         :param show_name: The show name of the episode title to be retrieved.
         """
         self.show = show
-        log.info('Looking up show: %s' % self.show)
+        log.info('Looking up show: {0}'.format(self.show))
         self.season = str(int(season))
         self.episode = str(int(episode))
 
-        self.show_id, self.show = self.__get_show_id()
-        log.debug('Retrieved show id: %s' % self.show_id)
-        log.debug('Retrieved canonical show name: %s' % self.show)
-        self.title = self.__get_episode_name()
-        log.debug('Retrieved episode name: %s' % self.title)
+        self.show_id, self.show = self._get_show_id()
+        log.debug('Retrieved show id: {0}'.format(self.show_id))
+        log.debug('Retrieved canonical show name: {0}'.format(self.show))
+        self.title = self._get_episode_name()
+        log.debug('Retrieved episode name: {0}'.format(self.title))
 
-    def __get_show_id(self):
+    def _get_show_id(self):
         """
         Retrieves the show ID of the show name passed in when the class is instantiated.
 
@@ -41,38 +41,38 @@ class TvRage():
         :returns: A show ID.
         :rtype: A string.
         """
-        log.debug('Retrieving series id for %s' % self.show)
+        log.debug('Retrieving series id for {0}'.format(self.show))
         try:
             quoted_show = urllib.quote(self.show)
         except AttributeError:
             # python 3
             quoted_show = urllib.parse.quote(self.show)
-        url = '%s%s' % (url_name, quoted_show)
-        log.debug('Series url: %s' % url)
+        url = '{0}{1}'.format(url_name, quoted_show)
+        log.debug('Series url: {0}'.format(url))
 
         req = requests.get(url)
         if not req.ok:
-            raise NoNetworkConnectionException('tvrage.com')
+            raise errors.NoNetworkConnectionException('tvrage.com')
 
         log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(req.content)
         except ParseError:
-            raise InvalidXMLException(log.name, self.show)
+            raise errors.InvalidXMLException(log.name, self.show)
         if tree is None or len(tree) is 0:
-            raise InvalidXMLException(log.name, self.show)
+            raise errors.InvalidXMLException(log.name, self.show)
         log.debug('XML: Parsed')
         log.debug('XML retrieved, searching for series')
 
         for name in tree.findall('show'):
             show = name.find('name').text
             if show.lower() == self.show.lower():
-                log.debug('Series chosen %s' % self.show)
+                log.debug('Series chosen {0}'.format(self.show))
                 return name.find('showid').text, show
             else:
-                raise ShowNotFoundException(log.name, self.show)
+                raise errors.ShowNotFoundException(log.name, self.show)
 
-    def __get_episode_name(self):
+    def _get_episode_name(self):
         """
         Retrieves the episode title for the given episode from tvrage.com.
 
@@ -84,26 +84,30 @@ class TvRage():
         :returns: The series name and title. Series name is returned so that it is formatted correctly.
         :rtype: A dictionary whose keys are 'series' and 'title'.
         """
-        episode_url = '%s%s' % (url_ep, self.show_id)
-        log.debug('Episode URL: %s' % episode_url)
+        episode_url = '{0}{1}'.format(url_ep, self.show_id)
+        log.debug('Episode URL: {0}'.format(episode_url))
 
         log.debug('Attempting to retrieve episode name')
         req = requests.get(episode_url)
         if not req.ok:
-            raise EpisodeNotFoundException(log.name, self.show, self.season,
-                                           self.episode)
+            raise errors.EpisodeNotFoundException(
+                log.name,
+                self.show,
+                self.season,
+                self.episode
+            )
         log.debug('XML: Retreived')
 
         log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(req.content)
         except ParseError:
-            raise InvalidXMLException(log.name, self.show)
+            raise errors.InvalidXMLException(log.name, self.show)
         if tree is None:
-            raise InvalidXMLException(log.name, self.show)
+            raise errors.InvalidXMLException(log.name, self.show)
         log.debug('XML: Parsed')
-        log.debug('XML: Episode document retrived for %s - %s%s' % (self.show,
-                  self.season, self.episode))
+        args = (self.show, self.season, self.episode)
+        log.debug('XML: Episode document retrived for {0} - {1}'.format(*args))
 
         # In a single digit episode number add a zero
         if len(self.episode) == 1 and self.episode[:1] != '0':
@@ -117,8 +121,11 @@ class TvRage():
                     if e.find('seasonnum').text == self.episode:
                         episode = e.find('title').text
         if not episode:
-            raise EpisodeNotFoundException(log.name, self.show, self.season,
-                                           self.episode)
+            raise errors.EpisodeNotFoundException(
+                log.name,
+                self.show,
+                self.season,
+                self.episode
+            )
 
         return episode
-
