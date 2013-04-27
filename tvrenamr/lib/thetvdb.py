@@ -1,6 +1,10 @@
 import logging
 import urllib
-from xml.etree.ElementTree import fromstring, ParseError
+from xml.etree.ElementTree import fromstring
+try:  # XML Exception class import dance
+    from xml.etree.ElementTree import ParseError
+except ImportError:  # python 2.6
+    from xml.parsers.expat import ExpatError as ParseError
 
 import requests
 
