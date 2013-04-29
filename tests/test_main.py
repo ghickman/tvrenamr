@@ -66,7 +66,7 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         assert_equal(self.tv.build_path(
-            episode, rename_dir=self.files, organise=False, format='%n - %s%e - %t%x'),
+            episode, rename_dir=self.files, organise=False, output_format='%n - %s%e - %t%x'),
             join(self.files, 'Chuck - 108 - Chuck Versus the Truth.avi'))
 
     def test_setting_an_episodes_format_as_season_episode_title_name(self):
@@ -75,7 +75,7 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         assert_equal(self.tv.build_path(
-            episode, rename_dir=self.files, organise=False, format='%s - %e - %t - %n%x'),
+            episode, rename_dir=self.files, organise=False, output_format='%s - %e - %t - %n%x'),
             join(self.files, '1 - 08 - Chuck Versus the Truth - Chuck.avi'))
 
     def test_setting_an_episodes_format_as_title_episode_season_name(self):
@@ -84,7 +84,7 @@ class TestMain(BaseTest):
         episode.title = self.tv.retrieve_episode_name(episode)
         episode.show_name = self.tv.format_show_name(episode.show_name)
         assert_equal(self.tv.build_path(
-            episode, rename_dir=self.files, organise=False, format='%t - %e - %s - %n%x'),
+            episode, rename_dir=self.files, organise=False, output_format='%t - %e - %s - %n%x'),
             join(self.files, 'Chuck Versus the Truth - 08 - 1 - Chuck.avi'))
 
     def test_extracting_season_from_file_format_s0e00(self):
