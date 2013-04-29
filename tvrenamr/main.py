@@ -158,7 +158,7 @@ class TvRenamr(object):
 
         return show_name
 
-    def build_path(self, episode, rename_dir=None, organise=None, format=None):
+    def build_path(self, episode, rename_dir=None, organise=None, output_format=None):
         """
         Build the full destination path and filename of the renamed file Set
         the output format for the file name of a renamed show.
@@ -188,11 +188,11 @@ class TvRenamr(object):
         if len(episode.episode) == 1:
             episode.episode = '0' + episode.episode
 
-        if format is None:
-            format = self.config.get(episode.show_name, 'format') or '%n - %s%e - %t%x'
-        if '%x' not in format:
-            format = format + '%x'
-        format = format.replace('%n', episode.show_name)\
+        if output_format is None:
+            output_format = self.config.get(episode.show_name, 'format') or '%n - %s%e - %t%x'
+        if '%x' not in output_format:
+            output_format = output_format + '%x'
+        output_format = output_format.replace('%n', episode.show_name)\
                         .replace('%s', str(int(episode.season)))\
                         .replace('%e', episode.episode)\
                         .replace('%t', self.__clean_names(episode.title))\
@@ -211,7 +211,7 @@ class TvRenamr(object):
                                     episode.show_name, episode.season)
 
         log.log(22, 'Directory: {0}'.format(rename_dir))
-        path = os.path.join(rename_dir, format)
+        path = os.path.join(rename_dir, output_format)
         log.debug('Full path: {0}'.format(path))
         return path
 
