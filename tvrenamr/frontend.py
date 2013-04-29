@@ -102,7 +102,8 @@ class FrontEnd(object):
                                                 override=options.show_override)
 
             path = tv.build_path(episode, rename_dir=options.rename_dir,
-                                    organise=options.organise, format=options.output_format)
+                                 organise=options.organise,
+                                 output_format=options.output_format)
 
             tv.rename(filename, path)
         except KeyboardInterrupt:

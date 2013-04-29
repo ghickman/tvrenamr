@@ -5,8 +5,9 @@ log = logging.getLogger('Episode')
 
 
 class Episode(object):
+    output_format = '%n - %s%e - %t.%x'
 
-    def __init__(self, format='%n - %s%e - %t.%x', **kwargs):
+    def __init__(self, output_format=None, **kwargs):
         if kwargs.get('show_name'):
             self.show_name = kwargs.get('show_name')
         if kwargs.get('season'):
@@ -14,7 +15,9 @@ class Episode(object):
         if kwargs.get('episode'):
             self.episode = kwargs.get('episode')
         self.extension = kwargs.get('extension')
-        self.format = format
+
+        if output_format:
+            self.output_format = output_format
 
     def __getattr__(self, item):
         msg = 'Missing {0}: Set it with {1} or use {2} in your --regex string'
@@ -40,7 +43,7 @@ class Episode(object):
         return object.__getattribute__(self, item)
 
     def __repr__(self):
-        filename = self.format
+        filename = self.output_format
         try:
             filename = filename.replace('%n', self.show_name)
         except TypeError:
