@@ -38,29 +38,13 @@ class TvRenamr(object):
         """
         fn = fn.replace("_", ".").replace(" ", ".")  # santise filename
         log.log(22, 'Renaming: {0}'.format(fn))
-        regex = self.__build_regex(user_regex)
-        log.debug('Renaming using: ' + regex)
-        m = re.compile(regex).match(fn)
-        if not m:
+
+        regex = self._build_regex(user_regex)
+        matches = re.match(regex, fn)
+        if not matches:
             raise errors.UnexpectedFormatException(fn)
 
-        credentials = {}
-        try:
-            credentials.update({'show_name': m.group('show_name').replace('.', ' ').strip()})
-        except IndexError:
-            pass
-        try:
-            credentials.update({'season': m.group('season')})
-        except IndexError:
-            pass
-        try:
-            credentials.update({'episode': m.group('episode')})
-        except IndexError:
-            pass
-        credentials.update({'extension': os.path.splitext(fn)[1]})
-        msg = ', '.join('{0}: {1}'.format(key, value) for key, value in credentials.items())
-        log.debug('Filename yielded: {0}'.format(msg))
-        return credentials
+        log.debug('Renaming using: {0}'.format(regex))
 
         return self._build_credentials(fn, matches)
 
@@ -81,11 +65,12 @@ class TvRenamr(object):
         [libraries.insert(0, libraries.pop(libraries.index(lib)))
         for lib in libraries if lib.__name__.lower() == library]
 
+        # TODO: Make this bit not suck.
         if canonical:
-            episode.show_name = canonical
+            episode._file.show_name = canonical
         else:
-            episode.show_name = self.config.get_canonical(episode.show_name)
-        log.debug('Show Name: {0}'.format(episode.show_name))
+            episode._file.show_name = self.config.get_canonical(episode._file.show_name)
+        log.debug('Show Name: {0}'.format(episode._file.show_name))
 
         # loop the libraries until one works
         for lib in libraries:
@@ -101,8 +86,8 @@ class TvRenamr(object):
                     raise errors.NoMoreLibrariesException(lib, e)
                 continue
 
-        log.info('Episode: {0}'.format(self.lookup.name))
-        return self.lookup.name
+        log.info('Episode: {0}'.format(self.lookup.title))
+        return self.lookup.title
 
     def format_show_name(self, show_name, the=None, override=None):
         if the is None:
@@ -127,7 +112,7 @@ class TvRenamr(object):
 
         return show_name
 
-    def build_path(self, episode, rename_dir=None, organise=None, output_format=None):
+    def build_path(self, _file, rename_dir=None, organise=None):
         """Build the full destination path and filename of the renamed file.
 
         By default the format is:
@@ -179,8 +164,29 @@ class TvRenamr(object):
         log.log(26, 'Renamed: "{0}"'.format(destination_file))
         return destination_filepath
 
-    def __build_organise_path(self, start_path, show_name, season_number):
+    def _build_credentials(self, fn, matches):
+        """Build a dictionary of a file's extracted credentials."""
+        details = {}
 
+        try:
+            details.update({'show_name': matches.group('show_name').replace('.', ' ').strip()})
+        except IndexError:
+            pass
+        try:
+            details.update({'season': str(int(matches.group('season')))})
+        except IndexError:
+            pass
+
+        details.update({
+            'episodes': filter(lambda x: x is not None, matches.groups()[2:]),
+            'extension': os.path.splitext(fn)[1]
+        })
+
+        msg = ', '.join('{0}: {1}'.format(key, value) for key, value in details.items())
+        log.debug('Filename yielded: {0}'.format(msg))
+        return details
+
+    def _build_organise_path(self, start_path, show_name, season_number):
         """Constructs a directory path using the show's details.
 
         Show name and season number of an episode dictate the folder structure.
@@ -194,7 +200,7 @@ class TvRenamr(object):
             log.debug('Directories created for path: ' + path)
         return path
 
-    def __build_regex(self, regex=None, partial=False):
+    def _build_regex(self, regex=None, partial=False):
         """Builds the regular expression to extract a files details.
 
         Custom syntax can be used in the regular expression to help specify
@@ -208,10 +214,12 @@ class TvRenamr(object):
         """
         series = r"(?P<show_name>[\w\s.',_-]+)"
         season = r"(?P<season>\d{1,2})"
-        episode = r"(?P<episode>\d{2})"
+        episode = r"(\d{2})"
+        second_episode = r".E?(\d{2})*"
 
         if regex is None:
-            return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"
+            # Build default regex
+            return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + second_episode
 
         if not partial and not ('%n' in regex or '%s' in regex or '%e' in regex):
             raise errors.IncorrectCustomRegularExpressionSyntaxException(regex)
@@ -224,7 +232,7 @@ class TvRenamr(object):
         if '%s{' in regex:
             log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
-            log.debug('Specified ' + r + ' season digits')
+            log.debug('Specified {0} season digits'.format(r))
             s = season.replace('1,2', r)
             regex = regex.replace('%s{' + r + '}', s)
             log.debug('Season regex set: {0}'.format(s))
@@ -239,7 +247,7 @@ class TvRenamr(object):
         if '%e{' in regex:
             log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
-            log.debug('User specified' + r + ' episode digits')
+            log.debug('User specified {0} episode digits'.format(r))
             e = episode.replace('2', r)
             regex = regex.replace('%e{' + r + '}', e)
             log.debug('Episode regex set: {0}'.format(e))
@@ -251,31 +259,13 @@ class TvRenamr(object):
 
         return regex
 
-    def __clean_names(self, filename, before=':', after=','):
-        """
-        Cleans the string passed in, making it be safe for all file systems.
-        Also allows the user to specify the new characters to be used.
-
-        :param fn: The string to replace characters in.
-        :type fn: A string.
-
-        :param original: The character to replace.
-        :type original: A string that defaults to a colon ':'.
-
-        :param after: The replacement character.
-        :type after: A string that defaults to a comma ','.
-
-        :returns: The file
-        :rtype: A string.
-        """
-        return filename.replace(before, after)
-
-    def __move_leading_the_to_trailing_the(self, show_name):
+    def _move_leading_the_to_trailing_the(self, show_name):
         """Moves the leading 'The' of a show name to a trailing 'The'.
+
         A comma and space are added before the new 'The'.
 
         """
         if not(show_name.startswith('The ')):
             return show_name
-        log.debug('Moving leading \'The\' to end of: ' + show_name)
+        log.debug("Moving leading 'The' to end of: {0}".format(show_name))
         return show_name[4:] + ', The'
