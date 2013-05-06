@@ -276,8 +276,8 @@ class TvRenamr(object):
         :rtype: A string.
         """
         series = r"(?P<show_name>[\w\s.',_-]+)"
-        season = r"(?P<season>[\d]{1,2})"
-        episode = r"(?P<episode>[\d]{2})"
+        season = r"(?P<season>\d{1,2})"
+        episode = r"(?P<episode>\d{2})"
 
         if regex is None:
             return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + r"\.|-"
