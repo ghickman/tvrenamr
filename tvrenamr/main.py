@@ -124,7 +124,7 @@ class TvRenamr(object):
                 args = [episode._file.show_name, episode._file.season, episode.number]
                 self.lookup = lib(*args)  # assign to self for use in format_show_name
                 break  # first library worked - nothing to see here
-            except (errors.EmptyEpisodeNameException, errors.EpisodeNotFoundException,
+            except (errors.EmptyEpisodeTitleException, errors.EpisodeNotFoundException,
                     errors.InvalidXMLException, errors.NoNetworkConnectionException,
                     errors.ShowNotFoundException) as e:
                 if lib == libraries[-1]:

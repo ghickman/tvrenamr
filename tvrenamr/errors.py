@@ -32,7 +32,7 @@ class ConfigNotFoundException(Exception):
                   'An example config: http://gist.github.com/586062')
 
 
-class EmptyEpisodeNameException(Exception):
+class EmptyEpisodeTitleException(Exception):
     """
     Raised when the episode XML document is returned but the name field is empty
 

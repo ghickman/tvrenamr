@@ -115,7 +115,7 @@ class FrontEnd(object):
                 self._stop_dry_run()
             sys.exit(1)
         except (AttributeError,
-                EmptyEpisodeNameException,
+                EmptyEpisodeTitleException,
                 EpisodeAlreadyExistsInDirectoryException,
                 EpisodeNotFoundException,
                 IncorrectCustomRegularExpressionSyntaxException,

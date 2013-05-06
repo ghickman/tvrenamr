@@ -31,8 +31,8 @@ class TvRage(object):
         self.show_id, self.show = self._get_show_id()
         log.debug('Retrieved show id: {0}'.format(self.show_id))
         log.debug('Retrieved canonical show name: {0}'.format(self.show))
-        self.name = self._get_episode_name()
-        log.debug('Retrieved episode name: {0}'.format(self.name))
+        self.title = self._get_episode_title()
+        log.debug('Retrieved episode title: {0}'.format(self.title))
 
     def _get_show_id(self):
         """
@@ -76,9 +76,9 @@ class TvRage(object):
             else:
                 raise errors.ShowNotFoundException(log.name, self.show)
 
-    def _get_episode_name(self):
+    def _get_episode_title(self):
         """
-        Retrieves the episode name for the given episode from tvrage.com.
+        Retrieves the episode title for the given episode from tvrage.com.
 
         :raises EpisodeNotFoundException: Raised when the url for an episode
         doesn't exist or the network cannot be reached.
@@ -91,7 +91,7 @@ class TvRage(object):
         episode_url = '{0}{1}'.format(url_ep, self.show_id)
         log.debug('Episode URL: {0}'.format(episode_url))
 
-        log.debug('Attempting to retrieve episode name')
+        log.debug('Attempting to retrieve episode title')
         req = requests.get(episode_url)
         if not req.ok:
             raise errors.EpisodeNotFoundException(
@@ -117,7 +117,7 @@ class TvRage(object):
         if len(self.episode) == 1 and self.episode[:1] != '0':
             self.episode = '0' + self.episode
 
-        log.debug('XML: Attempting to finding the episode name')
+        log.debug('XML: Attempting to finding the episode title')
         episode = None
         for s in tree.find('Episodelist'):
             if s.get('no') == self.season:

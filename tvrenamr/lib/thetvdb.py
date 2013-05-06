@@ -32,8 +32,8 @@ class TheTvDb(object):
         self.show_id, self.show = self._get_show_id()
         log.debug('Retrieved show id: {0}'.format(self.show_id))
         log.debug('Retrieved canonical show name: {0}'.format(self.show))
-        self.name = self._get_episode_name()
-        log.debug('Retrieved episode name: {0}'.format(self.name))
+        self.title = self._get_episode_title()
+        log.debug('Retrieved episode title: {0}'.format(self.title))
 
     def _get_show_id(self):
         """
@@ -77,24 +77,24 @@ class TheTvDb(object):
             else:
                 raise errors.ShowNotFoundException(log.name, self.show)
 
-    def _get_episode_name(self):
+    def _get_episode_title(self):
         """
-        Retrieves the episode name for the given episode from thetvdb.com.
+        Retrieves the episode title for the given episode from thetvdb.com.
 
         :raises EpisodeNotFoundException: Raised when the url for an episode
         doesn't exist or the network cannot be reached.
         :raises XMLEmptyException: Raised when the XML document returned from
         The Tv Db is empty.
-        :raises EmptyEpisodeNameException:
+        :raises EmptyEpisodeTitleException:
 
-        :returns: The episode name.
+        :returns: The episode title.
         :rtype: String
         """
         args = (url_base, apikey, self.show_id, str(int(self.season)), str(int(self.episode)))
         episode_url = '{0}{1}/series/{2}/default/{3}/{4}/en.xml'.format(*args)
         log.debug('Episode URL: {0}'.format(episode_url))
 
-        log.debug('Attempting to retrieve episode name')
+        log.debug('Attempting to retrieve episode title')
         req = requests.get(episode_url)
         if not req.ok:
             raise errors.EpisodeNotFoundException(
@@ -116,9 +116,9 @@ class TheTvDb(object):
         args = (self.show, self.season, self.episode)
         log.debug('XML: Episode document retrived for {0} - {1}{2}'.format(*args))
 
-        log.debug('XML: Attempting to find the episode name')
+        log.debug('XML: Attempting to find the episode title')
         episode = tree.find('Episode').findtext('EpisodeName')
         if not episode:
-            raise errors.EmptyEpisodeNameException
+            raise errors.EmptyEpisodeTitleException
 
         return episode
