@@ -123,7 +123,7 @@ class TvRage(object):
             if s.get('no') == self.season:
                 for e in s.findall('episode'):
                     if e.find('seasonnum').text == self.episode:
-                        episode = e.find('name').text
+                        episode = e.find('title').text
         if not episode:
             raise errors.EpisodeNotFoundException(
                 log.name,
