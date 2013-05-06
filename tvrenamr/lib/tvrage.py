@@ -21,7 +21,7 @@ url_ep = "http://services.tvrage.com/feeds/full_show_info.php?sid="
 class TvRage(object):
     def __init__(self, show, season, episode):
         """
-        :param show_name: The show name of the episode title to be retrieved.
+        :param show_name: The show name of the episode name to be retrieved.
         """
         self.show = show
         log.info('Looking up show: {0}'.format(self.show))
@@ -31,8 +31,8 @@ class TvRage(object):
         self.show_id, self.show = self._get_show_id()
         log.debug('Retrieved show id: {0}'.format(self.show_id))
         log.debug('Retrieved canonical show name: {0}'.format(self.show))
-        self.title = self._get_episode_name()
-        log.debug('Retrieved episode name: {0}'.format(self.title))
+        self.name = self._get_episode_name()
+        log.debug('Retrieved episode name: {0}'.format(self.name))
 
     def _get_show_id(self):
         """
@@ -78,15 +78,15 @@ class TvRage(object):
 
     def _get_episode_name(self):
         """
-        Retrieves the episode title for the given episode from tvrage.com.
+        Retrieves the episode name for the given episode from tvrage.com.
 
         :raises EpisodeNotFoundException: Raised when the url for an episode
         doesn't exist or the network cannot be reached.
         :raises XMLEmptyException: Raised when the XML document returned from
         Tv Rage is empty.
 
-        :returns: The series name and title. Series name is returned so that it is formatted correctly.
-        :rtype: A dictionary whose keys are 'series' and 'title'.
+        :returns: The series name and name. Series name is returned so that it is formatted correctly.
+        :rtype: A dictionary whose keys are 'series' and 'name'.
         """
         episode_url = '{0}{1}'.format(url_ep, self.show_id)
         log.debug('Episode URL: {0}'.format(episode_url))
@@ -123,7 +123,7 @@ class TvRage(object):
             if s.get('no') == self.season:
                 for e in s.findall('episode'):
                     if e.find('seasonnum').text == self.episode:
-                        episode = e.find('title').text
+                        episode = e.find('name').text
         if not episode:
             raise errors.EpisodeNotFoundException(
                 log.name,

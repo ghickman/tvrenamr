@@ -22,7 +22,7 @@ url_series = 'GetSeries.php?seriesname='
 class TheTvDb(object):
     def __init__(self, show, season, episode):
         """
-        :param show_name: The show name of the episode title to be retrieved.
+        :param show_name: The show name of the episode name to be retrieved.
         """
         self.show = show
         self.season = season
@@ -32,8 +32,8 @@ class TheTvDb(object):
         self.show_id, self.show = self._get_show_id()
         log.debug('Retrieved show id: {0}'.format(self.show_id))
         log.debug('Retrieved canonical show name: {0}'.format(self.show))
-        self.title = self._get_episode_name()
-        log.debug('Retrieved episode name: {0}'.format(self.title))
+        self.name = self._get_episode_name()
+        log.debug('Retrieved episode name: {0}'.format(self.name))
 
     def _get_show_id(self):
         """
@@ -79,7 +79,7 @@ class TheTvDb(object):
 
     def _get_episode_name(self):
         """
-        Retrieves the episode title for the given episode from thetvdb.com.
+        Retrieves the episode name for the given episode from thetvdb.com.
 
         :raises EpisodeNotFoundException: Raised when the url for an episode
         doesn't exist or the network cannot be reached.
@@ -87,7 +87,7 @@ class TheTvDb(object):
         The Tv Db is empty.
         :raises EmptyEpisodeNameException:
 
-        :returns: The episode title.
+        :returns: The episode name.
         :rtype: String
         """
         args = (url_base, apikey, self.show_id, str(int(self.season)), str(int(self.episode)))

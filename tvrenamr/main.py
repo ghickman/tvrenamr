@@ -121,8 +121,8 @@ class TvRenamr(object):
         for lib in libraries:
             try:
                 log.debug('Using {0}'.format(lib.__name__))
-                self.library = lib(episode.show_name, episode.season, episode.episode)
-                break # first library worked - nothing to see here
+                lookup = lib(episode._file.show_name, episode._file.season, episode.number)
+                break  # first library worked - nothing to see here
             except (errors.EmptyEpisodeNameException, errors.EpisodeNotFoundException,
                     errors.InvalidXMLException, errors.NoNetworkConnectionException,
                     errors.ShowNotFoundException) as e:
@@ -130,10 +130,8 @@ class TvRenamr(object):
                     raise errors.NoMoreLibrariesException(lib, e)
                 continue
 
-        self.title = self.library.title
-        log.info('Episode: {0}'.format(self.title))
-
-        return self.title
+        log.info('Episode: {0}'.format(lookup.name))
+        return lookup.name
 
     def format_show_name(self, show_name, the=None, override=None):
         if the is None:
