@@ -101,7 +101,7 @@ class TvRenamr(object):
         :param the:
         :param library: The library to search.
 
-        :returns: The episode title.
+        :returns: The episode name.
         :rtype: A string.
         """
         libraries = [
@@ -121,7 +121,8 @@ class TvRenamr(object):
         for lib in libraries:
             try:
                 log.debug('Using {0}'.format(lib.__name__))
-                lookup = lib(episode._file.show_name, episode._file.season, episode.number)
+                args = [episode._file.show_name, episode._file.season, episode.number]
+                self.lookup = lib(*args)  # assign to self for use in format_show_name
                 break  # first library worked - nothing to see here
             except (errors.EmptyEpisodeNameException, errors.EpisodeNotFoundException,
                     errors.InvalidXMLException, errors.NoNetworkConnectionException,
@@ -130,8 +131,8 @@ class TvRenamr(object):
                     raise errors.NoMoreLibrariesException(lib, e)
                 continue
 
-        log.info('Episode: {0}'.format(lookup.name))
-        return lookup.name
+        log.info('Episode: {0}'.format(self.lookup.name))
+        return self.lookup.name
 
     def format_show_name(self, show_name, the=None, override=None):
         if the is None:
@@ -141,7 +142,7 @@ class TvRenamr(object):
             show_name = self.config.get_output(show_name)
             log.debug('Using config output name: {0}'.format(show_name))
         except errors.ShowNotInConfigException:
-            show_name = self.library.show
+            show_name = self.lookup.show
             msg = 'Using the formatted show name retrieved by the library: {0}'
             log.debug(msg.format(show_name))
 
