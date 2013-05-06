@@ -62,20 +62,17 @@ class TvRenamr(object):
         log.debug('Filename yielded: {0}'.format(msg))
         return credentials
 
-    def retrieve_episode_name(self, episode, library='thetvdb', canonical=None):
-        """
-        Retrieves the name of a given episode. The series name, season and
-        episode numbers must be specified to get the episode's name. The
-        library specified by the user will be used first but will fall back
-        to the other library if an error occurs.
+        return self._build_credentials(fn, matches)
+
+    def retrieve_episode_title(self, episode, library='thetvdb', canonical=None):
+        """Retrieves the title of a given episode.
+
+        The series name, season and episode numbers must be specified to get
+        the episode's title. The library specified by the user will be used
+        first but will fall back to the other library if an error occurs.
 
         The first library defaults to The Tv DB.
 
-        :param the:
-        :param library: The library to search.
-
-        :returns: The episode name.
-        :rtype: A string.
         """
         libraries = [
             TheTvDb,
@@ -183,16 +180,11 @@ class TvRenamr(object):
         return destination_filepath
 
     def __build_organise_path(self, start_path, show_name, season_number):
-        """
-        Constructs a directory path using the show name and season number of
-        an episode.
 
-        :param start_path: The root path to construct the new path under.
-        :param show_name: The show name.
-        :param season_number: The season number.
+        """Constructs a directory path using the show's details.
 
-        :return: The path to move a renamed episode to.
-        :rtype: A string.
+        Show name and season number of an episode dictate the folder structure.
+
         """
         if start_path[-1:] != '/':
             start_path = start_path + '/'
@@ -203,20 +195,16 @@ class TvRenamr(object):
         return path
 
     def __build_regex(self, regex=None, partial=False):
-        """
-        Builds the regular expression to extract a files details. Custom syntax
-        can be used in the regular expression to help specify parts of the
-        episode's file name. These custom syntax snippets are replaced by the
-        regular expression blocks show.
+        """Builds the regular expression to extract a files details.
+
+        Custom syntax can be used in the regular expression to help specify
+        parts of the episode's file name. These custom syntax snippets are
+        replaced by the regular expression blocks show.
 
         %n - [\w\s.,_-]+ - The show name.
-        %s - [\d]{1,2} - The season number.
-        %e - [\d]{2} - The episode number.
+        %s - \d{1,2} - The season number.
+        %e - \d{2} - The episode number.
 
-        :param regex: The regular expression string.
-
-        :returns: An actual regular expression.
-        :rtype: A string.
         """
         series = r"(?P<show_name>[\w\s.',_-]+)"
         season = r"(?P<season>\d{1,2})"
@@ -283,18 +271,9 @@ class TvRenamr(object):
         return filename.replace(before, after)
 
     def __move_leading_the_to_trailing_the(self, show_name):
-        """
-        Moves the leading 'The' of a show name to a trailing 'The'.
+        """Moves the leading 'The' of a show name to a trailing 'The'.
         A comma and space are added before the new 'The'.
 
-        :param show_name: The show name.
-        :type show_name: A string.
-
-        :raises NoLeadingTheException: Raised when a show name doesn't have a
-        leading The.
-
-        :returns: The new show name.
-        :rtype: A string.
         """
         if not(show_name.startswith('The ')):
             return show_name
