@@ -12,7 +12,7 @@ from .main import TvRenamr
 from .options import OptionParser
 
 
-log = logging.getLogger('Core')
+log = logging.getLogger('FrontEnd')
 
 
 parser = OptionParser()
