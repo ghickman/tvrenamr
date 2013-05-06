@@ -5,10 +5,9 @@ import os
 import sys
 
 from .config import Config
-from .episode import File
 from .errors import *
 from .logs import start_logging
-from .main import TvRenamr
+from .main import File, TvRenamr
 from .options import OptionParser
 
 
