@@ -11,59 +11,32 @@ log = logging.getLogger('Core')
 
 class TvRenamr(object):
     def __init__(self, working_dir, config, debug=False, dry=False):
-        """
-        :param working_dir: The working directory.
-        :type working_dir: A string.
-
-        :param log_level: The log level to set.
-        :type log_level: A string that defaults to info.
-
-        :param log_file: The location to use for the log file
-        :type log_file: A string or None.
-        """
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
         self.config = config
 
     def remove_part_from_multiple_episodes(self, show_name):
-        """
-        In episode titles of multiple part episodes that use the format
+        """Remove the string "Part " from a filename.
+
+        In episode titles of multi-part episodes that use the format
         (Part n) remove the 'Part ' section so the format is (n).
 
-        :param show_name: The show name to sanitise.
-        :type show_name: A string.
-
-        :returns: The show name with sanitised multi-episode section.
-        :rtype: A string.
         """
         log.debug('Removing Part from episode name')
         return show_name.replace('(Part ', '(')
 
     def extract_details_from_file(self, fn, user_regex=None):
-        """
+        """Using a regular expression extract information from the filename passed in.
+
         Looks at the file given and extracts from it the show title, it's
         season number and episode number using regular expression magic.
         The default formats accepted are: series.0x00.xxx or series.s0e00.xxx
         A user can specify their own regular expression for a format not
         already covered.
 
-        :param fn: The file name passed in.
-        :type fn: String.
-
-        :param user_regex: A user specified regular expression.
-        :type user_regex: A string or None.
-
-        :raises UnexpectedFormatException: Raised if the file is in an
-        unexpected format.
-
-        :returns: The show name, season number, episode number and last four
-        characters (assumed to be the extension) extracted from the file
-        passed in.
-        :rtype: A dictionary with the keys 'show', 'season', 'episode' and
-        'extension'.
         """
-        fn = fn.replace("_", ".").replace(" ", ".")
+        fn = fn.replace("_", ".").replace(" ", ".")  # santise filename
         log.log(22, 'Renaming: {0}'.format(fn))
         regex = self.__build_regex(user_regex)
         log.debug('Renaming using: ' + regex)
@@ -151,16 +124,15 @@ class TvRenamr(object):
             log.debug('Overrode show name with: {0}'.format(show_name))
 
         if the is True:
-            show_name = self.__move_leading_the_to_trailing_the(show_name)
+            show_name = self._move_leading_the_to_trailing_the(show_name)
 
         log.debug('Final show name: {0}'.format(show_name))
 
         return show_name
 
     def build_path(self, episode, rename_dir=None, organise=None, output_format=None):
-        """
-        Build the full destination path and filename of the renamed file Set
-        the output format for the file name of a renamed show.
+        """Build the full destination path and filename of the renamed file.
+
         By default the format is:
 
         Show Name - Season NumberEpisode Number - Episode Title.format.
@@ -171,60 +143,32 @@ class TvRenamr(object):
         used to specify a top level directory where files will be placed in
         season and show folders, i.e. Show/Season 1/episodes
 
-        :param kwargs
-        :param format: The output format of the show name, season and episode
-        numbers, episode title and extension in the renamed file's name.
-        :param renamed_dir: The directory to place the renamed file into.
-        :param organise: A boolean to set whether the renamed directory path
-        should be constructed from the show name and season number.
-
-        :returns: The full path to the new file including the formatted file
-        name.
-        :rtype: A string.
         """
-        episode.show_name = self.__clean_names(episode.show_name)
-        episode.title = self.__clean_names(episode.title, '/',)
-        if len(episode.episode) == 1:
-            episode.episode = '0' + episode.episode
-
-        if output_format is None:
-            output_format = self.config.get(episode.show_name, 'format') or '%n - %s%e - %t%x'
-        if '%x' not in output_format:
-            output_format = output_format + '%x'
-        output_format = output_format.replace('%n', episode.show_name)\
-                        .replace('%s', str(int(episode.season)))\
-                        .replace('%e', episode.episode)\
-                        .replace('%t', self.__clean_names(episode.title))\
-                        .replace('%x', episode.extension)
-
         if rename_dir is None:
-            rename_dir = self.config.get(episode.show_name, 'renamed')
+            rename_dir = self.config.get(_file.show_name, 'renamed')
         if rename_dir is False:
             rename_dir = self.working_dir
 
         if organise is None:
-            organise = self.config.get(episode.show_name, 'organise')
-
+            organise = self.config.get(_file.show_name, 'organise')
         if organise is True:
-            rename_dir = self.__build_organise_path(rename_dir, \
-                                    episode.show_name, episode.season)
+            args = [rename_dir, _file.show_name, _file.season]
+            rename_dir = self._build_organise_path(*args)
 
         log.log(22, 'Directory: {0}'.format(rename_dir))
-        path = os.path.join(rename_dir, output_format)
+
+        path = os.path.join(rename_dir, str(_file))
         log.debug('Full path: {0}'.format(path))
+
         return path
 
     def rename(self, current_filepath, destination_filepath):
-        """
-        Renames the file passed in to the new filename path passed in and
-        returns the new filename
+        """Renames a file.
 
-        :param fn: The file to rename.
-        :param new_fn: The name to rename the file to.
+        This is more akin to the UNIX `mv` operation as the destination filepath
+        can be anywhere on the filesystem.
+        Returns the new filename for use elsewhere.
 
-        :raises EpisodeAlreadyExistsInDirectoryException: Raised when the
-        destination file already
-        exists in chosen directory.
         """
         if os.path.exists(destination_filepath):
             raise errors.EpisodeAlreadyExistsInDirectoryException(destination_filepath)
@@ -235,7 +179,7 @@ class TvRenamr(object):
             source_filepath = os.path.join(self.working_dir, current_filepath)
             os.rename(source_filepath, destination_filepath)
         destination_file = os.path.split(destination_filepath)[1]
-        log.log(26, 'Renamed: \"{0}\"'.format(destination_file))
+        log.log(26, 'Renamed: "{0}"'.format(destination_file))
         return destination_filepath
 
     def __build_organise_path(self, start_path, show_name, season_number):
