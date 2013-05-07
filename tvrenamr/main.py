@@ -272,7 +272,7 @@ class TvRenamr(object):
             pass
 
         details.update({
-            'episodes': filter(lambda x: x is not None, matches.groups()[2:]),
+            'episodes': list(filter(lambda x: x is not None, matches.groups()[2:])),
             'extension': os.path.splitext(fn)[1]
         })
 
