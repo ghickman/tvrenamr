@@ -41,7 +41,7 @@ class BaseTest(object):
         self.config.defaults['renamed'] = self.files
         self.tv = TvRenamr(self.files, self.config)
 
-        self._file = File('The Big Bang Theory', '3', ['01'], 'mp4')
+        self._file = File('The Big Bang Theory', '3', ['01'], '.mp4')
         self._file.episodes[0].title = 'The Electric Can Opener Fluctuation'
 
     def teardown(self):
