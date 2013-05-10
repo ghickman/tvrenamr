@@ -1,18 +1,17 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import logging
 import os
 import sys
 
 from .config import Config
-from .episode import Episode
 from .errors import *
 from .logs import start_logging
-from .main import TvRenamr
+from .main import File, TvRenamr
 from .options import OptionParser
 
 
-log = logging.getLogger('Core')
+log = logging.getLogger('FrontEnd')
 
 
 parser = OptionParser()
@@ -80,30 +79,25 @@ class FrontEnd(object):
             raise ConfigNotFoundException
         self.config = _config
 
-    def rename(self, details):
-        working, filename = details
-
+    def rename(self, working, filename):
         try:
             tv = TvRenamr(working, self.config, options.debug, options.dry)
-            episode = Episode(**tv.extract_details_from_file(filename,
-                                                    user_regex=options.regex))
 
-            if options.show_name:
-                episode.show_name = options.show_name
-            if options.season:
-                episode.season = options.season
-            if options.episode:
-                episode.episode = options.episode
+            _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
+            # TODO: Warn setting season & episode will override *all* episodes
+            _file.user_overrides(options.show_name, options.season, options.episode)
 
-            episode.title = tv.retrieve_episode_name(episode, library=options.library,
-                                                        canonical=options.canonical)
+            for episode in _file.episodes:
+                episode.title = tv.retrieve_episode_title(episode, library=options.library,
+                                                          canonical=options.canonical)
 
-            episode.show_name = tv.format_show_name(episode.show_name, the=options.the,
-                                                override=options.show_override)
+            _file.show_name = tv.format_show_name(_file.show_name, the=options.the,
+                                                  override=options.show_override)
 
-            path = tv.build_path(episode, rename_dir=options.rename_dir,
-                                 organise=options.organise,
-                                 output_format=options.output_format)
+            _file.set_output_format(options.output_format, self.config)
+
+            path = tv.build_path(_file, rename_dir=options.rename_dir,
+                                 organise=options.organise)
 
             tv.rename(filename, path)
         except KeyboardInterrupt:
@@ -115,7 +109,7 @@ class FrontEnd(object):
                 self._stop_dry_run()
             sys.exit(1)
         except (AttributeError,
-                EmptyEpisodeNameException,
+                EmptyEpisodeTitleException,
                 EpisodeAlreadyExistsInDirectoryException,
                 EpisodeNotFoundException,
                 IncorrectCustomRegularExpressionSyntaxException,
@@ -140,7 +134,7 @@ class FrontEnd(object):
 
         # kick off a rename for each file in the list
         for details in self.file_list:
-            self.rename(details)
+            self.rename(*details)
 
             # if we're not doing a dry run add a blank line for clarity
             if not (options.debug and options.dry):

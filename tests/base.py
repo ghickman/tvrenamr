@@ -3,7 +3,7 @@ import os
 import shutil
 
 from tvrenamr.config import Config
-from tvrenamr.main import TvRenamr
+from tvrenamr.main import File, TvRenamr
 
 from . import mock_requests
 # make pyflakes STFU
@@ -40,6 +40,9 @@ class BaseTest(object):
         self.config = Config(os.path.join(self.path, 'config.yml'))
         self.config.defaults['renamed'] = self.files
         self.tv = TvRenamr(self.files, self.config)
+
+        self._file = File('The Big Bang Theory', '3', ['01'], '.mp4')
+        self._file.episodes[0].title = 'The Electric Can Opener Fluctuation'
 
     def teardown(self):
         shutil.rmtree(self.files)
