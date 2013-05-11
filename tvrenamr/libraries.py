@@ -28,12 +28,8 @@ class BaseLibrary(object):
         self.log.debug('Attempting to retrieve episode title')
         req = requests.get(url)
         if not req.ok:
-            raise errors.EpisodeNotFoundException(
-                self.log.name,
-                self.show,
-                self.season,
-                self.episode
-            )
+            args = (self.log.name, self.show, self.season, self.episode)
+            raise errors.EpisodeNotFoundException(*args)
         self.log.debug('XML: Retreived')
 
         self.log.debug('XML: Attempting to parse')
