@@ -8,7 +8,7 @@ except ImportError:  # python 2.6
 
 import requests
 
-from .. import errors
+from . import errors
 
 
 log = logging.getLogger('The Tv DB')

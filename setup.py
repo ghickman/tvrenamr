@@ -4,8 +4,8 @@ from setuptools import setup
 import tvrenamr
 
 
-requires = ('pyyaml', 'requests',)
-packages = ('tvrenamr', 'tvrenamr.lib')
+requires = ('pyyaml', 'requests')
+packages = ('tvrenamr',)
 
 setup_requires = ('minimock', 'mock', 'nose', 'pyyaml')
 
