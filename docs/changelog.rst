@@ -4,6 +4,7 @@ Changelog
 =========
 
 v3.2.0
+------
 
 - Remove lxml and thus it's C building dependencies
 
