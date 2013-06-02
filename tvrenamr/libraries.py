@@ -1,4 +1,5 @@
 import logging
+import os
 import urllib
 from xml.etree.ElementTree import fromstring
 try:  # XML Exception class import dance
@@ -28,11 +29,36 @@ class BaseLibrary(object):
     def build_id_url(self, quoted_show):
         raise NotImplementedError
 
+    def get_cache_dir(self, show):
+        module = self.__class__.__name__.lower()
+        config_dir = os.path.expanduser('~/.tvrenamr')
+        cache_dir = os.path.join(config_dir, 'cache', module, self.show)
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir)
+        return cache_dir
+
     def get_episode_title_from_xml(self, xml):
         raise NotImplementedError
 
     def get_show_id_from_xml(self, xml):
         raise NotImplementedError
+
+    def request_show_id(self, show, cache):
+        try:
+            quoted_show = urllib.parse.quote(self.show)
+        except AttributeError:  # python 2
+            quoted_show = urllib.quote(self.show)
+
+        url = self.build_id_url(quoted_show)
+        self.log.debug('Series url: {0}'.format(url))
+
+        req = requests.get(url)
+        if not req.ok:
+            raise errors.NoNetworkConnectionException('thetvdb.com')
+        xml = req.content
+        with open(cache, 'w') as f:
+            f.write(xml)
+        return xml
 
     def set_episode_title(self, url):
         self.log.debug('Episode URL: {0}'.format(url))
@@ -61,21 +87,17 @@ class BaseLibrary(object):
 
     def set_show_id(self):
         self.log.debug('Retrieving series id for {0}'.format(self.show))
+
+        cache = os.path.join(self.get_cache_dir(self.show), 'show_id')
         try:
-            quoted_show = urllib.parse.quote(self.show)
-        except AttributeError:  # python 2
-            quoted_show = urllib.quote(self.show)
-
-        url = self.build_id_url(quoted_show)
-        self.log.debug('Series url: {0}'.format(url))
-
-        req = requests.get(url)
-        if not req.ok:
-            raise errors.NoNetworkConnectionException('thetvdb.com')
+            with open(cache, 'r') as f:
+                xml = f.read()
+        except IOError:
+            xml = self.request_show_id(self.show, cache)
 
         self.log.debug('XML: Attempting to parse')
         try:
-            tree = fromstring(req.content)
+            tree = fromstring(xml)
         except ParseError:
             raise errors.InvalidXMLException(self.log.name, self.show)
         if tree is None or len(tree) is 0:
