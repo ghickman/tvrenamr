@@ -81,7 +81,7 @@ class FrontEnd(object):
 
     def rename(self, working, filename):
         try:
-            tv = TvRenamr(working, self.config, options.debug, options.dry)
+            tv = TvRenamr(working, self.config, options.debug, options.dry, options.cache)
 
             _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
             # TODO: Warn setting season & episode will override *all* episodes

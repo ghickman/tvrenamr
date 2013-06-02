@@ -104,7 +104,8 @@ class File(object):
 
 
 class TvRenamr(object):
-    def __init__(self, working_dir, config, debug=False, dry=False):
+    def __init__(self, working_dir, config, debug=False, dry=False, cache=True):
+        self.cache = cache
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
@@ -170,7 +171,7 @@ class TvRenamr(object):
         for lib in libraries:
             try:
                 log.debug('Using {0}'.format(lib.__name__))
-                args = [episode._file.show_name, episode._file.season, episode.number]
+                args = (episode._file.show_name, episode._file.season, episode.number, self.cache)
                 self.lookup = lib(*args)  # assign to self for use in format_show_name
                 break  # first library worked - nothing to see here
             except (errors.EmptyEpisodeTitleException, errors.EpisodeNotFoundException,

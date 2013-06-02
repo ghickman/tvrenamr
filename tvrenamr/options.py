@@ -24,6 +24,7 @@ class OptionParser(OptParser):
         self.add_option('-l', '--log-level', dest='log_level', help='Set the log level. Options: short, minimal, info and debug.')
         self.add_option('--library', dest='library', default='thetvdb', help='Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.')
         self.add_option('-n', '--name', dest='name', help='Set the episode\'s name.')
+        self.add_option('--no-cache', action='store_true', dest='cache', help='Force all renames to ignore the cache.')
         self.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
         self.add_option('--organise', action='store_true', dest='organise', help='Organise renamed files into folders based on their show name and season number.')
         self.add_option('--no-organise', action='store_false', dest='organise', help='Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.')

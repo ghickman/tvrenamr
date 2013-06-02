@@ -12,8 +12,12 @@ import requests
 from .import errors
 
 
+class SkipCache(Exception): pass
+
+
 class BaseLibrary(object):
-    def __init__(self, show, season, episode):
+    def __init__(self, show, season, episode, cache):
+        self.cache = cache
         self.show = show
         self.season = season
         self.episode = episode
@@ -91,15 +95,17 @@ class BaseLibrary(object):
 
         cache = os.path.join(self.get_cache_dir(self.show), 'show_id')
         try:
+            if not self.cache:
+                raise SkipCache
             with open(cache, 'r') as f:
                 xml = f.read()
-        except IOError:
+        except (IOError, SkipCache):
             xml = self.request_show_id(self.show, cache)
 
         self.log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(xml)
-        except ParseError:
+        except ParseError as e:
             raise errors.InvalidXMLException(self.log.name, self.show)
         if tree is None or len(tree) is 0:
             raise errors.InvalidXMLException(self.log.name, self.show)
