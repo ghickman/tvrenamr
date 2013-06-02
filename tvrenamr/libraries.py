@@ -30,9 +30,10 @@ class BaseLibrary(object):
         raise NotImplementedError
 
     def get_cache_dir(self, show):
+        show = show.lower().replace(' ', '_')  # sanitise show name
         module = self.__class__.__name__.lower()
         config_dir = os.path.expanduser('~/.tvrenamr')
-        cache_dir = os.path.join(config_dir, 'cache', module, self.show)
+        cache_dir = os.path.join(config_dir, 'cache', module, show)
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
         return cache_dir
