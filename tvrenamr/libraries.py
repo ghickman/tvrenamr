@@ -51,9 +51,8 @@ class BaseLibrary(object):
             raise errors.InvalidXMLException(self.log.name, self.show)
         if tree is None:
             raise errors.InvalidXMLException(self.log.name, self.show)
-        self.log.debug('XML: Parsed')
-        args = (self.show, self.season, self.episode)
-        self.log.debug('XML: Episode document retrived for {0} - {1}'.format(*args))
+        args = (self.show, self.season, self.episode.zfill(2))
+        self.log.debug('XML: Episode document retrived for {0} - {1}{2}'.format(*args))
 
         self.log.debug('XML: Attempting to find the episode title')
         self.title = self.get_episode_title_from_xml(tree)
