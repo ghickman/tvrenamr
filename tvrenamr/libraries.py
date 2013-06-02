@@ -60,7 +60,7 @@ class BaseLibrary(object):
         req = requests.get(url)
         if not req.ok:
             raise errors.NoNetworkConnectionException('thetvdb.com')
-        xml = req.content
+        xml = req.text
         with open(cache, 'w') as f:
             f.write(xml)
         return xml

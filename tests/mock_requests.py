@@ -17,12 +17,20 @@ def cache_folder_check(func):
 
 
 class MockFile(io.FileIO):
-    content = None
+    _contents = None
     ok = True
     status_code = 0
 
-    def populate_content(self):
-        self.content = self.read()
+    @property
+    def content(self):
+        return self._contents
+
+    @property
+    def text(self):
+        return str(self._contents)
+
+    def populate_contents(self):
+        self._contents = self.read()
 
 
 def bad_response(url, **kwargs):
@@ -37,7 +45,7 @@ def invalid_xml(url, **kwargs):
     bad_xml = os.path.join(test_dir, 'mocked_xml', 'invalid.xml')
     f = MockFile(bad_xml, 'r')
     f.status_code = requests.codes.ok
-    f.populate_content()
+    f.populate_contents()
     return f
 
 
@@ -51,7 +59,7 @@ def initially_bad_xml(url, **kwargs):
         path = os.path.join(test_dir, 'mocked_xml', '{0}.xml'.format(filename))
         f = MockFile(path, 'r')
         f.status_code = requests.codes.ok
-        f.populate_content()
+        f.populate_contents()
         return f
 
     if 'thetvdb' in url:
@@ -81,7 +89,7 @@ def mock_get(url, **kwargs):
         mock('requests.get', returns_func=mock_get, tracker=None) # re-mock it.
         f = MockFile(file_path, 'r')
 
-    f.populate_content()
+    f.populate_contents()
     f.status_code = requests.codes.ok
     if not f.content:
         f.status_code = requests.codes.not_found
