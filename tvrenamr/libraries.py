@@ -22,6 +22,18 @@ class BaseLibrary(object):
 
         self.set_episode_title(self.build_episode_url())
 
+    def build_episode_url(self):
+        raise NotImplementedError
+
+    def build_id_url(self, quoted_show):
+        raise NotImplementedError
+
+    def get_episode_title_from_xml(self, xml):
+        raise NotImplementedError
+
+    def get_show_id_from_xml(self, xml):
+        raise NotImplementedError
+
     def set_episode_title(self, url):
         self.log.debug('Episode URL: {0}'.format(url))
 
