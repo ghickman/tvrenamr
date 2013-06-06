@@ -12,9 +12,6 @@ import requests
 from .import errors
 
 
-class SkipCache(Exception): pass
-
-
 class BaseLibrary(object):
     def __init__(self, show, season, episode, cache):
         self.cache = cache
@@ -96,10 +93,10 @@ class BaseLibrary(object):
         cache = os.path.join(self.get_cache_dir(self.show), 'show_id')
         try:
             if not self.cache:
-                raise SkipCache
+                raise IOError
             with open(cache, 'r') as f:
                 xml = f.read()
-        except (IOError, SkipCache):
+        except IOError:
             xml = self.request_show_id(self.show, cache)
 
         self.log.debug('XML: Attempting to parse')
