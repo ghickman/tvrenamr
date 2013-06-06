@@ -57,10 +57,10 @@ class BaseLibrary(object):
         req = requests.get(url)
         if not req.ok:
             raise errors.NoNetworkConnectionException('thetvdb.com')
-        xml = req.text
-        with open(cache, 'w') as f:
-            f.write(xml)
-        return xml
+        if self.cache:
+            with open(cache, 'w') as f:
+                f.write(req.text)
+        return req.text
 
     def set_episode_title(self, url):
         self.log.debug('Episode URL: {0}'.format(url))
