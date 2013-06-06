@@ -1,5 +1,4 @@
 import hashlib
-import io
 import os
 
 from minimock import mock, restore
@@ -16,21 +15,26 @@ def cache_folder_check(func):
     return func
 
 
-class MockFile(io.FileIO):
-    _contents = None
-    ok = True
-    status_code = 0
+class MockResponse(requests.models.Response):
+    def __init__(self, path, *args, **kwargs):
+        super(MockResponse, self).__init__(*args, **kwargs)
+        with open(path, 'r') as f:
+            try:
+                self._content = f.read().encode('utf-8')
+            except UnicodeDecodeError:
+                self._content = f.read()  # python 2
+        # print('Content Type: {0}'.format(type(self._content)))
+        # print('Content: {0}'.format(self._content))
+        print(path)
+        print(os.path.exists(path))
+        with open(path, 'r') as f:
+            _file = f.read()
+            print(len(_file))
+            print(type(_file))
+            # print(_file)
 
-    @property
-    def content(self):
-        return self._contents
-
-    @property
-    def text(self):
-        return str(self._contents)
-
-    def populate_contents(self):
-        self._contents = self.read()
+        self.status_code = 200
+        self.encoding = 'utf-8'
 
 
 def bad_response(url, **kwargs):
@@ -43,10 +47,7 @@ def bad_response(url, **kwargs):
 def invalid_xml(url, **kwargs):
     """Mock requests' get() and return a local file handle to invalid.xml"""
     bad_xml = os.path.join(test_dir, 'mocked_xml', 'invalid.xml')
-    f = MockFile(bad_xml, 'r')
-    f.status_code = requests.codes.ok
-    f.populate_contents()
-    return f
+    return MockResponse(bad_xml)
 
 
 @cache_folder_check
@@ -57,10 +58,7 @@ def initially_bad_xml(url, **kwargs):
     """
     def get_file(filename):
         path = os.path.join(test_dir, 'mocked_xml', '{0}.xml'.format(filename))
-        f = MockFile(path, 'r')
-        f.status_code = requests.codes.ok
-        f.populate_contents()
-        return f
+        return MockResponse(path)
 
     if 'thetvdb' in url:
         return get_file('invalid')
@@ -74,26 +72,20 @@ def initially_bad_xml(url, **kwargs):
 @cache_folder_check
 def mock_get(url, **kwargs):
     """
-    Mock requets.get and return a local file handle or create file if
-    not existent and then return it.
+    Mock requests.get with the contents of a local file. If the file doesn't
+    exist, make the request and save to the file.
     """
     key = hashlib.md5(url.encode('utf-8')).hexdigest()
     file_path = os.path.join(test_dir, 'cache', '{0}.xml'.format(key))
     try:
-        f = MockFile(file_path, 'r')
+        return MockResponse(file_path)
     except IOError:
-        restore() # restore normal function
-        tmp = MockFile(file_path, 'w')
-        tmp.write(requests.get(url).content)
-        tmp.close()
-        mock('requests.get', returns_func=mock_get, tracker=None) # re-mock it.
-        f = MockFile(file_path, 'r')
-
-    f.populate_contents()
-    f.status_code = requests.codes.ok
-    if not f.content:
-        f.status_code = requests.codes.not_found
-    return f
+        restore()  # restore normal function
+        r = requests.get(url)
+        with open(file_path, 'w') as tmp:
+            tmp.write(r.content)
+        mock('requests.get', returns_func=mock_get, tracker=None)  # re-mock it.
+        return MockResponse(file_path)
 
 
 mock('requests.get', returns_func=mock_get, tracker=None)
