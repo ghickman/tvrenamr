@@ -75,7 +75,7 @@ def mock_get(url, **kwargs):
         restore()  # restore normal function
         r = requests.get(url)
         with open(file_path, 'w') as tmp:
-            tmp.write(r.content)
+            tmp.write(r.text)
         mock('requests.get', returns_func=mock_get, tracker=None)  # re-mock it.
         return MockResponse(file_path)
 
