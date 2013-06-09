@@ -102,7 +102,7 @@ class BaseLibrary(object):
         self.log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(xml)
-        except ParseError as e:
+        except ParseError:
             raise errors.InvalidXMLException(self.log.name, self.show)
         if tree is None or len(tree) is 0:
             raise errors.InvalidXMLException(self.log.name, self.show)
