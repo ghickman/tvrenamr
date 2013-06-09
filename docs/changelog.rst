@@ -3,6 +3,36 @@
 Changelog
 =========
 
+v3.4.0
+------
+
+- Fix python 3 support in the tests
+
+- Show IDs are now cached, cutting web requests by 50% for the majority of renames
+
+- Tentative multiple episode file support. Hope to improve this over time
+
+
+v3.3.3
+------
+
+- Add python 3 support!
+
+- Fix python 2.6 support
+
+
+v3.3.2
+------
+
+- Return destination filepath from a rename (useful for libs)
+
+
+v3.3.1
+------
+
+- Tidy up so it can be used as a library too
+
+
 v3.2.0
 ------
 
