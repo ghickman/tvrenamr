@@ -61,17 +61,28 @@ class File(object):
         filename = getattr(self, 'output_format', self.default_format)
 
         filename = filename.replace('%n', self.show_name)
-        filename = filename.replace('%s', self.season)
         filename = filename.replace('%t', self.title)
         filename = filename.replace('%x', self.extension)
 
-        filename = filename.replace('%e', self.episode)
+        filename = self.get_season_output(filename)
+        filename = self.get_episode_output(filename)
 
         return filename
 
-    @property
-    def episode(self):
-        return '-'.join([e.number.zfill(2) for e in self.episodes])
+    def get_episode_output(self, filename, marker='%e', fill=2):
+        if '%e{' in filename:
+            fill = filename.split('%e{')[1][:1]
+            marker = '%e{' + fill + '}'
+        episode = '-'.join([e.number.zfill(int(fill)) for e in self.episodes])
+        return filename.replace(marker, episode)
+
+    def get_season_output(self, filename, marker='%s', fill=1):
+        if '%s{' in filename:
+            fill = filename.split('%s{')[1][:1]
+            marker = '%s{' + fill + '}'
+        season = self.season.zfill(int(fill))
+        return filename.replace(marker, season)
+
 
     @property
     def title(self):

@@ -64,6 +64,24 @@ class TestMain(BaseTest):
         filename = 'The Electric Can Opener Fluctuation - 01 - 3 - The Big Bang Theory.mp4'
         assert_equal(os.path.split(path)[1], filename)
 
+    def test_setting_season_number_digit_length(self):
+        self._file.output_format = '%n S%s{2}E%e %t%x'
+        path = self.tv.build_path(self._file, organise=False)
+        filename = 'The Big Bang Theory S03E01 The Electric Can Opener Fluctuation.mp4'
+        assert_equal(os.path.split(path)[1], filename)
+
+    def test_setting_episode_number_digit_length(self):
+        self._file.output_format = '%n S%sE%e{2} %t%x'
+        path = self.tv.build_path(self._file, organise=False)
+        filename = 'The Big Bang Theory S3E01 The Electric Can Opener Fluctuation.mp4'
+        assert_equal(os.path.split(path)[1], filename)
+
+    def test_setting_season_and_episode_number_digit_length(self):
+        self._file.output_format = '%n S%s{3}E%e{4} %t%x'
+        path = self.tv.build_path(self._file, organise=False)
+        filename = 'The Big Bang Theory S003E0001 The Electric Can Opener Fluctuation.mp4'
+        assert_equal(os.path.split(path)[1], filename)
+
     def test_extracting_season_from_file_format_s0e00(self):
         assert_equal(self.tv.extract_details_from_file('chuck.s2e06.avi')['season'], '2')
 
