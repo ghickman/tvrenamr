@@ -99,6 +99,11 @@ class BaseLibrary(object):
         except IOError:
             xml = self.request_show_id(self.show, cache)
 
+        try:
+            xml = xml.encode('utf-8')  # deal with py2 faff
+        except UnicodeEncodeError:
+            pass
+
         self.log.debug('XML: Attempting to parse')
         try:
             tree = fromstring(xml)
