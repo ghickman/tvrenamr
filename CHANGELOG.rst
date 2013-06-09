@@ -1,20 +1,36 @@
 Changelog
 =========
 
+v3.4.0
+------
+
+- Fix python 3 support in the tests
+
+- Show IDs are now cached, cutting web requests by 50% for the majority of renames
+
+- Tentative multiple episode file support. Hope to improve this over time
+
+- Fix custom output format so it can use custom regex syntax
+
+
 v3.3.3
 ------
 
-- Bring back Python 2.6 support!
+- Add python 3 support!
+
+- Fix python 2.6 support
 
 
-v3.3.0
+v3.3.2
 ------
 
-- Add partial option and functionality.
+- Return destination filepath from a rename (useful for libs)
 
-- Update test suite & travis.
 
-- Refactor ``FrontEnd`` to make it easier to use from elsewhere.
+v3.3.1
+------
+
+- Tidy up so it can be used as a library too
 
 
 v3.2.0
@@ -45,7 +61,6 @@ v3.0.3
 - Add documentation and push to Read the Docs
 
 - Fix another silly typo. Regretting the state of the tests now...
-
 
 
 v3.0.2

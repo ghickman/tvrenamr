@@ -12,6 +12,8 @@ v3.4.0
 
 - Tentative multiple episode file support. Hope to improve this over time
 
+- Fix custom output format so it can use custom regex syntax
+
 
 v3.3.3
 ------
@@ -61,7 +63,6 @@ v3.0.3
 - Add documentation and push to Read the Docs
 
 - Fix another silly typo. Regretting the state of the tests now...
-
 
 
 v3.0.2
