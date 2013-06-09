@@ -75,7 +75,10 @@ def mock_get(url, **kwargs):
         restore()  # restore normal function
         r = requests.get(url)
         with open(file_path, 'w') as tmp:
-            tmp.write(r.text)
+            try:
+                tmp.write(r.text)
+            except UnicodeEncodeError:
+                tmp.write(r.content)  # python 2
         mock('requests.get', returns_func=mock_get, tracker=None)  # re-mock it.
         return MockResponse(file_path)
 
