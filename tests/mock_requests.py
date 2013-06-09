@@ -19,19 +19,11 @@ class MockResponse(requests.models.Response):
     def __init__(self, path, *args, **kwargs):
         super(MockResponse, self).__init__(*args, **kwargs)
         with open(path, 'r') as f:
+            tmp = f.read()
             try:
-                self._content = f.read().encode('utf-8')
+                self._content = tmp.encode('utf-8')
             except UnicodeDecodeError:
-                self._content = f.read()  # python 2
-        # print('Content Type: {0}'.format(type(self._content)))
-        # print('Content: {0}'.format(self._content))
-        print(path)
-        print(os.path.exists(path))
-        with open(path, 'r') as f:
-            _file = f.read()
-            print(len(_file))
-            print(type(_file))
-            # print(_file)
+                self._content = tmp  # python 2
 
         self.status_code = 200
         self.encoding = 'utf-8'
