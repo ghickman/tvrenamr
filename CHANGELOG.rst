@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.4.1
+------
+
+- Fix partial regex support
+
+
 v3.4.0
 ------
 
