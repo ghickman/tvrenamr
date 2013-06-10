@@ -51,10 +51,10 @@ class Episode(object):
 class File(object):
     default_format = '%n - %s%e - %t.%x'
 
-    def __init__(self, show_name, season, episodes, extension):
+    def __init__(self, show_name='', season='', episodes=(), extension=''):
         self.show_name = show_name
         self.season = season
-        self.episodes = [Episode(_file=self, number=str(int(i))) for i in episodes]
+        self.episodes = [Episode(_file=self, number=i) for i in episodes]
         self.extension = extension
 
     def __str__(self):
@@ -82,7 +82,6 @@ class File(object):
             marker = '%s{' + fill + '}'
         season = self.season.zfill(int(fill))
         return filename.replace(marker, season)
-
 
     @property
     def title(self):
@@ -275,16 +274,23 @@ class TvRenamr(object):
         details = {}
 
         try:
-            details.update({'show_name': matches.group('show_name').replace('.', ' ').strip()})
+            details['show_name'] = matches.group('show_name').replace('.', ' ').strip()
         except IndexError:
             pass
         try:
-            details.update({'season': str(int(matches.group('season')))})
+            details['season'] = str(int(matches.group('season')))
         except IndexError:
             pass
 
+        episodes = []
+        for group in ('episode', 'episode2'):
+            try:
+                episodes.append(str(int(matches.group(group))))
+            except (IndexError, TypeError):
+                pass
+
         details.update({
-            'episodes': list(filter(lambda x: x is not None, matches.groups()[2:])),
+            'episodes': episodes,
             'extension': os.path.splitext(fn)[1]
         })
 
@@ -320,8 +326,8 @@ class TvRenamr(object):
         """
         series = r"(?P<show_name>[\w\s.',_-]+)"
         season = r"(?P<season>\d{1,2})"
-        episode = r"(\d{2})"
-        second_episode = r".E?(\d{2})*"
+        episode = r"(?P<episode>\d{2})"
+        second_episode = r".E?(?P<episode2>\d{2})*"
 
         if regex is None:
             # Build default regex
