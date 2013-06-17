@@ -139,3 +139,28 @@ class TestMain(BaseTest):
     def test_extracting_season_with_custom_regular_expression_passing_in_episode_digit_lengths_from_file_format_000(self):
         details = self.tv.extract_details_from_file('chuck.025', user_regex='%n.%s%e{1}')
         assert_equal(details['season'], '2')
+
+    def test_720_before_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.720.S01E03.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_720_after_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.S01E03.720.mp4')
+        print(details)
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_720p_before_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.720p.S01E03.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_720p_after_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.S01E03.720p.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
