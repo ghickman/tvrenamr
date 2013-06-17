@@ -286,7 +286,7 @@ class TvRenamr(object):
         for group in ('episode', 'episode2'):
             try:
                 episodes.append(str(int(matches.group(group))))
-            except (IndexError, TypeError):
+            except (IndexError, KeyError, TypeError):
                 pass
 
         details.update({
