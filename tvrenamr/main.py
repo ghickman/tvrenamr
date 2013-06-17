@@ -141,7 +141,7 @@ class TvRenamr(object):
         already covered.
 
         """
-        fn = fn.replace("_", ".").replace(" ", ".")  # santise filename
+        fn = self._santise_filename(fn)
         log.log(22, 'Renaming: {0}'.format(fn))
 
         regex = self._build_regex(user_regex)
@@ -381,3 +381,19 @@ class TvRenamr(object):
             return show_name
         log.debug("Moving leading 'The' to end of: {0}".format(show_name))
         return show_name[4:] + ', The'
+    def _santise_filename(self, filename):
+        """
+        Remove bits of the filename that cause a problem.
+
+        Initially added to deal specifically with the issues 720[p] causes
+        in filenames by appearing before or after the season/episode block.
+        """
+        items = (
+            ('_', '.'),
+            (' ', '.'),
+            ('.720p', ''),
+            ('.720', ''),
+        )
+        for target, replacement in items:
+            filename = filename.replace(target, replacement)
+        return filename
