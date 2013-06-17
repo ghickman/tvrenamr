@@ -148,7 +148,6 @@ class TestMain(BaseTest):
 
     def test_720_after_season_and_episode(self):
         details = self.tv.extract_details_from_file('chuck.S01E03.720.mp4')
-        print(details)
         assert_equal(details['show_name'], 'chuck')
         assert_equal(details['season'], '1')
         assert_equal(details['episodes'][0], '3')
