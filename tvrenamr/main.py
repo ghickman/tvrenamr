@@ -128,9 +128,13 @@ class File(object):
 
         if season:
             self.season = int(season)
-        for e in self.episodes:
-            if episode:
-                e.number = int(episode)
+
+        if episode:
+            if self.episodes:
+                for e in self.episodes:
+                    e.number = int(episode)
+            else:
+                self.episodes = [Episode(_file=self, number=episode)]
 
 
 class TvRenamr(object):
