@@ -44,6 +44,9 @@ class Episode(object):
             return '0{0}'.format(self.number)
         return object.__getattribute__(self, item)
 
+    def __repr__(self):
+        return 'Episode: {0} (season {1})'.format(self.number, self._file.season)
+
     def __str__(self):
         return '{0} - {1}'.format(self.number, self.title)
 
