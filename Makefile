@@ -1,11 +1,13 @@
 SHELL := /bin/bash
 
-pyc:
-	find . -name "*.pyc" -delete
+help:
+	@echo "usage:"
+	@echo "    make release -- build and release to PyPI"
+	@echo "    make test    -- run the tests"
 
 release:
-	python setup.py register sdist upload
+	python setup.py sdist upload
+	python setup.py sdist_wheel upload
 
 test:
 	python setup.py test
-
