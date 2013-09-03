@@ -124,9 +124,7 @@ class TheTvDb(BaseLibrary):
 
     def build_episode_url(self):
         apikey = 'C4C424B4E9137AFD'
-        episode = str(int(self.episode))
-        season = str(int(self.season))
-        args = (self.url_base, apikey, self.show_id, season, episode)
+        args = (self.url_base, apikey, self.show_id, self.season, self.episode)
         return '{0}{1}/series/{2}/default/{3}/{4}/en.xml'.format(*args)
 
     def build_id_url(self, quoted_show):
