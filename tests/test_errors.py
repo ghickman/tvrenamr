@@ -3,9 +3,11 @@ import os
 from mock import patch
 from nose.tools import assert_raises
 from tvrenamr.errors import (EpisodeAlreadyExistsInDirectoryException,
+                             MissingInformationException,
                              NoMoreLibrariesException,
                              IncorrectCustomRegularExpressionSyntaxException,
                              UnexpectedFormatException)
+from tvrenamr.main import File
 
 from .base import BaseTest
 from .mock_requests import bad_response
@@ -40,3 +42,15 @@ class TestExceptionsAreRaised(BaseTest):
             'chuck.s02e05.avi',
             '.'
         )
+
+    def test_missing_show_name_raises_missing_information_exception(self):
+        _file = File(season=1, episodes=[1])
+        assert_raises(MissingInformationException, _file.safety_check)
+
+    def test_missing_season_raises_missing_information_exception(self):
+        _file = File(show_name='foo', episodes=[1])
+        assert_raises(MissingInformationException, _file.safety_check)
+
+    def test_missing_episode_raises_missing_information_exception(self):
+        _file = File(show_name='foo', season=1,)
+        assert_raises(MissingInformationException, _file.safety_check)

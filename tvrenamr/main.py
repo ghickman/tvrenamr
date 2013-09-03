@@ -109,6 +109,9 @@ class File(object):
         if self.season is None:
             raise errors.MissingInformationException('A season number')
 
+        if not self.episodes:
+            raise errors.MissingInformationException('An episode number')
+
         for e in self.episodes:
             if e.number is None:
                 raise errors.MissingInformationException('An episode number')
