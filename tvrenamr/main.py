@@ -106,9 +106,9 @@ class File(object):
         if show_name:
             self.show_name = show_name
 
+        if season:
+            self.season = int(season)
         for e in self.episodes:
-            if season:
-                e.season = season
             if episode:
                 e.number = episode
 
