@@ -51,7 +51,7 @@ class Episode(object):
 class File(object):
     default_format = '%n - %s%e - %t.%x'
 
-    def __init__(self, show_name='', season='', episodes=(), extension=''):
+    def __init__(self, show_name='', season=None, episodes=(), extension=''):
         self.show_name = show_name
         self.season = season
         self.episodes = [Episode(_file=self, number=i) for i in episodes]
@@ -73,14 +73,14 @@ class File(object):
         if '%e{' in filename:
             fill = filename.split('%e{')[1][:1]
             marker = '%e{' + fill + '}'
-        episode = '-'.join([e.number.zfill(int(fill)) for e in self.episodes])
+        episode = '-'.join([str(e.number).zfill(int(fill)) for e in self.episodes])
         return filename.replace(marker, episode)
 
     def get_season_output(self, filename, marker='%s', fill=1):
         if '%s{' in filename:
             fill = filename.split('%s{')[1][:1]
             marker = '%s{' + fill + '}'
-        season = self.season.zfill(int(fill))
+        season = str(self.season).zfill(int(fill))
         return filename.replace(marker, season)
 
     @property
@@ -110,7 +110,7 @@ class File(object):
             self.season = int(season)
         for e in self.episodes:
             if episode:
-                e.number = episode
+                e.number = int(episode)
 
 
 class TvRenamr(object):
