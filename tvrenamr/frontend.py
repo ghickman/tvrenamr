@@ -86,6 +86,7 @@ class FrontEnd(object):
             _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
             # TODO: Warn setting season & episode will override *all* episodes
             _file.user_overrides(options.show_name, options.season, options.episode)
+            _file.safety_check()
 
             for episode in _file.episodes:
                 episode.title = tv.retrieve_episode_title(episode, library=options.library,
@@ -114,6 +115,7 @@ class FrontEnd(object):
                 EpisodeNotFoundException,
                 IncorrectCustomRegularExpressionSyntaxException,
                 InvalidXMLException,
+                MissingInformationException,
                 OutputFormatMissingSyntaxException,
                 ShowNotFoundException,
                 UnexpectedFormatException) as e:

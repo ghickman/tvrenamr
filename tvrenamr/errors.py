@@ -95,6 +95,14 @@ class InvalidXMLException(Exception):
         log.error('This could be indicative of a Show or Episode not being found.')
 
 
+class MissingInformationException(Exception):
+    """
+    Not enough information to rename a file
+    """
+    def __init__(self, err):
+        log.error('{0} is required to rename files.'.format(err))
+
+
 class NoMoreLibrariesException(Exception):
     """
     All libraries have returned invalid XML.

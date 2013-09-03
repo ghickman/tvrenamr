@@ -54,7 +54,7 @@ class Episode(object):
 class File(object):
     default_format = '%n - %s%e - %t.%x'
 
-    def __init__(self, show_name='', season=None, episodes=(), extension=''):
+    def __init__(self, show_name=None, season=None, episodes=(), extension=''):
         self.show_name = show_name
         self.season = season
         self.episodes = [Episode(_file=self, number=i) for i in episodes]
@@ -98,6 +98,20 @@ class File(object):
                 titles = stripped_titles
 
         return ' & '.join(titles)
+
+    def safety_check(self):
+        """
+        Check we have all the necessary information to rename a file.
+        """
+        if self.show_name is None:
+            raise errors.MissingInformationException('A show name')
+
+        if self.season is None:
+            raise errors.MissingInformationException('A season number')
+
+        for e in self.episodes:
+            if e.number is None:
+                raise errors.MissingInformationException('An episode number')
 
     def set_output_format(self, user_format, config):
         if user_format is None:
