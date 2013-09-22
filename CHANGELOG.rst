@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v3.4.6
+------
+
+- Append to main log file instead of overwriting it
+
+- Add some sane defaults for rotating the log file
+
+
 v3.4.5
 ------
 
