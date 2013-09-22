@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.4.7
+------
+
+- Enable passing files *and* folders as paths to rename
+
+
 v3.4.6
 ------
 
