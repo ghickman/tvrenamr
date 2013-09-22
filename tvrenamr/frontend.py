@@ -18,48 +18,47 @@ parser = OptionParser()
 options, args = parser.parse_args()
 
 
+def build_file_list(paths, recursive=False, ignore_filelist=()):
+    """
+    Determines which files need to be processed for renaming.
+
+    :param glob: A list of file(s) or directory(s).
+    :param recursive: Do a recursive search for files if 'glob' is a
+    directory. Default is False.
+    :param ignore_filelist: Optional set of files to ignore from renaming.
+    Often used by filtering methods such as Deluge.
+
+    :returns: A list of files to be renamed.
+    :rtype: A list of tuples
+    """
+    file_list = []
+
+    for glob in paths:
+        if not (os.path.isfile(glob) or os.path.isdir(glob)):
+            parser.error("'{0}' is not a file or directory. Ruh Roe!".format(args))
+
+        if os.path.isfile(glob):
+            file_list.append(glob)
+
+        if os.path.isdir(glob):
+            for root, dirs, files in os.walk(glob):
+                for fname in files:
+                    file_path = os.path.join(root, fname)
+                    if not file_path in ignore_filelist:
+                        file_list.append(file_path)
+
+                if not recursive:
+                    break
+
+    return file_list
+
+
 class FrontEnd(object):
     def __init__(self):
         # start logging
         if options.debug:
             options.log_level = 10
         start_logging(options.log_file, options.log_level, options.quiet)
-
-    def build_file_list(self, glob, recursive=False, ignore_filelist=None):
-        """
-        Determines which files need to be processed for renaming.
-
-        :param glob: A list of file(s) or directory(s).
-        :param recursive: Do a recursive search for files if 'glob' is a
-        directory. Default is False.
-        :param ignore_filelist: Optional set of files to ignore from renaming.
-        Often used by filtering methods such as Deluge.
-
-        :returns: A list of files to be renamed.
-        :rtype: A list of tuples
-        """
-        if len(glob) > 1:
-            # must have used wildcards
-            self.file_list = [os.path.split(fn) for fn in glob]
-            return
-
-        glob = glob[0] # only one item, add some convenience
-        if os.path.isdir(glob):
-            self.file_list = []
-            for root, dirs, files in os.walk(glob):
-                for fname in files:
-                    # If we have a file we should be ignoring and skipping.
-                    full_path = os.path.join(root, fname)
-                    if ignore_filelist is not None and (full_path in ignore_filelist):
-                        continue
-                    self.file_list.append((root, fname))
-                # Don't want a recursive walk?
-                if not recursive:
-                    break
-        elif os.path.isfile(glob):
-            self.file_list = [os.path.split(glob)]
-        else:
-            parser.error("'{0}' is not a file or directory. Ruh Roe!".format(args))
 
     def get_config(self, path=None):
         possible_config = (
@@ -79,7 +78,8 @@ class FrontEnd(object):
             raise ConfigNotFoundException
         self.config = _config
 
-    def rename(self, working, filename):
+    def rename(self, path):
+        working, filename = os.path.split(path)
         try:
             tv = TvRenamr(working, self.config, options.debug, options.dry, options.cache)
 
@@ -130,13 +130,13 @@ class FrontEnd(object):
                 log.critical('Error: {0}'.format(msg))
             sys.exit(1)
 
-    def run(self):
+    def run(self, files):
         if options.dry or options.debug:
             self._start_dry_run()
 
         # kick off a rename for each file in the list
-        for details in self.file_list:
-            self.rename(*details)
+        for path in files:
+            self.rename(path)
 
             # if we're not doing a dry run add a blank line for clarity
             if not (options.debug and options.dry):
@@ -159,15 +159,15 @@ class FrontEnd(object):
 
 def run():
     # use current directory if no args specified
-    files = args
+    paths = args
     if not args:
         log.debug('No file or directory specified, using current directory')
-        files = [os.getcwd()]
+        paths = [os.getcwd()]
+    files = build_file_list(paths, options.recursive, options.ignore_filelist)
 
     frontend = FrontEnd()
     frontend.get_config()
-    frontend.build_file_list(files, options.recursive, options.ignore_filelist)
-    frontend.run()
+    frontend.run(files)
 
 if __name__ == "__main__":
     run()

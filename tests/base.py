@@ -22,6 +22,7 @@ class BaseTest(object):
             return os.path.join(self.path, path)
 
         self.files = join_path('files')
+        self.subfolder = join_path('subfolder')
         self.organised = join_path('organised')
         self.renamed = join_path('renamed')
 
@@ -29,12 +30,11 @@ class BaseTest(object):
         if not os.path.exists(self.files):
             os.mkdir(self.files)
 
-        # build the file list
-        with open(os.path.join(self.path, 'file_list'), 'r') as f:
-            for fn in f.readlines():
-                path = os.path.abspath(os.path.join(self.files, fn.strip()))
-                with open(path, 'w') as f:
-                    f.write('')
+        if not os.path.exists(self.subfolder):
+            os.mkdir(self.subfolder)
+
+        for path in (self.files, self.subfolder):
+            self.build_files(path)
 
         # instantiate tvr
         self.config = Config(os.path.join(self.path, 'config.yml'))
@@ -46,3 +46,12 @@ class BaseTest(object):
 
     def teardown(self):
         shutil.rmtree(self.files)
+        shutil.rmtree(self.subfolder)
+
+    def build_files(self, path):
+        # build the file list
+        with open(os.path.join(self.path, 'file_list'), 'r') as f:
+            for fn in f.readlines():
+                filepath = os.path.abspath(os.path.join(path, fn.strip()))
+                with open(filepath, 'w') as f:
+                    f.write('')

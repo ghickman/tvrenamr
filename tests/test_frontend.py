@@ -4,7 +4,7 @@ import random
 from nose.tools import assert_true
 
 from .base import BaseTest
-from tvrenamr.frontend import FrontEnd
+from tvrenamr.frontend import build_file_list, FrontEnd
 
 
 class TestFrontEnd(BaseTest):
@@ -13,28 +13,44 @@ class TestFrontEnd(BaseTest):
         self.frontend = FrontEnd()
         self.frontend.get_config(os.path.join(self.path, 'config.yml'))
 
+    def random_files(self, files):
+        possible_files = os.listdir(self.files)
+        return [os.path.join(files, random.choice(possible_files)) for choice in range(3)]
+
     def test_config_variable_exists(self):
         assert_true(hasattr(self.frontend, 'config'))
 
-    def test_file_list_contains_files_from_test_dir(self):
-        self.frontend.build_file_list([self.files])
+    def test_build_file_list_from_a_folder_path(self):
+        file_list = build_file_list([self.files])
         for fn in os.listdir(self.files):
-            assert_true((self.files, fn) in self.frontend.file_list)
+            if os.path.isdir(fn):
+                assert_true(os.path.join(self.files, fn) in file_list)
 
     def test_passing_current_dir_makes_file_list_a_list(self):
-        self.frontend.build_file_list([self.files])
-        assert_true(isinstance(self.frontend.file_list, list))
+        assert_true(isinstance(build_file_list([self.files]), list))
 
-    def test_passing_multiple_files_are_added_to_file_list(self):
-        possible_files = os.listdir(self.files)
-        files = [os.path.join(self.files, random.choice(possible_files)) for choice in range(3)]
-        self.frontend.build_file_list(files)
-        assert_true(all(os.path.split(fn) in self.frontend.file_list for fn in files))
+    def test_build_file_list_from_multiple_files(self):
+        files = self.random_files(self.files)
+        file_list = build_file_list(files)
+        assert_true(all(fn in file_list for fn in files))
 
-    def test_passing_single_file_is_added_to_file_list(self):
-        fn = random.choice(os.listdir(self.files))
-        self.frontend.build_file_list([os.path.join(self.files, fn)])
-        assert_true((self.files, fn) in self.frontend.file_list)
+    def test_build_file_list_from_folders_and_files(self):
+        files = self.random_files(self.files) + [self.subfolder]
+        file_list = build_file_list(files)
+
+        def final_list():
+            files = []
+            for path in os.listdir(self.files) + os.listdir(self.subfolder):
+                if not os.path.isfile(path):
+                    continue
+                files.append(path)
+            return files
+        assert_true(all(fn in file_list for fn in final_list()))
+
+    def test_build_file_list_from_single_file(self):
+        fn = os.path.join(self.files, random.choice(os.listdir(self.files)))
+        file_list = build_file_list([fn])
+        assert_true(fn in file_list)
 
     def test_setting_recursive_adds_all_files_below_the_folder(self):
         new_folders = ('herp', 'derp', 'test')
@@ -47,14 +63,12 @@ class TestFrontEnd(BaseTest):
         build_folder('herp')
         build_folder('herp/derp')
         build_folder('herp/derp/test')
-        self.frontend.build_file_list([self.files], recursive=True)
+        file_list = build_file_list([self.files], recursive=True)
         for root, dirs, files in os.walk(self.files):
             for fn in files:
-                assert_true((root, fn) in self.frontend.file_list)
+                assert_true(os.path.join(root, fn) in file_list)
 
     def test_ignoring_files(self):
-        ignore = [random.choice(os.listdir(self.files)) for i in range(3)]
-        self.frontend.build_file_list([self.files], ignore_filelist=ignore)
-        for fn in [fn for fn in os.listdir(self.files) if fn not in ignore]:
-            assert_true((self.files, fn) in self.frontend.file_list)
-
+        ignore = self.random_files(self.files)
+        file_list = build_file_list([self.files], ignore_filelist=ignore)
+        assert_true(all(not fn in file_list for fn in ignore))
