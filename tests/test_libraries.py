@@ -1,6 +1,10 @@
+# coding=utf-8
+from xml.etree.ElementTree import fromstring
+
 from nose.tools import assert_equal, assert_raises
 
 from tvrenamr.errors import NoMoreLibrariesException
+from tvrenamr.libraries import TheTvDb, TvRage
 from tvrenamr.main import File
 
 from .base import BaseTest
@@ -38,3 +42,16 @@ class TestLibraries(BaseTest):
             self.tv.retrieve_episode_title(self._file.episodes[0], library=library)
             assert_equal(self.tv.format_show_name(self._file.show_name, the=False), 'The Big Bang Theory')
             assert_equal(self.tv.format_show_name(self._file.show_name), 'Big Bang Theory, The')
+
+    def test_unicode_character_in_episode_name(self):
+        # This is horrible but the libraries are horrendous atm
+        from tvrenamr.errors import EmptyEpisodeTitleException
+        xml = fromstring('<Data><Episode><EpisodeName>¡Viva los Muertos!</EpisodeName></Episode></Data>')
+        episode = xml.find('Episode').findtext('EpisodeName').encode('utf-8')
+        if not episode:
+            raise EmptyEpisodeTitleException
+        return episode
+        # for library in (TheTvDb, TvRage):
+        #     l = library()
+        #     episode = l.get_episode_title_from_xml(xml)
+        #     assert_equal(episode, u'¡Viva los Muertos!')

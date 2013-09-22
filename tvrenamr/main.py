@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 import os
 import re
@@ -60,17 +61,8 @@ class File(object):
         self.episodes = [Episode(_file=self, number=i) for i in episodes]
         self.extension = extension
 
-    def __str__(self):
-        filename = getattr(self, 'output_format', self.default_format)
-
-        filename = filename.replace('%n', self.show_name)
-        filename = filename.replace('%t', self.title)
-        filename = filename.replace('%x', self.extension)
-
-        filename = self.get_season_output(filename)
-        filename = self.get_episode_output(filename)
-
-        return filename
+    def __repr__(self):
+        return self.name
 
     def get_episode_output(self, filename, marker='%e', fill=2):
         if '%e{' in filename:
@@ -85,6 +77,19 @@ class File(object):
             marker = '%s{' + fill + '}'
         season = str(self.season).zfill(int(fill))
         return filename.replace(marker, season)
+
+    @property
+    def name(self):
+        filename = getattr(self, 'output_format', self.default_format)
+
+        filename = filename.replace('%n', self.show_name)
+        filename = filename.replace('%t', self.title)
+        filename = filename.replace('%x', self.extension)
+
+        filename = self.get_season_output(filename)
+        filename = self.get_episode_output(filename)
+
+        return filename
 
     @property
     def title(self):
@@ -268,7 +273,7 @@ class TvRenamr(object):
 
         log.log(22, 'Directory: {0}'.format(rename_dir))
 
-        path = os.path.join(rename_dir, str(_file))
+        path = os.path.join(rename_dir, _file.name)
         log.debug('Full path: {0}'.format(path))
 
         return path
