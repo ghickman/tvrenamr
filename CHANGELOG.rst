@@ -1,6 +1,32 @@
 Changelog
 =========
 
+v3.4.5
+------
+
+- Handle unicode in episode names
+
+
+v3.4.4
+------
+
+- Fix specifying an episode on the command line
+
+
+v3.4.3
+------
+
+- Improve the code that checks if tvr has everything needed to rename a file
+
+- Handle seasons & episodes as numbers internally
+
+
+v3.4.2
+------
+
+- Fix renaming shows with 720[p] in the filename
+
+
 v3.4.1
 ------
 
