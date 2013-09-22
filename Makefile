@@ -7,7 +7,7 @@ help:
 
 release:
 	python setup.py sdist upload
-	python setup.py sdist_wheel upload
+	python setup.py bdist_wheel upload
 
 test:
 	python setup.py test
