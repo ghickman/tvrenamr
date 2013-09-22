@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.4.8
+------
+
+- Fix ignored file list option default
+
+
 v3.4.7
 ------
 
