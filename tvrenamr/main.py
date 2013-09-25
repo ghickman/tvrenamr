@@ -422,6 +422,10 @@ class TvRenamr(object):
             (' ', '.'),
             ('.720p', ''),
             ('.720', ''),
+            ('.1080p', ''),
+            ('.1080', ''),
+            ('.H.264', ''),
+            ('.h.264', ''),
         )
         for target, replacement in items:
             filename = filename.replace(target, replacement)

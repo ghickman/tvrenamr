@@ -163,3 +163,51 @@ class TestMain(BaseTest):
         assert_equal(details['show_name'], 'chuck')
         assert_equal(details['season'], '1')
         assert_equal(details['episodes'][0], '3')
+
+    def test_1080_before_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.1080.S01E03.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_1080_after_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.S01E03.1080.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_1080p_before_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.1080p.S01E03.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_1080p_after_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.S01E03.1080p.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_H264_before_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.H.264.S01E03.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_H264_after_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.S01E03.H.264.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_h264_before_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.h.264.S01E03.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
+
+    def test_h264_after_season_and_episode(self):
+        details = self.tv.extract_details_from_file('chuck.S01E03.h.264.mp4')
+        assert_equal(details['show_name'], 'chuck')
+        assert_equal(details['season'], '1')
+        assert_equal(details['episodes'][0], '3')
