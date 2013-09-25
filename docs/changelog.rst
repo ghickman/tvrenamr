@@ -3,6 +3,58 @@
 Changelog
 =========
 
+v3.4.9
+------
+
+- Fix 1080[p] and [Hh].264 breaking the season & episode searching regular expression
+
+
+v3.4.8
+------
+
+- Fix ignored file list option default
+
+
+v3.4.7
+------
+
+- Enable passing files *and* folders as paths to rename
+
+
+v3.4.6
+------
+
+- Append to main log file instead of overwriting it
+
+- Add some sane defaults for rotating the log file
+
+
+v3.4.5
+------
+
+- Handle unicode in episode names
+
+
+v3.4.4
+------
+
+- Fix specifying an episode on the command line
+
+
+v3.4.3
+------
+
+- Improve the code that checks if tvr has everything needed to rename a file
+
+- Handle seasons & episodes as numbers internally
+
+
+v3.4.2
+------
+
+- Fix renaming shows with 720[p] in the filename
+
+
 v3.4.1
 ------
 

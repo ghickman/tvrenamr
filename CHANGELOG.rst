@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.4.9
+------
+
+- Fix 1080[p] and [Hh].264 breaking the season & episode searching regular expression
+
+
 v3.4.8
 ------
 
