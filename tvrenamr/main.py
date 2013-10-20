@@ -53,7 +53,7 @@ class Episode(object):
 
 
 class File(object):
-    default_format = '%n - %s%e - %t.%x'
+    output_format = '%n - %s%e - %t%x'
 
     def __init__(self, show_name=None, season=None, episodes=(), extension=''):
         self.show_name = show_name
@@ -80,7 +80,7 @@ class File(object):
 
     @property
     def name(self):
-        filename = getattr(self, 'output_format', self.default_format)
+        filename = self.output_format
 
         filename = filename.replace('%n', self.show_name)
         filename = filename.replace('%t', self.title)
@@ -123,7 +123,9 @@ class File(object):
 
     def set_output_format(self, user_format, config):
         if user_format is None:
-            self.output_format = config.get(self.show_name, 'format')
+            config_format = config.get(self.show_name, 'format')
+            if config_format is not None:
+                self.output_format = config_format
         else:
             self.output_format = user_format
 
