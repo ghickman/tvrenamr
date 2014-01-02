@@ -263,9 +263,7 @@ class TvRenamr(object):
 
         """
         if rename_dir is None:
-            rename_dir = self.config.get(_file.show_name, 'renamed')
-        if rename_dir is False:
-            rename_dir = self.working_dir
+            rename_dir = self.config.get(_file.show_name, 'renamed', self.working_dir)
 
         if organise is None:
             organise = self.config.get(_file.show_name, 'organise')

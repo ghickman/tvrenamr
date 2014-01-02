@@ -24,14 +24,14 @@ class Config(object):
         else:
             return False
 
-    def get(self, show, option):
+    def get(self, show, option, default=None):
         try:
             return self.config[show][option]
         except KeyError:
             try:
                 return self.defaults[option]
             except KeyError:
-                return False
+                return default
 
     def get_canonical(self, show):
         try:

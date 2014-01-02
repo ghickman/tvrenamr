@@ -53,7 +53,7 @@ class TestMain(BaseTest):
         assert_equal(os.path.split(path)[1], filename)
 
     def test_setting_an_episodes_format_as_season_episode_title_name(self):
-        self._file.output_format = '%s - %e - %t - %n%x'
+        self._file.set_output_format('%s - %e - %t - %n%x', None)
         path = self.tv.build_path(self._file, organise=False)
         filename = '3 - 01 - The Electric Can Opener Fluctuation - The Big Bang Theory.mp4'
         assert_equal(os.path.split(path)[1], filename)
@@ -211,3 +211,8 @@ class TestMain(BaseTest):
         assert_equal(details['show_name'], 'chuck')
         assert_equal(details['season'], '1')
         assert_equal(details['episodes'][0], '3')
+
+    def test_no_organise_in_config(self):
+        path = self.tv.build_path(self._file)
+        expected = os.path.join(self.files, 'The Big Bang Theory - 301 - The Electric Can Opener Fluctuation.mp4')
+        assert_equal(path, expected)

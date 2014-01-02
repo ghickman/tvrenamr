@@ -1,8 +1,8 @@
 defaults:
-  format: '%n - %s%e - %t%x'
+  # format: '%n - %s%e - %t%x'
   library: thetvdb
-  organise: yes
-  renamed: ./tests/files
+  # organise: yes
+  # renamed: ./tests/files
   the: true
 
 american dad:
