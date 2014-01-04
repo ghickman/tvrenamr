@@ -199,7 +199,7 @@ class TvRenamr(object):
             TvRage
         ]
         [libraries.insert(0, libraries.pop(libraries.index(lib)))
-        for lib in libraries if lib.__name__.lower() == library]
+            for lib in libraries if lib.__name__.lower() == library]
 
         # TODO: Make this bit not suck.
         if canonical:
