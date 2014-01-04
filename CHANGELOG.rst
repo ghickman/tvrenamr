@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v3.4.11
+-------
+
+- Fix bug when logging episode number that had been overridden
+
+
+v3.4.10
+-------
+
+- Fix bug with organise directory when no config is present
+
+
 v3.4.9
 ------
 
