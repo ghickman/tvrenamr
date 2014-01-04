@@ -14,8 +14,6 @@ class OptionParser(OptParser):
         self.add_option('--config', dest='config', help='Select a location for your config file. If the path is invalid the default locations will be used.')
         self.add_option('-c', '--canonical', dest='canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
         self.add_option('--debug', action='store_true', dest='debug', help=SUPPRESS_HELP)
-        self.add_option('--deluge', action='store_true', dest='deluge', help='Checks Deluge to make sure the file has been completed before renaming.')
-        self.add_option('--deluge-ratio', dest='deluge_ratio', help='Checks Deluge for completed and that the file has at least reached X share ratio.')
         self.add_option('-d', '--dry-run', dest='dry', action='store_true', help='Dry run your renaming.')
         self.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file.')
         self.add_option('--ignore-filelist', dest='ignore_filelist', default=(), help=SUPPRESS_HELP)

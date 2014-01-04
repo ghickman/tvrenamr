@@ -28,8 +28,6 @@ Options
 Tv Renamr accepts the following options which take precedent over any options set in the :ref:`config`.
 
 -c, --canonical  Set the show's canonical name to use when performing the online lookup.
---deluge         Checks Deluge to make sure the file has been completed before renaming.
---deluge-ratio   Checks Deluge for completed and that the file has at least reached X share ratio.
 -d, --dry-run    Dry run your renaming.
 -e, --episode    Set the episode number. Currently this will cause errors when working with more than one file.
 --log-file       Set the log file location.
