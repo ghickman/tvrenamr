@@ -43,10 +43,10 @@ class Config(object):
     def get_output(self, show):
         try:
             return self.config[show.lower()]['output']
-        except KeyError:
+        except (KeyError, TypeError):
             try:
                 return self.config[show.lower()]['canonical']
-            except KeyError:
+            except (KeyError, TypeError):
                 raise ShowNotInConfigException(show)
 
     def _load_config(self, config):
