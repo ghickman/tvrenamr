@@ -61,20 +61,18 @@ class FrontEnd(object):
         start_logging(options.log_file, options.log_level, options.quiet)
 
     def get_config(self, path=None):
-        possible_config = (
-            options.config,
-            path,
+        """Get the first viable config from the list of possiblities"""
+        exists = lambda x: x is not None and os.path.exists(x)
+        possible_configs = list(filter(exists, (
+            os.path.join(sys.path[0], 'config.yml'),
             os.path.expanduser('~/.tvrenamr/config.yml'),
-            os.path.join(sys.path[0], 'config.yml')
-        )
+            path,
+            options.config,
+        )))
 
-        # get the first viable config from the list of possibles
-        _config = None
-        for config in possible_config:
-            if config is not None and os.path.exists(config):
-                _config = Config(config)
-                break
-        self.config = _config
+        location = possible_configs[0] if possible_configs else None
+
+        self.config = Config(location)
 
     def rename(self, path):
         working, filename = os.path.split(path)
