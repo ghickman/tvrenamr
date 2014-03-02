@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import logging
 import os
 import re
+import shutil
 
 from . import errors
 from .libraries import TheTvDb, TvRage
@@ -295,7 +296,7 @@ class TvRenamr(object):
         log.debug(destination_filepath)
         if not self.dry and not self.debug:
             source_filepath = os.path.join(self.working_dir, current_filepath)
-            os.rename(source_filepath, destination_filepath)
+            shutil.move(source_filepath, destination_filepath)
         destination_file = os.path.split(destination_filepath)[1]
         log.log(26, 'Renamed: "{0}"'.format(destination_file))
         return destination_filepath
