@@ -74,8 +74,6 @@ class FrontEnd(object):
             if config is not None and os.path.exists(config):
                 _config = Config(config)
                 break
-        if _config is None:
-            raise ConfigNotFoundException
         self.config = _config
 
     def rename(self, path):
