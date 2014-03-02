@@ -5,9 +5,7 @@ import shutil
 from tvrenamr.config import Config
 from tvrenamr.main import File, TvRenamr
 
-from . import mock_requests
-# make pyflakes STFU
-assert mock_requests
+from . import mock_requests  # noqa
 
 
 logging.disable(logging.CRITICAL)
