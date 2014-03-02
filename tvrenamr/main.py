@@ -205,7 +205,9 @@ class TvRenamr(object):
         if canonical:
             episode._file.show_name = canonical
         else:
-            episode._file.show_name = self.config.get_canonical(episode._file.show_name)
+            episode._file.show_name = self.config.get(episode._file.show_name,
+                                                      'canonical',
+                                                      episode._file.show_name)
         log.debug('Show Name: {0}'.format(episode._file.show_name))
 
         # loop the libraries until one works

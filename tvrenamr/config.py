@@ -25,23 +25,26 @@ class Config(object):
             return False
 
     def get(self, show, option, default=None):
+        """
+        Get a configuration option from the config
+
+        This is a wrapper around the dict we build from the actual config
+        file that does some extra checking:
+            * Look for the option in a show
+            * Look for the option in a lowercased show
+            * Look for the option in the defaults
+            * return/error?
+        """
         try:
             return self.config[show][option]
         except KeyError:
             try:
-                return self.defaults[option]
+                return self.config[show.lower()][option]
             except KeyError:
-                return default
-
-    def get_canonical(self, show):
-        try:
-            return self.config[show]['canonical']
-        except KeyError:
-            try:
-                return self.config[show.lower()]['canonical']
-            except KeyError:
-                self.log.debug('No canonical defined, returning: {0}'.format(show))
-                return show
+                try:
+                    return self.cofnig['defaults'][option]
+                except KeyError:
+                    return default
 
     def _get_defaults(self):
         if 'defaults' in self.config:
