@@ -37,8 +37,8 @@ class BaseTest(object):
             self.build_files(path)
 
         # instantiate tvr
-        self.config = Config(os.path.join(self.path, 'config.yml'))
-        self.config.defaults['renamed'] = self.files
+        self.config = Config()
+        self.config.config['defaults']['renamed'] = self.files
         self.tv = TvRenamr(self.files, self.config, cache=False)
 
         self._file = File('The Big Bang Theory', '3', ['01'], '.mp4')

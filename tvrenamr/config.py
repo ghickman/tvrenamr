@@ -1,3 +1,4 @@
+import collections
 import logging
 import sys
 
@@ -8,14 +9,13 @@ from .errors import ShowNotInConfigException
 
 class Config(object):
 
-    def __init__(self, config):
+    def __init__(self, config=None):
         self.log = logging.getLogger('Config')
 
         self.config = self._load_config(config)
 
         self.log.debug('Config loaded')
 
-        self.defaults = self._get_defaults()
         self.log.debug('Defaults retrieved')
 
     def get(self, show, option, default=None):
@@ -40,17 +40,6 @@ class Config(object):
                 except KeyError:
                     return default
 
-    def _get_defaults(self):
-        if 'defaults' in self.config:
-            return self.config['defaults']
-        else:
-            message = """
-            The defaults section of your config is missing.
-
-            For an example see: https://gist.github.com/586062
-            """
-            raise NameError(message)
-
     def get_output(self, show):
         try:
             return self.config[show.lower()]['output']
@@ -61,6 +50,10 @@ class Config(object):
                 raise ShowNotInConfigException(show)
 
     def _load_config(self, config):
+        if config is None:
+            self.log.info('No config found, continuing with defaults.')
+            return collections.defaultdict(dict)
+
         try:
             with open(config, 'r') as f:
                 return yaml.safe_load(f)
