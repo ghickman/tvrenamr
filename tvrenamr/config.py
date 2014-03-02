@@ -10,7 +10,7 @@ from .errors import ShowNotInConfigException
 class Config(object):
 
     def __init__(self, config=None):
-        self.log = logging.getLogger('Config')
+        self.log = logging.getLogger('tvrenamr.config')
 
         self.config = self._load_config(config)
 
