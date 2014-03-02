@@ -18,12 +18,6 @@ class Config(object):
         self.defaults = self._get_defaults()
         self.log.debug('Defaults retrieved')
 
-    def exists(self, show):
-        if show in self.config:
-            return True
-        else:
-            return False
-
     def get(self, show, option, default=None):
         """
         Get a configuration option from the config
