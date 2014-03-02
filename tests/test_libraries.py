@@ -18,7 +18,7 @@ class TestLibraries(BaseTest):
         for library in self.libs:
             self.tv.retrieve_episode_title(_file.episodes[0], library=library)
             assert_equal(self.tv.format_show_name(_file.show_name, the=False), 'The O.C.')
-            assert_equal(self.tv.format_show_name(_file.show_name), 'O.C., The')
+            assert_equal(self.tv.format_show_name(_file.show_name, the=True), 'O.C., The')
 
     def test_searching_for_an_incorrect_name_returns_an_exception(self):
         _file = File('west, wing', '4', ['01'], '.mp4')
@@ -41,7 +41,7 @@ class TestLibraries(BaseTest):
         for library in self.libs:
             self.tv.retrieve_episode_title(self._file.episodes[0], library=library)
             assert_equal(self.tv.format_show_name(self._file.show_name, the=False), 'The Big Bang Theory')
-            assert_equal(self.tv.format_show_name(self._file.show_name), 'Big Bang Theory, The')
+            assert_equal(self.tv.format_show_name(self._file.show_name, the=True), 'Big Bang Theory, The')
 
     def test_unicode_character_in_episode_name(self):
         # This is horrible but the libraries are horrendous atm
