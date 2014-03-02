@@ -18,20 +18,6 @@ class AlreadyNamedException(Exception):
         log.error('Already in correct naming format: {0}'.format(fn))
 
 
-class ConfigNotFoundException(Exception):
-    """
-    Exception that is raised when a file with the same name as the renamed file
-    exists in the destination folder
-
-    :param fn: The destination file name.
-    :param dest: The destination directory.
-    """
-    def __init__(self):
-        log.error('A config could not be found. Please place one in either '
-                  '~/.tvrenamr/config.yml or the tvrenamr root directory. '
-                  'An example config: http://gist.github.com/586062')
-
-
 class EmptyEpisodeTitleException(Exception):
     """
     Raised when the episode XML document is returned but the name field is empty

@@ -101,8 +101,7 @@ class FrontEnd(object):
             tv.rename(filename, path)
         except KeyboardInterrupt:
             sys.exit()
-        except (ConfigNotFoundException,
-                NoMoreLibrariesException,
+        except (NoMoreLibrariesException,
                 NoNetworkConnectionException):
             if options.dry or options.debug:
                 self._stop_dry_run()
