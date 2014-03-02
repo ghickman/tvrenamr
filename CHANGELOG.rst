@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.5.0
+------
+
+- Remove requirement on config
+
+
 v3.4.11
 -------
 
