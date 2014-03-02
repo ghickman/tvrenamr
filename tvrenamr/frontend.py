@@ -62,15 +62,17 @@ class FrontEnd(object):
 
     def get_config(self, path=None):
         """Get the first viable config from the list of possiblities"""
-        exists = lambda x: x is not None and os.path.exists(x)
-        possible_configs = list(filter(exists, (
+        def exists(x):
+            return x is not None and os.path.exists(x)
+
+        possible_configs = iter(filter(exists, (
             os.path.join(sys.path[0], 'config.yml'),
             os.path.expanduser('~/.tvrenamr/config.yml'),
             path,
             options.config,
         )))
 
-        location = possible_configs[0] if possible_configs else None
+        location = next(possible_configs, None)
 
         self.config = Config(location)
 
