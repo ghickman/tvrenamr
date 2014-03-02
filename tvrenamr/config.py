@@ -31,13 +31,13 @@ class Config(object):
         """
         try:
             return self.config[show][option]
-        except KeyError:
+        except (KeyError, TypeError):
             try:
                 return self.config[show.lower()][option]
-            except KeyError:
+            except (KeyError, TypeError):
                 try:
                     return self.config['defaults'][option]
-                except KeyError:
+                except (KeyError, TypeError):
                     return default
 
     def get_output(self, show):
