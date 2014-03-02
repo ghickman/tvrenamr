@@ -36,7 +36,7 @@ class Config(object):
                 return self.config[show.lower()][option]
             except KeyError:
                 try:
-                    return self.cofnig['defaults'][option]
+                    return self.config['defaults'][option]
                 except KeyError:
                     return default
 
