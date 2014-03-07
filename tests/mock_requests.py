@@ -3,7 +3,7 @@ import os
 
 from minimock import mock, restore
 
-from ..tvrenamr.vendor import requests
+from tvrenamr.vendor import requests
 
 
 test_dir = os.path.abspath(os.path.dirname(__file__))
