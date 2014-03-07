@@ -18,7 +18,7 @@ class TestExceptionsAreRaised(BaseTest):
         args = (self.tv.extract_details_from_file, 'chuck.avi')
         assert_raises(UnexpectedFormatException, *args)
 
-    @patch('requests.get', new=bad_response)
+    @patch('tvrenamr.libraries.requests.get', new=bad_response)
     def test_nonexistant_episode_doesnt_work_on_any_library(self):
         args = (
            NoMoreLibrariesException,
