@@ -21,9 +21,9 @@ class TestExceptionsAreRaised(BaseTest):
     @patch('tvrenamr.libraries.requests.get', new=bad_response)
     def test_nonexistant_episode_doesnt_work_on_any_library(self):
         args = (
-           NoMoreLibrariesException,
-           self.tv.retrieve_episode_title,
-           self._file.episodes[0],
+            NoMoreLibrariesException,
+            self.tv.retrieve_episode_title,
+            self._file.episodes[0],
         )
         assert_raises(*args)
 
