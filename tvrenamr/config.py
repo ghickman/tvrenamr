@@ -2,7 +2,7 @@ import collections
 import logging
 import sys
 
-import yaml
+from vendor.yaml import safe_load, YAMLError
 
 from .errors import ShowNotInConfigException
 
@@ -56,8 +56,8 @@ class Config(object):
 
         try:
             with open(config, 'r') as f:
-                return yaml.safe_load(f)
-        except yaml.YAMLError as e:
+                return safe_load(f)
+        except YAMLError as e:
             self.log.critical(e)
             print('')
             print('-' * 79)
