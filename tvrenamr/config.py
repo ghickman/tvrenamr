@@ -2,9 +2,8 @@ import collections
 import logging
 import sys
 
-from vendor.yaml import safe_load, YAMLError
-
 from .errors import ShowNotInConfigException
+from .vendor.yaml import safe_load, YAMLError
 
 
 class Config(object):

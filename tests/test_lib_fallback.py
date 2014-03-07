@@ -1,10 +1,9 @@
 from mock import patch
 from nose.tools import assert_true, assert_raises
-import requests
-# make pyflakes STFU
-assert requests
+
 from tvrenamr.errors import NoMoreLibrariesException
 from tvrenamr.main import Episode
+from tvrenamr.vendor import requests  # noqa
 
 from .base import BaseTest
 from .mock_requests import initially_bad_xml, invalid_xml

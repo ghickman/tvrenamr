@@ -8,9 +8,8 @@ try:  # XML Exception class import dance
 except ImportError:  # python 2.6
     from xml.parsers.expat import ExpatError as ParseError
 
-import requests
-
-from .import errors
+from . import errors
+from .vendor import requests
 
 
 class BaseLibrary(object):

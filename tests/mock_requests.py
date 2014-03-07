@@ -2,7 +2,8 @@ import hashlib
 import os
 
 from minimock import mock, restore
-import requests
+
+from ..tvrenamr.vendor import requests
 
 
 test_dir = os.path.abspath(os.path.dirname(__file__))
