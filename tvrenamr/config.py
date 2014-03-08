@@ -3,7 +3,10 @@ import logging
 import sys
 
 from .errors import ShowNotInConfigException
-from .vendor.yaml import safe_load, YAMLError
+if sys.version_info[0] == 3:
+    from .vendor import yaml
+else:
+    from .vendor import yaml2 as yaml
 
 
 class Config(object):
@@ -55,8 +58,8 @@ class Config(object):
 
         try:
             with open(config, 'r') as f:
-                return safe_load(f)
-        except YAMLError as e:
+                return yaml.safe_load(f)
+        except yaml.error.YAMLError as e:
             self.log.critical(e)
             print('')
             print('-' * 79)
