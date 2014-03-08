@@ -336,13 +336,13 @@ class TvRenamr(object):
 
         Show name and season number of an episode dictate the folder structure.
         """
-
         season = 'Season {}'.format(season_number)
         path = os.path.join(start_path, show_name, season)
 
-        if not (os.path.exists(path) and self.dry and self.debug):
+        if not (os.path.exists(path) or self.dry or self.debug):
             os.makedirs(path)
             log.debug('Directories created for path: ' + path)
+
         return path
 
     def _build_regex(self, regex=None, partial=False):
