@@ -35,4 +35,5 @@ class OptionParser(OptParser):
         self.add_option('-s', '--season', dest='season', help='Set the season number.')
         self.add_option('--show', dest='show_name', help='Set the show\'s name (will search for this name).')
         self.add_option('--show-override', dest='show_override', help='Override the show\'s name (only replaces the show\'s name in the final file)')
+        self.add_option('--specials', dest='specials_folder', help='Set the show\'s specials folder (defaults to "Season 0")')
         self.add_option('-t', '--the', action='store_true', dest='the', help='Set the position of \'The\' in a show\'s name to the end of the show name')

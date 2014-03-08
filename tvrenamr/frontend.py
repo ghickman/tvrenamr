@@ -95,8 +95,12 @@ class FrontEnd(object):
 
             _file.set_output_format(options.output_format, self.config)
 
-            path = tv.build_path(_file, rename_dir=options.rename_dir,
-                                 organise=options.organise)
+            path = tv.build_path(
+                _file,
+                rename_dir=options.rename_dir,
+                organise=options.organise,
+                specials_folder=options.specials_folder,
+            )
 
             tv.rename(filename, path)
         except KeyboardInterrupt:
