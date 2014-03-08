@@ -336,9 +336,9 @@ class TvRenamr(object):
 
         Show name and season number of an episode dictate the folder structure.
         """
-        if start_path[-1:] != '/':
-            start_path = start_path + '/'
-        path = start_path + show_name + '/Season ' + str(int(season_number)) + '/'
+
+        season = 'Season {}'.format(season_number)
+        path = os.path.join(start_path, show_name, season)
 
         if not (os.path.exists(path) and self.dry and self.debug):
             os.makedirs(path)
