@@ -331,10 +331,10 @@ class TvRenamr(object):
         return details
 
     def _build_organise_path(self, start_path, show_name, season_number):
-        """Constructs a directory path using the show's details.
+        """
+        Constructs a directory path using the show's details.
 
         Show name and season number of an episode dictate the folder structure.
-
         """
         if start_path[-1:] != '/':
             start_path = start_path + '/'
