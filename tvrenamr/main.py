@@ -330,13 +330,16 @@ class TvRenamr(object):
         log.debug('Filename yielded: {0}'.format(msg))
         return details
 
-    def _build_organise_path(self, start_path, show_name, season_number):
+    def _build_organise_path(self, start_path, show_name, season_number, specials=None):
         """
         Constructs a directory path using the show's details.
 
         Show name and season number of an episode dictate the folder structure.
         """
         season = 'Season {}'.format(season_number)
+        if season_number is 0:  # specials folder
+            season = specials or self.config.get(show_name, 'specials_folder')
+
         path = os.path.join(start_path, show_name, season)
 
         if not (os.path.exists(path) or self.dry or self.debug):
