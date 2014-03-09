@@ -1,6 +1,6 @@
 *.log
 *.pyc
-*.egg/
+*.egg
 .com*
 tests/data
 tests/cache
