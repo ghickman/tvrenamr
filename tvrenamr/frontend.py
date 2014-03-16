@@ -49,23 +49,24 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
     return file_list
 
 
+def get_config(path=None):
+    """Get the first viable config from the list of possiblities"""
+    def exists(x):
+        return x is not None and os.path.exists(x)
+
+    possible_configs = iter(filter(exists, (
+        os.path.join(sys.path[0], 'config.yml'),
+        os.path.expanduser('~/.tvrenamr/config.yml'),
+        path,
+        options.config,
+    )))
+
+    location = next(possible_configs, None)
+
+    return Config(location)
+
+
 class FrontEnd(object):
-    def get_config(self, path=None):
-        """Get the first viable config from the list of possiblities"""
-        def exists(x):
-            return x is not None and os.path.exists(x)
-
-        possible_configs = iter(filter(exists, (
-            os.path.join(sys.path[0], 'config.yml'),
-            os.path.expanduser('~/.tvrenamr/config.yml'),
-            path,
-            options.config,
-        )))
-
-        location = next(possible_configs, None)
-
-        self.config = Config(location)
-
     def rename(self, path):
         working, filename = os.path.split(path)
         try:
@@ -162,8 +163,9 @@ def run():
         args = [os.getcwd()]
     files = build_file_list(args, options.recursive, options.ignore_filelist)
 
+    config = get_config()
+
     frontend = FrontEnd()
-    frontend.get_config()
     frontend.run(files)
 
 if __name__ == "__main__":
