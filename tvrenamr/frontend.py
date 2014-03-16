@@ -50,12 +50,6 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
 
 
 class FrontEnd(object):
-    def __init__(self):
-        # start logging
-        if options.debug:
-            options.log_level = 10
-        start_logging(options.log_file, options.log_level, options.quiet)
-
     def get_config(self, path=None):
         """Get the first viable config from the list of possiblities"""
         def exists(x):
@@ -157,6 +151,10 @@ class FrontEnd(object):
 def run():
     parser = OptionParser()
     options, args = parser.parse_args()
+
+    if options.debug:
+        options.log_level = 10
+    start_logging(options.log_file, options.log_level, options.quiet)
 
     # use current directory if no args specified
     if not args:
