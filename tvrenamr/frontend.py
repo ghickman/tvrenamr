@@ -55,9 +55,9 @@ def get_config(path=None):
         return x is not None and os.path.exists(x)
 
     possible_configs = iter(filter(exists, (
+        path,
         os.path.join(sys.path[0], 'config.yml'),
         os.path.expanduser('~/.tvrenamr/config.yml'),
-        path,
     )))
 
     location = next(possible_configs, None)
