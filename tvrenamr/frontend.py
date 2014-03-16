@@ -14,10 +14,6 @@ from .options import OptionParser
 log = logging.getLogger('FrontEnd')
 
 
-parser = OptionParser()
-options, args = parser.parse_args()
-
-
 def build_file_list(paths, recursive=False, ignore_filelist=()):
     """
     Determines which files need to be processed for renaming.
@@ -159,12 +155,14 @@ class FrontEnd(object):
 
 
 def run():
+    parser = OptionParser()
+    options, args = parser.parse_args()
+
     # use current directory if no args specified
-    paths = args
     if not args:
         log.debug('No file or directory specified, using current directory')
-        paths = [os.getcwd()]
-    files = build_file_list(paths, options.recursive, options.ignore_filelist)
+        args = [os.getcwd()]
+    files = build_file_list(args, options.recursive, options.ignore_filelist)
 
     frontend = FrontEnd()
     frontend.get_config()
