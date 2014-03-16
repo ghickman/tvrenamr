@@ -66,87 +66,73 @@ def get_config(path=None):
     return Config(location)
 
 
-class FrontEnd(object):
-    def rename(self, path):
-        working, filename = os.path.split(path)
-        try:
-            tv = TvRenamr(working, self.config, options.debug, options.dry, options.cache)
+def start_dry_run():
+    log.log(26, 'Dry Run beginning.')
+    log.log(26, '-' * 70)
+    log.log(26, '')
 
-            _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
-            # TODO: Warn setting season & episode will override *all* episodes
-            _file.user_overrides(options.show_name, options.season, options.episode)
-            _file.safety_check()
 
-            for episode in _file.episodes:
-                episode.title = tv.retrieve_episode_title(episode, library=options.library,
-                                                          canonical=options.canonical)
+def stop_dry_run():
+    log.log(26, '')
+    log.log(26, '-' * 70)
+    log.log(26, 'Dry Run complete. No files were harmed in the process.')
+    log.log(26, '')
 
-            _file.show_name = tv.format_show_name(_file.show_name, the=options.the,
-                                                  override=options.show_override)
 
-            _file.set_output_format(options.output_format, self.config)
+def rename(path, config, options):
+    working, filename = os.path.split(path)
+    try:
+        tv = TvRenamr(working, config, options.debug, options.dry, options.cache)
 
-            path = tv.build_path(
-                _file,
-                rename_dir=options.rename_dir,
-                organise=options.organise,
-                specials_folder=options.specials_folder,
-            )
+        _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
+        # TODO: Warn setting season & episode will override *all* episodes
+        _file.user_overrides(options.show_name, options.season, options.episode)
+        _file.safety_check()
 
-            tv.rename(filename, path)
-        except KeyboardInterrupt:
-            sys.exit()
-        except (NoMoreLibrariesException,
-                NoNetworkConnectionException):
-            if options.dry or options.debug:
-                self._stop_dry_run()
-            sys.exit(1)
-        except (AttributeError,
-                EmptyEpisodeTitleException,
-                EpisodeAlreadyExistsInDirectoryException,
-                EpisodeNotFoundException,
-                IncorrectCustomRegularExpressionSyntaxException,
-                InvalidXMLException,
-                MissingInformationException,
-                OutputFormatMissingSyntaxException,
-                ShowNotFoundException,
-                UnexpectedFormatException) as e:
-            for msg in e.args:
-                log.critical(e)
-            pass
-        except Exception as e:
-            if options.debug:
-                # In debug mode, show the full traceback.
-                raise
-            for msg in e.args:
-                log.critical('Error: {0}'.format(msg))
-            sys.exit(1)
+        for episode in _file.episodes:
+            episode.title = tv.retrieve_episode_title(episode, library=options.library,
+                                                      canonical=options.canonical)
 
-    def run(self, files):
+        _file.show_name = tv.format_show_name(_file.show_name, the=options.the,
+                                              override=options.show_override)
+
+        _file.set_output_format(options.output_format, config)
+
+        path = tv.build_path(
+            _file,
+            rename_dir=options.rename_dir,
+            organise=options.organise,
+            specials_folder=options.specials_folder,
+        )
+
+        tv.rename(filename, path)
+    except KeyboardInterrupt:
+        sys.exit()
+    except (NoMoreLibrariesException,
+            NoNetworkConnectionException):
         if options.dry or options.debug:
-            self._start_dry_run()
-
-        # kick off a rename for each file in the list
-        for path in files:
-            self.rename(path)
-
-            # if we're not doing a dry run add a blank line for clarity
-            if not (options.debug and options.dry):
-                log.info('')
-
-        if options.dry or options.debug:
-            self._stop_dry_run()
-
-    def _start_dry_run(self):
-        log.log(26, 'Dry Run beginning.')
-        log.log(26, '-' * 70)
-        log.log(26, '')
-
-    def _stop_dry_run(self):
-        log.log(26, '')
-        log.log(26, '-' * 70)
-        log.log(26, 'Dry Run complete. No files were harmed in the process.')
-        log.log(26, '')
+            stop_dry_run()
+        sys.exit(1)
+    except (AttributeError,
+            EmptyEpisodeTitleException,
+            EpisodeAlreadyExistsInDirectoryException,
+            EpisodeNotFoundException,
+            IncorrectCustomRegularExpressionSyntaxException,
+            InvalidXMLException,
+            MissingInformationException,
+            OutputFormatMissingSyntaxException,
+            ShowNotFoundException,
+            UnexpectedFormatException) as e:
+        for msg in e.args:
+            log.critical(e)
+        pass
+    except Exception as e:
+        if options.debug:
+            # In debug mode, show the full traceback.
+            raise
+        for msg in e.args:
+            log.critical('Error: {0}'.format(msg))
+        sys.exit(1)
 
 
 def run():
@@ -165,8 +151,20 @@ def run():
 
     config = get_config()
 
-    frontend = FrontEnd()
-    frontend.run(files)
+    if options.dry or options.debug:
+        start_dry_run()
+
+    # kick off a rename for each file in the list
+    for path in files:
+        rename(path, config)
+
+        # if we're not doing a dry run add a blank line for clarity
+        if not (options.debug and options.dry):
+            log.info('')
+
+    if options.dry or options.debug:
+        stop_dry_run()
+
 
 if __name__ == "__main__":
     run()
