@@ -66,19 +66,6 @@ def get_config(path=None):
     return Config(location)
 
 
-def start_dry_run():
-    log.log(26, 'Dry Run beginning.')
-    log.log(26, '-' * 70)
-    log.log(26, '')
-
-
-def stop_dry_run():
-    log.log(26, '')
-    log.log(26, '-' * 70)
-    log.log(26, 'Dry Run complete. No files were harmed in the process.')
-    log.log(26, '')
-
-
 def rename(path, config, options):
     working, filename = os.path.split(path)
     try:
@@ -164,6 +151,19 @@ def run():
 
     if options.dry or options.debug:
         stop_dry_run()
+
+
+def start_dry_run():
+    log.log(26, 'Dry Run beginning.')
+    log.log(26, '-' * 70)
+    log.log(26, '')
+
+
+def stop_dry_run():
+    log.log(26, '')
+    log.log(26, '-' * 70)
+    log.log(26, 'Dry Run complete. No files were harmed in the process.')
+    log.log(26, '')
 
 
 if __name__ == "__main__":
