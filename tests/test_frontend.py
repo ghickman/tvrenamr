@@ -22,14 +22,6 @@ class TestFrontEnd(BaseTest):
             if os.path.isdir(fn):
                 assert_true(os.path.join(self.files, fn) in file_list)
 
-    def test_passing_current_dir_makes_file_list_a_list(self):
-        assert_true(isinstance(frontend.build_file_list([self.files]), list))
-
-    def test_build_file_list_from_multiple_files(self):
-        files = self.random_files(self.files)
-        file_list = frontend.build_file_list(files)
-        assert_true(all(fn in file_list for fn in files))
-
     def test_build_file_list_from_folders_and_files(self):
         files = self.random_files(self.files) + [self.subfolder]
         file_list = frontend.build_file_list(files)
@@ -43,10 +35,18 @@ class TestFrontEnd(BaseTest):
             return files
         assert_true(all(fn in file_list for fn in final_list()))
 
+    def test_build_file_list_from_multiple_files(self):
+        files = self.random_files(self.files)
+        file_list = frontend.build_file_list(files)
+        assert_true(all(fn in file_list for fn in files))
+
     def test_build_file_list_from_single_file(self):
         fn = os.path.join(self.files, random.choice(os.listdir(self.files)))
         file_list = frontend.build_file_list([fn])
         assert_true(fn in file_list)
+
+    def test_passing_current_dir_makes_file_list_a_list(self):
+        assert_true(isinstance(frontend.build_file_list([self.files]), list))
 
     def test_setting_recursive_adds_all_files_below_the_folder(self):
         new_folders = ('herp', 'derp', 'test')
