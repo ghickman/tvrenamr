@@ -28,7 +28,7 @@ class OptionParser(OptParser):
         self.add_option('--no-organise', action='store_false', dest='organise', help='Explicitly tell Tv Renamr not to organise renamed files. Used to override the config.')
         self.add_option('-p', '--partial', action='store_true', dest='partial', help='Allow partial regex matching of the filename.')
         self.add_option('-q', '--quiet', action='store_true', dest='quiet', help='Don\'t output logs to the command line')
-        self.add_option('-r', '--recursive', action='store_true', dest='recursive', default=False help='Recursively lookup files in a given directory')
+        self.add_option('-r', '--recursive', action='store_true', dest='recursive', default=False, help='Recursively lookup files in a given directory')
         self.add_option('--rename-dir', dest='rename_dir', help='The directory to move renamed files to, if not specified the working directory is used.')
         self.add_option('--no-rename-dir', action='store_false', dest='rename_dir', help='Explicity tell Tv Renamr not to move renamed files. Used to override the config.')
         self.add_option('--regex', dest='regex', help='The regular expression to use when extracting information from files.')
