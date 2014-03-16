@@ -58,7 +58,6 @@ def get_config(path=None):
         os.path.join(sys.path[0], 'config.yml'),
         os.path.expanduser('~/.tvrenamr/config.yml'),
         path,
-        options.config,
     )))
 
     location = next(possible_configs, None)
@@ -136,7 +135,7 @@ def run():
         args = [os.getcwd()]
     files = build_file_list(args, options.recursive, options.ignore_filelist)
 
-    config = get_config()
+    config = get_config(options.config)
 
     if options.dry or options.debug:
         start_dry_run()
