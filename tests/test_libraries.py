@@ -1,11 +1,10 @@
 # coding=utf-8
-from xml.etree.ElementTree import fromstring
-
 from nose.tools import assert_equal, assert_raises
 
 from tvrenamr.errors import NoMoreLibrariesException
 from tvrenamr.libraries import TheTvDb, TvRage
 from tvrenamr.main import File
+from tvrenamr.vendor.defusedxml.ElementTree import fromstring
 
 from .base import BaseTest
 

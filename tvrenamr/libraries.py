@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 import logging
 import os
 import urllib
-from xml.etree.ElementTree import fromstring
 try:  # XML Exception class import dance
     from xml.etree.ElementTree import ParseError
 except ImportError:  # python 2.6
@@ -10,6 +9,7 @@ except ImportError:  # python 2.6
 
 from . import errors
 from .vendor import requests
+from .vendor.defusedxml.ElementTree import fromstring
 
 
 class BaseLibrary(object):
