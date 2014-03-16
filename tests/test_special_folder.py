@@ -29,6 +29,3 @@ class TestSpecialFolder(BaseTest):
         args = ('foo', 'Chuck', 0)
         path = self.tv._build_organise_path(*args)
         assert_equal(path, 'foo/Chuck/Specials')
-
-    def test_foo(self):
-        pass
