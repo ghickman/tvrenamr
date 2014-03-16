@@ -142,7 +142,7 @@ def run():
 
     # kick off a rename for each file in the list
     for path in files:
-        rename(path, config)
+        rename(path, config, options)
 
         # if we're not doing a dry run add a blank line for clarity
         if not (options.debug and options.dry):
