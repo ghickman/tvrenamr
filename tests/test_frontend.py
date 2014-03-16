@@ -45,6 +45,18 @@ class TestFrontEnd(BaseTest):
         file_list = frontend.build_file_list([fn])
         assert_true(fn in file_list)
 
+    def test_load_config(self):
+        tmp_conf = os.path.join(self.path, 'test_config.yml')
+        with open(tmp_conf, 'w') as f:
+            f.writelines(['defaults:\n', '  foo: bar'])
+
+        config = frontend.get_config(tmp_conf).config
+        assert config
+        assert 'defaults' in config
+        assert 'foo' in config['defaults']
+
+        os.remove(tmp_conf)
+
     def test_passing_current_dir_makes_file_list_a_list(self):
         assert_true(isinstance(frontend.build_file_list([self.files]), list))
 
