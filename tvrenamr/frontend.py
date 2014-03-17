@@ -31,7 +31,7 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
 
     for glob in paths:
         if not os.path.exists(glob):
-            parser.error("'{0}' is not a file or directory. Ruh Roe!".format(args))
+            raise IOError(glob)
 
         if os.path.isfile(glob):
             file_list.append(glob)
@@ -133,7 +133,10 @@ def run():
     if not args:
         log.debug('No file or directory specified, using current directory')
         args = [os.getcwd()]
-    files = build_file_list(args, options.recursive, options.ignore_filelist)
+    try:
+        files = build_file_list(args, options.recursive, options.ignore_filelist)
+    except IOError as e:
+        parser.error("'{0}' is not a file or directory.".format(e))
 
     config = get_config(options.config)
 
