@@ -4,8 +4,6 @@ from setuptools import setup
 import tvrenamr
 
 
-setup_requires = ('minimock', 'mock', 'nose')
-
 setup(
     name=tvrenamr.__title__,
     version=tvrenamr.__version__,
@@ -33,6 +31,4 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Topic :: Utilities',
     ],
-    setup_requires=setup_requires,
-    test_suite='nose.collector',
 )

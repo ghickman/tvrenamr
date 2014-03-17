@@ -1,4 +1,3 @@
 minimock
 mock
-nose
-pyyaml
+pytest

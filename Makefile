@@ -9,4 +9,4 @@ release:
 	python setup.py register sdist bdist_wheel upload
 
 test:
-	python setup.py test
+	py.test

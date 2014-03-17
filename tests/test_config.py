@@ -1,5 +1,3 @@
-from nose.tools import assert_equal, assert_true
-
 class TestConfig(object):
     # def test passing in a
     # test passing in a show not in the config
