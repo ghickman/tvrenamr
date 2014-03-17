@@ -18,10 +18,6 @@ class MockOptions(object):
 
 
 class TestFrontEnd(BaseTest):
-    def setup(self):
-        super(TestFrontEnd, self).setup()
-        self.config = frontend.get_config()
-
     def random_files(self, files):
         possible_files = os.listdir(self.files)
         return [os.path.join(files, random.choice(possible_files)) for choice in range(3)]
