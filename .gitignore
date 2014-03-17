@@ -13,3 +13,4 @@ thoughts
 docs/_build/
 venv
 .tox
+.coverage
