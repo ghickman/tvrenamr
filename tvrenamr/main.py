@@ -336,7 +336,7 @@ class TvRenamr(object):
 
         Show name and season number of an episode dictate the folder structure.
         """
-        season = 'Season {}'.format(season_number)
+        season = 'Season {0}'.format(season_number)
         if season_number is 0:  # specials folder
             season = specials or self.config.get(show_name, 'specials_folder')
 
