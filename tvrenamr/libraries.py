@@ -2,10 +2,13 @@ from __future__ import unicode_literals
 import logging
 import os
 import urllib
-try:  # XML Exception class import dance
-    from xml.etree.ElementTree import ParseError
-except ImportError:  # python 2.6
-    from xml.parsers.expat import ExpatError as ParseError
+try:
+    from .vendor.defusedxml.ElementTree import ParseError
+except ImportError:  # python 2
+    try:
+        from xml.etree.ElementTree import ParseError
+    except ImportError:  # python 2.6
+        from xml.parsers.expat import ExpatError as ParseError
 
 from . import errors
 from .vendor import requests
