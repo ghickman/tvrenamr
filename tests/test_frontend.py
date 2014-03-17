@@ -1,10 +1,20 @@
 import os
 import random
 
+from mock import patch
 from nose.tools import assert_true
 
 from .base import BaseTest
 from tvrenamr import frontend
+
+
+class MockOptions(object):
+    ignore_filelist = ()
+    library = 'thetvdb'
+    recursive = False
+
+    def __getattr__(self, name):
+        return None
 
 
 class TestFrontEnd(BaseTest):
@@ -60,9 +70,24 @@ class TestFrontEnd(BaseTest):
     def test_passing_current_dir_makes_file_list_a_list(self):
         assert_true(isinstance(frontend.build_file_list([self.files]), list))
 
+    def test_dry_run_methods_are_called(self):
+        def fake(cls):
+            options = MockOptions()
+            options.dry_run = True
+            return options, []
+
+        with patch('tvrenamr.frontend.OptionParser.parse_args', new=fake):
+            with patch.object(frontend.start_dry_run, '__call__') as start:
+                with patch.object(frontend, 'stop_dry_run') as stop:
+                    frontend.start_dry_run()
+                    frontend.run()
+                    assert start.called
+                    assert stop.called
+
     def test_setting_recursive_adds_all_files_below_the_folder(self):
         new_folders = ('herp', 'derp', 'test')
         os.makedirs(os.path.join(self.files, *new_folders))
+
         def build_folder(folder):
             new_files = ('foo', 'bar', 'blah')
             for fn in new_files:
