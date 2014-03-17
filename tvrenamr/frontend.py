@@ -30,7 +30,7 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
     file_list = []
 
     for glob in paths:
-        if not (os.path.isfile(glob) or os.path.isdir(glob)):
+        if not os.path.exists(glob):
             parser.error("'{0}' is not a file or directory. Ruh Roe!".format(args))
 
         if os.path.isfile(glob):
