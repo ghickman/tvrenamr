@@ -84,6 +84,15 @@ class TestFrontEnd(BaseTest):
                     assert start.called
                     assert stop.called
 
+    def test_main_run_function(self):
+        def fake(foo):
+            return MockOptions(), []
+
+        with patch('tvrenamr.frontend.OptionParser.parse_args', new=fake):
+            with patch.object(self.tv, 'rename') as ob:
+                print(ob)
+                frontend.run()
+
     def test_setting_recursive_adds_all_files_below_the_folder(self):
         new_folders = ('herp', 'derp', 'test')
         os.makedirs(os.path.join(self.files, *new_folders))
