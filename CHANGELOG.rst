@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v3.6.0
+------
+
+- Vendor dependencies
+- Harden XML with defusedxml
+- Switch to py.test for testing
+- Rework frontend code for easier testing
+
+
 v3.5.0
 ------
 
