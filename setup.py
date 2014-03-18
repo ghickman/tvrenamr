@@ -4,12 +4,21 @@ from setuptools import find_packages, setup
 import tvrenamr
 
 
+def long_desc():
+    with open('README.rst') as f:
+        readme = f.read()
+
+    with open('CHANGELOG.rst') as f:
+        changelog = f.read()
+
+    return readme + '\n\n' + changelog
+
+
 setup(
     name=tvrenamr.__title__,
     version=tvrenamr.__version__,
     description='Rename tv show files using online databases',
-    long_description=open('README.rst').read() + '\n\n' +
-    open('CHANGELOG.rst').read(),
+    long_description=long_desc,
     author=tvrenamr.__author__,
     author_email='george@ghickman.co.uk',
     url='http://tvrenamr.info',
