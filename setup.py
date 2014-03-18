@@ -1,5 +1,5 @@
 import multiprocessing  # noqa # stop tests breaking tox
-from setuptools import setup
+from setuptools import find_packages, setup
 
 import tvrenamr
 
@@ -14,7 +14,7 @@ setup(
     author_email='george@ghickman.co.uk',
     url='http://tvrenamr.info',
     license='MIT',
-    packages=['tvrenamr'],
+    packages=find_packages(exclude=['docs', 'tests']),
     entry_points={'console_scripts': ['tvr=tvrenamr.frontend:run']},
     classifiers=[
         'Development Status :: 6 - Mature',
