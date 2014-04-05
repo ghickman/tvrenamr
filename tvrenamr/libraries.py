@@ -19,8 +19,8 @@ class BaseLibrary(object):
     def __init__(self, show, season, episode, cache):
         self.cache = cache
         self.show = show
-        self.season = season
-        self.episode = episode
+        self.season = season.lstrip('0')
+        self.episode = episode.lstrip('0')
 
         self.log.info('Searching: {0}'.format(self.show))
         self.set_show_id()
