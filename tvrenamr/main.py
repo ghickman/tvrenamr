@@ -219,17 +219,13 @@ class TvRenamr(object):
         log.info('Episode: {0}'.format(self.lookup.title))
         return self.lookup.title
 
-    def format_show_name(self, show_name, the=False, override=None):
+    def format_show_name(self, show_name, the=False):
         if show_name is None:
             show_name = self.lookup.show
             msg = 'Using the formatted show name retrieved by the library: {0}'
             log.debug(msg.format(show_name))
         else:
             log.debug('Using config output name: {0}'.format(show_name))
-
-        if override is not None:
-            show_name = override
-            log.debug('Overrode show name with: {0}'.format(show_name))
 
         if the is True:
             show_name = self._move_leading_the_to_trailing_the(show_name)

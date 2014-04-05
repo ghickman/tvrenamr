@@ -86,10 +86,9 @@ def rename(path, config, options):
             ep_kwargs = {'library': options.library, 'canonical': canonical}
             episode.title = tv.retrieve_episode_title(episode, **ep_kwargs)
 
-        show = config.get_output(_file.show_name)
+        show = config.get_output(_file.show_name, override=options.show_override)
         the = config.get(_file.show_name, key='the', override=options.the)
-        _file.show_name = tv.format_show_name(show, the=the,
-                                              override=options.show_override)
+        _file.show_name = tv.format_show_name(show, the=the)
 
         config_kwargs = {
             'key': 'format',
