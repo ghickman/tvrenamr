@@ -14,7 +14,7 @@ class TestMain(BaseTest):
         _file = File('doctor who', '5', ['10'], 'mp4')
         _file.show_name = show_name
         _file.episodes[0].title = ''
-        path = self.tv.build_path(_file, organise=False)
+        path = self.tv.build_path(_file, rename_dir=self.files, organise=False)
         assert os.path.split(path.split('-')[0].strip())[1] == show_name
 
     def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
@@ -26,7 +26,7 @@ class TestMain(BaseTest):
 
     def test_passing_in_a_season_number_renames_a_file_using_that_season_number(self):
         self._file.season = '2'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         season_number = path.split('-')[1].strip()[0]
         assert season_number == '2'
 
@@ -37,7 +37,7 @@ class TestMain(BaseTest):
 
     def test_passing_in_an_episode_number_renames_a_file_using_that_episode_number(self):
         self._file.episodes[0].number = '3'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         assert path.split('-')[1].strip()[-2:] == '03'
 
     def test_setting_the_position_of_a_shows_leading_the_to_the_end_of_the_file_name(self):
@@ -47,37 +47,37 @@ class TestMain(BaseTest):
 
     def test_setting_an_episodes_format_as_name_season_episode_title(self):
         self._file.output_format = '%n - %s%e - %t%x'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         filename = 'The Big Bang Theory - 301 - The Electric Can Opener Fluctuation.mp4'
         assert os.path.split(path)[1] == filename
 
     def test_setting_an_episodes_format_as_season_episode_title_name(self):
         self._file.set_output_format('%s - %e - %t - %n%x')
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         filename = '3 - 01 - The Electric Can Opener Fluctuation - The Big Bang Theory.mp4'
         assert os.path.split(path)[1] == filename
 
     def test_setting_an_episodes_format_as_title_episode_season_name(self):
         self._file.output_format = '%t - %e - %s - %n%x'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         filename = 'The Electric Can Opener Fluctuation - 01 - 3 - The Big Bang Theory.mp4'
         assert os.path.split(path)[1] == filename
 
     def test_setting_season_number_digit_length(self):
         self._file.output_format = '%n S%s{2}E%e %t%x'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         filename = 'The Big Bang Theory S03E01 The Electric Can Opener Fluctuation.mp4'
         assert os.path.split(path)[1] == filename
 
     def test_setting_episode_number_digit_length(self):
         self._file.output_format = '%n S%sE%e{2} %t%x'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         filename = 'The Big Bang Theory S3E01 The Electric Can Opener Fluctuation.mp4'
         assert os.path.split(path)[1] == filename
 
     def test_setting_season_and_episode_number_digit_length(self):
         self._file.output_format = '%n S%s{3}E%e{4} %t%x'
-        path = self.tv.build_path(self._file, organise=False)
+        path = self.tv.build_path(self._file, rename_dir=self.files, organise=False)
         filename = 'The Big Bang Theory S003E0001 The Electric Can Opener Fluctuation.mp4'
         assert os.path.split(path)[1] == filename
 
@@ -222,6 +222,6 @@ class TestMain(BaseTest):
         assert details['episodes'][0] == '3'
 
     def test_no_organise_in_config(self):
-        path = self.tv.build_path(self._file)
+        path = self.tv.build_path(self._file, rename_dir=self.files)
         expected = os.path.join(self.files, 'The Big Bang Theory - 301 - The Electric Can Opener Fluctuation.mp4')
         assert path == expected

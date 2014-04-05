@@ -97,9 +97,15 @@ def rename(path, config, options):
         }
         _file.set_output_format(config.get(_file.show_name, **config_kwargs))
 
+        rename_kwargs = {
+            'key': 'renamed',
+            'default': working,
+            'override': options.rename_dir
+        }
+        rename_dir = config.get(_file.show_name, **rename_kwargs)
         path = tv.build_path(
             _file,
-            rename_dir=options.rename_dir,
+            rename_dir=rename_dir,
             organise=options.organise,
             specials_folder=options.specials_folder,
         )
