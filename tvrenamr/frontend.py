@@ -76,8 +76,15 @@ def rename(path, config, options):
         _file.safety_check()
 
         for episode in _file.episodes:
-            episode.title = tv.retrieve_episode_title(episode, library=options.library,
-                                                      canonical=options.canonical)
+            config_kwargs = {
+                'key': 'canonical',
+                'default': episode._file.show_name,
+                'override': options.canonical
+            }
+            canonical = config.get(episode._file.show_name, **config_kwargs)
+
+            ep_kwargs = {'library': options.library, 'canonical': canonical}
+            episode.title = tv.retrieve_episode_title(episode, **ep_kwargs)
 
         _file.show_name = tv.format_show_name(_file.show_name, the=options.the,
                                               override=options.show_override)

@@ -202,13 +202,9 @@ class TvRenamr(object):
         [libraries.insert(0, libraries.pop(libraries.index(lib)))
             for lib in libraries if lib.__name__.lower() == library]
 
-        # TODO: Make this bit not suck.
-        if canonical:
+        if canonical is not None:
             episode._file.show_name = canonical
-        else:
-            episode._file.show_name = self.config.get(episode._file.show_name,
-                                                      'canonical',
-                                                      episode._file.show_name)
+
         log.debug('Show Name: {0}'.format(episode._file.show_name))
 
         # loop the libraries until one works
