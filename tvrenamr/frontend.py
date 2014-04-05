@@ -89,7 +89,12 @@ def rename(path, config, options):
         _file.show_name = tv.format_show_name(_file.show_name, the=options.the,
                                               override=options.show_override)
 
-        _file.set_output_format(options.output_format, config)
+        config_kwargs = {
+            'key': 'format',
+            'default': _file.output_format,
+            'override': options.output_format,
+        }
+        _file.set_output_format(config.get(_file.show_name, **config_kwargs))
 
         path = tv.build_path(
             _file,

@@ -10,7 +10,6 @@ else:
 
 
 class Config(object):
-
     def __init__(self, config=None):
         self.log = logging.getLogger('tvrenamr.config')
 
