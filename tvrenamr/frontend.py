@@ -109,11 +109,17 @@ def rename(path, config, options):
             'override': options.rename_dir
         }
         rename_dir = config.get(_file.show_name, **rename_kwargs)
+        specials_folder = config.get(
+            _file.show,
+            key='specials_folder',
+            default='Season 0',
+            override=options.specials_folder
+        )
         path = tv.build_path(
             _file,
             rename_dir=rename_dir,
             organise=organise,
-            specials_folder=options.specials_folder,
+            specials_folder=specials_folder,
         )
 
         tv.rename(filename, path)

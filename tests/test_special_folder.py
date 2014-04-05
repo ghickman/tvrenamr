@@ -1,3 +1,5 @@
+import os
+
 from .base import BaseTest
 
 
@@ -14,16 +16,11 @@ class TestSpecialFolder(BaseTest):
         path = self.tv._build_organise_path(*args)
         assert path == 'foo/Chuck/Season 2'
 
-    def test_setting_specials_folder_in_config_defaults(self):
+    def test_setting_specials_folder_when_build_path(self):
         self.tv.debug = True
-        self.tv.config.config['defaults']['specials_folder'] = 'Specials'
-        args = ('foo', 'Chuck', 0)
-        path = self.tv._build_organise_path(*args)
-        assert path == 'foo/Chuck/Specials'
-
-    def test_setting_specials_folder_in_config_show_name(self):
-        self.tv.debug = True
-        self.tv.config.config['chuck']['specials_folder'] = 'Specials'
-        args = ('foo', 'Chuck', 0)
-        path = self.tv._build_organise_path(*args)
-        assert path == 'foo/Chuck/Specials'
+        class File(object):
+            name = 'Chuck'
+            show_name = 'Chuck'
+            season = 0
+        path = self.tv.build_path(File(), self.files, True, 'Specials')
+        assert path == os.path.join(self.files, 'Chuck/Specials/Chuck')
