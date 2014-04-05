@@ -219,10 +219,7 @@ class TvRenamr(object):
         log.info('Episode: {0}'.format(self.lookup.title))
         return self.lookup.title
 
-    def format_show_name(self, show_name, the=None, override=None):
-        if the is None:
-            the = self.config.get(show_name, 'the')
-
+    def format_show_name(self, show_name, the=False, override=None):
         try:
             show_name = self.config.get_output(show_name)
             log.debug('Using config output name: {0}'.format(show_name))
