@@ -14,20 +14,19 @@ class BaseTest(object):
         # absolute path to the file is pretty useful
         self.path = os.path.abspath(os.path.dirname(__file__))
 
+        def build_path(path):
+            if not os.path.exists(path):
+                os.mkdir(path)
+
+            return path
+
         def join_path(path):
             return os.path.join(self.path, path)
 
-        self.files = join_path('files')
-        self.subfolder = join_path('subfolder')
-        self.organised = join_path('organised')
+        self.files = build_path(join_path('files'))
+        self.subfolder = build_path(join_path('subfolder'))
+        self.organised = build_path(join_path('organised'))
         self.renamed = join_path('renamed')
-
-        # if `file` isn't there, make it
-        if not os.path.exists(self.files):
-            os.mkdir(self.files)
-
-        if not os.path.exists(self.subfolder):
-            os.mkdir(self.subfolder)
 
         for path in (self.files, self.subfolder):
             self.build_files(path)
@@ -45,7 +44,7 @@ class BaseTest(object):
         shutil.rmtree(self.subfolder)
 
     def build_files(self, path):
-        # build the file list
+        """Build the file list"""
         with open(os.path.join(self.path, 'file_list'), 'r') as f:
             for fn in f.readlines():
                 filepath = os.path.abspath(os.path.join(path, fn.strip()))
