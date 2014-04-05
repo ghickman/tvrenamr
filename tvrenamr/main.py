@@ -389,7 +389,7 @@ class TvRenamr(object):
         try:
             libraries.append(lookup[library])
         except KeyError:
-            libraries = lookup.values()
+            libraries = list(lookup.values())
 
         return libraries
 
