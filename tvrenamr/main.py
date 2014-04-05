@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
-import collections
 import logging
 import os
 import re
 import shutil
 
+from tvrenamr.vendor import ordereddict
 from . import errors
 from .libraries import TheTvDb, TvRage
 
@@ -381,7 +381,7 @@ class TvRenamr(object):
         return regex
 
     def _get_libraries(self, library):
-        lookup = collections.OrderedDict({
+        lookup = ordereddict.OrderedDict({
             'thetvdb': TheTvDb,
             'tvrage': TvRage,
         })
