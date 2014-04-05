@@ -141,12 +141,11 @@ class File(object):
 
 
 class TvRenamr(object):
-    def __init__(self, working_dir, config, debug=False, dry=False, cache=True):
+    def __init__(self, working_dir, debug=False, dry=False, cache=True):
         self.cache = cache
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
-        self.config = config
 
     def remove_part_from_multiple_episodes(self, show_name):
         """Remove the string "Part " from a filename.

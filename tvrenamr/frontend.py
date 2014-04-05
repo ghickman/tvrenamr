@@ -65,56 +65,38 @@ def get_config(path=None):
     return Config(location)
 
 
-def rename(path, config, options):
+def rename(path, options):
     working, filename = os.path.split(path)
     try:
-        tv = TvRenamr(working, config, options.debug, options.dry, options.cache)
+        tv = TvRenamr(working, options.debug, options.dry, options.cache)
 
         _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
         # TODO: Warn setting season & episode will override *all* episodes
         _file.user_overrides(options.show_name, options.season, options.episode)
         _file.safety_check()
 
+        config = get_config(options.config, _file.show_name)
+
         for episode in _file.episodes:
-            config_kwargs = {
-                'key': 'canonical',
-                'default': episode._file.show_name,
-                'override': options.canonical
-            }
-            canonical = config.get(episode._file.show_name, **config_kwargs)
+            canonical = config.get('canonical',
+                default=episode._file.show_name, override=options.canonical)
 
             ep_kwargs = {'library': options.library, 'canonical': canonical}
             episode.title = tv.retrieve_episode_title(episode, **ep_kwargs)
 
         show = config.get_output(_file.show_name, override=options.show_override)
-        the = config.get(_file.show_name, key='the', override=options.the)
+        the = config.get('the', override=options.the)
         _file.show_name = tv.format_show_name(show, the=the)
 
-        config_kwargs = {
-            'key': 'format',
-            'default': _file.output_format,
-            'override': options.output_format,
-        }
-        _file.set_output_format(config.get(_file.show_name, **config_kwargs))
+        _file.set_output_format(config.get('format',
+            default=_file.output_format, override=options.output_format))
 
-        organise = config.get(
-            _file.show_name,
-            key='organise',
-            default=False,
-            override=options.organise
-        )
-        rename_kwargs = {
-            'key': 'renamed',
-            'default': working,
-            'override': options.rename_dir
-        }
-        rename_dir = config.get(_file.show_name, **rename_kwargs)
-        specials_folder = config.get(
-            _file.show,
-            key='specials_folder',
-            default='Season 0',
-            override=options.specials_folder
-        )
+        organise = config.get('organise',
+            default=False, override=options.organise)
+        rename_dir = config.get('renamed',
+            default=working, override=options.rename_dir)
+        specials_folder = config.get('specials_folder',
+            default='Season 0', override=options.specials_folder)
         path = tv.build_path(
             _file,
             rename_dir=rename_dir,
@@ -169,14 +151,12 @@ def run():
     except IOError as e:
         parser.error("'{0}' is not a file or directory.".format(e))
 
-    config = get_config(options.config)
-
     if options.dry or options.debug:
         start_dry_run()
 
     # kick off a rename for each file in the list
     for path in files:
-        rename(path, config, options)
+        rename(path, options)
 
         # if we're not doing a dry run add a blank line for clarity
         if not (options.debug and options.dry):

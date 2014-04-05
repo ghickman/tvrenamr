@@ -9,16 +9,15 @@ else:
 
 
 class Config(object):
-    def __init__(self, config=None):
+    def __init__(self, config=None, show=None):
         self.log = logging.getLogger('tvrenamr.config')
 
         self.config = self._load_config(config)
+        self.show = show
 
         self.log.debug('Config loaded')
 
-        self.log.debug('Defaults retrieved')
-
-    def get(self, show, key, default=None, override=None):
+    def get(self, key, show=None, default=None, override=None):
         """
         Get a configuration option
 
@@ -49,6 +48,9 @@ class Config(object):
         if override is not None:
             return override
 
+        if show is None and self.show is None:
+            raise Exception('You must provide a show name to use this method')
+
         try:
             return self.config[show][key]
         except KeyError:
@@ -60,11 +62,11 @@ class Config(object):
                 except KeyError:
                     return default
 
-    def get_output(self, show):
-        output = self.get(show, 'output')
+    def get_output(self, show, override=None):
+        output = self.get(show, 'output', override=override)
 
         if output is None:
-            output = self.get(show, 'canonical')
+            output = self.get(show, 'canonical', override=override)
 
         return output
 
