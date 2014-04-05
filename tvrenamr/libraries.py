@@ -165,7 +165,7 @@ class TvRage(BaseLibrary):
     def get_episode_title_from_xml(self, xml):
         # In a single digit episode number add a zero
         if len(self.episode) == 1 and self.episode[:1] != '0':
-            self.episode = '0' + self.episode
+            self.episode = self.episode.zfill(2)
 
         episode = None
         for s in xml.find('Episodelist'):
