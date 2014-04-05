@@ -155,8 +155,13 @@ class TvRage(BaseLibrary):
     url_base = 'http://services.tvrage.com/feeds/'
 
     def build_episode_url(self):
-        url_episode = 'full_show_info.php?sid='
-        return '{0}{1}{2}'.format(self.url_base, url_episode, self.show_id)
+        args = (
+            self.url_base,
+            self.show_id,
+            self.season,
+            self.episode
+        )
+        return '{0}episodeinfo.php?sid={1}&ep={2}x{3}'.format(*args)
 
     def build_id_url(self, quoted_show):
         url_series = 'search.php?show='
@@ -167,14 +172,9 @@ class TvRage(BaseLibrary):
         if len(self.episode) == 1 and self.episode[:1] != '0':
             self.episode = self.episode.zfill(2)
 
-        episode = None
-        for s in xml.find('Episodelist'):
-            if s.get('no') == self.season:
-                for e in s.findall('episode'):
-                    if e.find('seasonnum').text == self.episode:
-                        episode = e.find('title').text
-
-        if not episode:
+        try:
+            return xml.find('./episode/title').text
+        except AttributeError:
             args = (self.log.name, self.show, self.season, self.episode)
             raise errors.EpisodeNotFoundException(*args)
 
