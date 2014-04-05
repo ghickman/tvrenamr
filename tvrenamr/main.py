@@ -4,7 +4,11 @@ import os
 import re
 import shutil
 
-from tvrenamr.vendor import ordereddict
+try:
+    from collections import OrderedDict
+except ImportError:  # python 2
+    from tvrenamr.vendor.ordereddict import OrderedDict
+
 from . import errors
 from .libraries import TheTvDb, TvRage
 
@@ -381,7 +385,7 @@ class TvRenamr(object):
         return regex
 
     def _get_libraries(self, library):
-        lookup = ordereddict.OrderedDict({
+        lookup = OrderedDict({
             'thetvdb': TheTvDb,
             'tvrage': TvRage,
         })
