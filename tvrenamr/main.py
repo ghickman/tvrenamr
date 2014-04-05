@@ -234,7 +234,7 @@ class TvRenamr(object):
 
         return show_name
 
-    def build_path(self, _file, rename_dir, organise=None, specials_folder=None):
+    def build_path(self, _file, rename_dir, organise=False, specials_folder=None):
         """Build the full destination path and filename of the renamed file.
 
         By default the format is:
@@ -248,8 +248,6 @@ class TvRenamr(object):
         season and show folders, i.e. Show/Season 1/episodes
 
         """
-        if organise is None:
-            organise = self.config.get(_file.show_name, 'organise')
         if organise is True:
             args = [rename_dir, _file.show_name, _file.season, specials_folder]
             rename_dir = self._build_organise_path(*args)
