@@ -20,26 +20,46 @@ class Config(object):
 
         self.log.debug('Defaults retrieved')
 
-    def get(self, show, option, default=None):
+    def get(self, show, key, default=None, override=None):
         """
-        Get a configuration option from the config
+        Get a configuration option
 
-        This is a wrapper around the dict we build from the actual config
-        file that does some extra checking:
-            * Look for the option in a show
-            * Look for the option in a lowercased show
-            * Look for the option in the defaults
-            * return/error?
+        This method is a convenient wrapper for asking for a config value in
+        one place.
+
+        At a higher level options are picked in this order:
+         * cli
+         * config
+         * filename
+
+        Internally this is handled as:
+         * Override Option
+           Picked first allowing a command line option to be passed in and used
+           with the highest priority.
+
+         * Show Specific Config
+           The key is looked up under the show name in the yaml file. If this
+           lookup fails the lowercased version of the show name is also tried.
+
+         * Default Config
+           The key is looked up in the defaults section of the yaml file.
+
+         * Default Option
+           If all the other options fail the default option passed into this
+           method is returned as a last resort.
         """
+        if override is not None:
+            return override
+
         try:
-            return self.config[show][option]
-        except (KeyError, TypeError):
+            return self.config[show][key]
+        except KeyError:
             try:
-                return self.config[show.lower()][option]
-            except (KeyError, TypeError):
+                return self.config[show.lower()][key]
+            except KeyError:
                 try:
-                    return self.config['defaults'][option]
-                except (KeyError, TypeError):
+                    return self.config['defaults'][key]
+                except KeyError:
                     return default
 
     def get_output(self, show):
