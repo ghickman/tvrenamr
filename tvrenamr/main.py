@@ -220,13 +220,12 @@ class TvRenamr(object):
         return self.lookup.title
 
     def format_show_name(self, show_name, the=False, override=None):
-        try:
-            show_name = self.config.get_output(show_name)
-            log.debug('Using config output name: {0}'.format(show_name))
-        except errors.ShowNotInConfigException:
+        if show_name is None:
             show_name = self.lookup.show
             msg = 'Using the formatted show name retrieved by the library: {0}'
             log.debug(msg.format(show_name))
+        else:
+            log.debug('Using config output name: {0}'.format(show_name))
 
         if override is not None:
             show_name = override

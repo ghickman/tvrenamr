@@ -2,7 +2,6 @@ import collections
 import logging
 import sys
 
-from .errors import ShowNotInConfigException
 if sys.version_info[0] == 3:
     from .vendor import yaml
 else:
@@ -62,13 +61,12 @@ class Config(object):
                     return default
 
     def get_output(self, show):
-        try:
-            return self.config[show.lower()]['output']
-        except (KeyError, TypeError):
-            try:
-                return self.config[show.lower()]['canonical']
-            except (KeyError, TypeError):
-                raise ShowNotInConfigException(show)
+        output = self.get(show, 'output')
+
+        if output is None:
+            output = self.get(show, 'canonical')
+
+        return output
 
     def _load_config(self, config):
         if config is None:

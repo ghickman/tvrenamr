@@ -125,17 +125,6 @@ class ShowNotFoundException(Exception):
         log.error('"{0}" could not be found on {1}'.format(show, library))
 
 
-class ShowNotInConfigException(Exception):
-    """
-    The specified show wasn't found in the exceptions list
-
-    :param show: The show name not found.
-    """
-    def __init__(self, show):
-        log.debug('"{0}" is not in the Config. Falling back on name extracted from'
-                  ' the filename'.format(show))
-
-
 class ShowNotInExceptionsList(Exception):
     """
     The specified show wasn't found in the exceptions list
