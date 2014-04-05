@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import collections
 import logging
 import os
 import re
@@ -179,7 +180,7 @@ class TvRenamr(object):
 
         return self._build_credentials(fn, matches)
 
-    def retrieve_episode_title(self, episode, library='thetvdb', canonical=None):
+    def retrieve_episode_title(self, episode, library=None, canonical=None):
         """Retrieves the title of a given episode.
 
         The series name, season and episode numbers must be specified to get
@@ -189,12 +190,7 @@ class TvRenamr(object):
         The first library defaults to The Tv DB.
 
         """
-        libraries = [
-            TheTvDb,
-            TvRage
-        ]
-        [libraries.insert(0, libraries.pop(libraries.index(lib)))
-            for lib in libraries if lib.__name__.lower() == library]
+        libraries = self._get_libraries(library)
 
         if canonical is not None:
             episode._file.show_name = canonical
@@ -383,6 +379,19 @@ class TvRenamr(object):
             log.debug('Default episode regex set: {0}'.format(regex))
 
         return regex
+
+    def _get_libraries(self, library):
+        lookup = collections.OrderedDict({
+            'thetvdb': TheTvDb,
+            'tvrage': TvRage,
+        })
+        libraries = list()
+        try:
+            libraries.append(lookup[library])
+        except KeyError:
+            libraries = lookup.values()
+
+        return libraries
 
     def _move_leading_the_to_trailing_the(self, show_name):
         """Moves the leading 'The' of a show name to a trailing 'The'.
