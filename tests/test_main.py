@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 from tvrenamr.main import File, TvRenamr
@@ -225,3 +226,14 @@ class TestMain(BaseTest):
         path = self.tv.build_path(self._file, rename_dir=self.files)
         expected = os.path.join(self.files, 'The Big Bang Theory - 301 - The Electric Can Opener Fluctuation.mp4')
         assert path == expected
+
+    def test_unicode_in_filename(self):
+        fn = 'chuck.s03e04.hdtv.’.mkv'
+        details = self.tv.extract_details_from_file(fn)
+        expected = {
+            'show_name': 'chuck',
+            'season': '3',
+            'episodes': ['4'],
+            'extension': '.mkv',
+        }
+        assert details == expected
