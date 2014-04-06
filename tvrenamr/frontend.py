@@ -6,6 +6,7 @@ import sys
 
 from .config import Config
 from .errors import *
+from .history import parse_history
 from .logs import start_logging
 from .main import File, TvRenamr
 from .options import OptionParser
@@ -141,6 +142,9 @@ def run():
     if options.debug:
         options.log_level = 10
     start_logging(options.log_file, options.log_level, options.quiet)
+
+    if options.history:
+        return parse_history(options.log_file)
 
     # use current directory if no args specified
     if not args:

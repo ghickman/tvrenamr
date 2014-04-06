@@ -16,6 +16,7 @@ class OptionParser(OptParser):
         self.add_option('--debug', action='store_true', dest='debug', help=SUPPRESS_HELP)
         self.add_option('-d', '--dry-run', dest='dry', action='store_true', help='Dry run your renaming.')
         self.add_option('-e', '--episode', dest='episode', help='Set the episode number. Currently this will cause errors when working with more than one file.')
+        self.add_option('--history', action='store_true', dest='history', help='Display a list of shows renamed using the system pager.')
         self.add_option('--ignore-filelist', dest='ignore_filelist', default=(), help=SUPPRESS_HELP)
         self.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', help='Only use files from the root of a given directory, not entering any sub-directories.')
         self.add_option('--log-file', dest='log_file', help='Set the log file location.')
