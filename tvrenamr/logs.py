@@ -54,7 +54,7 @@ def start_logging(filename, log_level, quiet=False):
     # setup log file
     file_format = '%(asctime)-15s %(levelname)-8s %(name)-11s %(message)s'
     handler = logging.handlers.RotatingFileHandler(filename, maxBytes=1048576, backupCount=10)
-    handler.setFormatter(logging.Formatter(file_format, '%m-%d %H:%M'))
+    handler.setFormatter(logging.Formatter(file_format, '%Y-%m-%dT%H:%M'))
     logging.getLogger().addHandler(handler)
 
     logging.getLogger().setLevel(logging.DEBUG)
