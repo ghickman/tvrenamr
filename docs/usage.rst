@@ -78,3 +78,12 @@ Examples
 
     $ tvr --season 1 --name chuck /path/to/a/file/the_file.mkv
 
+
+History
+~~~~~~~
+
+Use the history command to parse your logs for a list of files you've renamed:
+
+.. code-block:: bash
+
+    $ tvr --history
