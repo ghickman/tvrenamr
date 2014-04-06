@@ -172,7 +172,12 @@ class TvRenamr(object):
         already covered.
 
         """
-        fn = self._santise_filename(fn.decode('utf-8'))
+        try:
+            fn = fn.decode('utf-8')
+        except AttributeError:  # python 3
+            pass
+
+        fn = self._santise_filename(fn)
         log.log(22, 'Renaming: {0}'.format(fn))
 
         regex = self._build_regex(user_regex)
