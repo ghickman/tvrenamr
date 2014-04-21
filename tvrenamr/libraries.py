@@ -178,7 +178,7 @@ class TvRage(BaseLibrary):
             args = (self.log.name, self.show, self.season, self.episode)
             raise errors.EpisodeNotFoundException(*args)
 
-        return episode
+        return self.episode
 
     def get_show_id_from_xml(self, xml):
         for name in xml.findall('show'):
