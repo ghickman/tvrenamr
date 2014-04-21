@@ -18,7 +18,7 @@ setup(
     name=tvrenamr.__title__,
     version=tvrenamr.__version__,
     description='Rename tv show files using online databases',
-    long_description=long_desc,
+    long_description=long_desc(),
     author=tvrenamr.__author__,
     author_email='george@ghickman.co.uk',
     url='http://tvrenamr.info',
