@@ -177,7 +177,7 @@ class TvRenamr(object):
         except AttributeError:  # python 3
             pass
 
-        fn = self._santise_filename(fn)
+        fn = self._sanitise_filename(fn)
         log.log(22, 'Renaming: {0}'.format(fn))
 
         regex = self._build_regex(user_regex)
@@ -412,7 +412,7 @@ class TvRenamr(object):
             return show_name
         log.debug("Moving leading 'The' to end of: {0}".format(show_name))
         return show_name[4:] + ', The'
-    def _santise_filename(self, filename):
+    def _sanitise_filename(self, filename):
         """
         Remove bits of the filename that cause a problem.
 
