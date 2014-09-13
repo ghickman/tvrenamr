@@ -24,7 +24,7 @@ setup(
     url='http://tvrenamr.info',
     license='MIT',
     packages=find_packages(exclude=['docs', 'tests']),
-    entry_points={'console_scripts': ['tvr=tvrenamr.frontend:run']},
+    entry_points={'console_scripts': ['tvr=cli.core:cli']},
     classifiers=[
         'Development Status :: 6 - Mature',
         'Environment :: Console',

@@ -4,15 +4,16 @@ import logging
 import os
 import sys
 
-from . import errors
-from .config import Config
-from .history import parse_history
-from .logs import start_logging
-from .main import File, TvRenamr
-from .options import OptionParser
+import click
+
+from tvrenamr.config import Config
+from tvrenamr.errors import *
+from tvrenamr.logs import start_logging
+from tvrenamr.main import File, TvRenamr
+from .decorators import logfile_option
 
 
-log = logging.getLogger('FrontEnd')
+log = logging.getLogger('CLI')
 
 
 def build_file_list(paths, recursive=False, ignore_filelist=()):
@@ -154,53 +155,63 @@ def rename(path, options):
         sys.exit(1)
 
 
-def run():
-    parser = OptionParser()
-    options, args = parser.parse_args()
+@click.group()
+@click.option('--config', type=click.Path(), help='Select a location for your config file. If the path is invalid the default locations will be used.')
+@click.option('-c', '--canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
+@click.option('--debug', is_flag=True)
+@click.option('-d', '--dry-run', is_flag=True, help='Dry run your renaming.')
+@click.option('-e', '--episode', type=int, help='Set the episode number. Currently this will cause errors when working with more than one file.')
+@click.option('--ignore-filelist', default=())
+@click.option('--ignore-recursive', is_flag=True, help='Only use files from the root of a given directory, not entering any sub-directories.')
+@logfile_option
+@click.option('-l', '--log-level', help='Set the log level. Options: short, minimal, info and debug.')
+@click.option('--library', default='thetvdb', help='Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.')
+@click.option('-n', '--name', help="Set the episode's name.")
+@click.option('--no-cache', is_flag=True, help='Force all renames to ignore the cache.')
+@click.option('-o', '--output', help='Set the output format for the episodes being renamed.')
+@click.option('--organise/--no-organise', default=True, help='Organise renamed files into folders based on their show name and season number. Can be explicitly disabled.')
+@click.option('-p', '--partial', is_flag=True, help='Allow partial regex matching of the filename.')
+@click.option('-q', '--quiet', is_flag=True, help="Don't output logs to the command line")
+@click.option('-r', '--recursive', is_flag=True, help='Recursively lookup files in a given directory')
+@click.option('--rename-dir', type=click.Path(), help='The directory to move renamed files to, if not specified the working directory is used.')
+@click.option('--no-rename-dir', is_flag=True, default=False, help='Explicity tell Tv Renamr not to move renamed files. Used to override the config.')
+@click.option('--regex', help='The regular expression to use when extracting information from files.')
+@click.option('-s', '--season', help='Set the season number.')
+@click.option('--show', help="Set the show's name (will search for this name).")
+@click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")
+@click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
+@click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")
+@click.argument('files', nargs=3, required=False, type=click.Path(exists=True))
+def cli(config, canonical, debug, dry_run, episode, ignore_filelist,
+        ignore_recursive, log_level, library, name, no_cache, output, organise,
+        partial, quiet, recursive, rename_dir, regex, season, show, show_override,
+        specials, the, files):
+    if debug:
+        log_level = 10
+    start_logging(log_file, log_level, quiet)
+    logger = functools.partial(log.log, level=26)
 
-    if options.debug:
-        options.log_level = 10
-    start_logging(options.log_file, options.log_level, options.quiet)
+    import pdb;pdb.set_trace()
 
-    if options.history:
-        return parse_history(options.log_file)
-
-    # use current directory if no args specified
-    if not args:
-        log.debug('No file or directory specified, using current directory')
-        args = [os.getcwd()]
     try:
-        files = build_file_list(args, options.recursive, options.ignore_filelist)
+        files = build_file_list(files, recursive, ignore_filelist)
     except IOError as e:
-        parser.error("'{0}' is not a file or directory.".format(e))
+        click.error("'{0}' is not a file or directory.".format(e))
 
-    if options.dry or options.debug:
-        start_dry_run()
+    if dry or debug:
+        start_dry_run(logger)
 
     # kick off a rename for each file in the list
     for path in files:
         rename(path, options)
 
         # if we're not doing a dry run add a blank line for clarity
-        if not (options.debug and options.dry):
+        if not (debug and dry):
             log.info('')
 
-    if options.dry or options.debug:
-        stop_dry_run()
-
-
-def start_dry_run():
-    log.log(26, 'Dry Run beginning.')
-    log.log(26, '-' * 70)
-    log.log(26, '')
-
-
-def stop_dry_run():
-    log.log(26, '')
-    log.log(26, '-' * 70)
-    log.log(26, 'Dry Run complete. No files were harmed in the process.')
-    log.log(26, '')
+    if dry or debug:
+        stop_dry_run(logger)
 
 
 if __name__ == "__main__":
-    run()
+    cli()
