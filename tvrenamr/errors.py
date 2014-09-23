@@ -7,17 +7,6 @@ log = logging.getLogger('Error')
 error = 'Alert: '
 
 
-class AlreadyNamedException(Exception):
-    """
-    Raised when the format of the file being passed in is the same as the
-    output format
-
-    :param fn: The file that is already in the correct naming format.
-    """
-    def __init__(self, fn):
-        log.error('Already in correct naming format: {0}'.format(fn))
-
-
 class EmptyEpisodeTitleException(Exception):
     """
     Raised when the episode XML document is returned but the name field is empty
@@ -28,18 +17,6 @@ class EmptyEpisodeTitleException(Exception):
     def __init__(self, library):
         log.error('The episode name was not found. The record on {0} is likely '
                   'incomplete.'.format(library))
-
-
-class EpisodeAlreadyExistsInDirectoryException(Exception):
-    """
-    Exception that is raised when a file with the same name as the renamed file
-    exists in the destination folder
-
-    :param fn: The destination file name.
-    :param dest: The destination directory.
-    """
-    def __init__(self, destination_path):
-        log.error('File already exists: {0}'.format(destination_path))
 
 
 class EpisodeNotFoundException(Exception):
@@ -57,7 +34,7 @@ class EpisodeNotFoundException(Exception):
         log.error('"{0} - {1}{2}" could not be found on {3}'.format(*args))
 
 
-class IncorrectCustomRegularExpressionSyntaxException(Exception):
+class IncorrectRegExpException(Exception):
     """
     The syntax used in a custom regular expression was incorrect.
 
@@ -89,6 +66,18 @@ class MissingInformationException(Exception):
         log.error('{0} is required to rename files.'.format(err))
 
 
+class NetworkException(Exception):
+    """
+    Raised when no connection to the desired library is detected
+
+    This will be raised if either the library or the internet connection itself
+    is down.
+    """
+    def __init__(self, library):
+        log.error('{0}TV Renamr could not connect to {1}. Please check your '
+                  'internet connection and try again.'.format(error, library))
+
+
 class OutputFormatMissingSyntaxException(Exception):
     """
     The output format string is missing syntax.
@@ -103,6 +92,18 @@ class OutputFormatMissingSyntaxException(Exception):
             errors = syntax[0]
         log.error('The output format is missing the following format elements: '
                   '{0}'.format(errors))
+
+
+class PathExistsException(Exception):
+    """
+    Exception that is raised when a file with the same name as the renamed file
+    exists in the destination folder
+
+    :param fn: The destination file name.
+    :param dest: The destination directory.
+    """
+    def __init__(self, destination_path):
+        log.error('File already exists: {0}'.format(destination_path))
 
 
 class ShowNotFoundException(Exception):
@@ -124,28 +125,6 @@ class ShowNotInExceptionsList(Exception):
     """
     def __init__(self, show):
         log.warning('{0} is not in the Exceptions list'.format(show))
-
-
-class NoLeadingTheException(Exception):
-    """
-    Raised when the file passed in has no leading The in the show name
-
-    :param show: The show name with no leading The.
-    """
-    def __init__(self, show):
-        log.warning('{0} has no leading The'.format(show))
-
-
-class NoNetworkConnectionException(Exception):
-    """
-    Raised when no connection to the desired library is detected
-
-    This will be raised if either the library or the internet connection itself
-    is down.
-    """
-    def __init__(self, library):
-        log.error('{0}TV Renamr could not connect to {1}. Please check your '
-                  'internet connection and try again.'.format(error, library))
 
 
 class UnexpectedFormatException(Exception):

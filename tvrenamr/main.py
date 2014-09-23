@@ -324,7 +324,7 @@ class TvRenamr(object):
             return series + r"\.[Ss]?" + season + r"[XxEe]?" + episode + second_episode
 
         if not partial and not ('%n' in regex or '%s' in regex or '%e' in regex):
-            raise errors.IncorrectCustomRegularExpressionSyntaxException(regex)
+            raise errors.IncorrectRegExpException(regex)
 
         # series name
         regex = regex.replace('%n', series)

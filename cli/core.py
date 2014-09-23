@@ -1,161 +1,55 @@
 #!/usr/bin/env python
 
+import functools
 import logging
 import os
+import pydoc
 import sys
 
 import click
-
-from tvrenamr.config import Config
-from tvrenamr.errors import *
-from tvrenamr.logs import start_logging
+from tvrenamr import errors
+from tvrenamr.logs import get_log_file, start_logging
 from tvrenamr.main import File, TvRenamr
-from .decorators import logfile_option
 
+from .decorators import logfile_option
+from .helpers import (build_file_list, get_config, sanitise_log, start_dry_run,
+                      stop_dry_run)
 
 log = logging.getLogger('CLI')
 
 
-def build_file_list(paths, recursive=False, ignore_filelist=()):
-    """
-    Determines which files need to be processed for renaming.
-
-    :param glob: A list of file(s) or directory(s).
-    :param recursive: Do a recursive search for files if 'glob' is a
-    directory. Default is False.
-    :param ignore_filelist: Optional set of files to ignore from renaming.
-    Often used by filtering methods such as Deluge.
-
-    :returns: A list of files to be renamed.
-    :rtype: A list of tuples
-    """
-    file_list = []
-
-    for glob in paths:
-        if not os.path.exists(glob):
-            raise IOError(glob)
-
-        if os.path.isfile(glob):
-            file_list.append(glob)
-
-        if os.path.isdir(glob):
-            for root, dirs, files in os.walk(glob):
-                for fname in files:
-                    file_path = os.path.join(root, fname)
-                    if file_path not in ignore_filelist:
-                        file_list.append(file_path)
-
-                if not recursive:
-                    break
-
-    return file_list
-
-
-def get_config(path=None):
-    """Get the first viable config from the list of possiblities"""
-    def exists(x):
-        return x is not None and os.path.exists(x)
-
-    possible_configs = iter(filter(exists, (
-        path,
-        os.path.join(sys.path[0], 'config.yml'),
-        os.path.expanduser('~/.tvrenamr/config.yml'),
-    )))
-
-    location = next(possible_configs, None)
-
-    return Config(location)
-
-
-def rename(path, options):
-    working, filename = os.path.split(path)
-    try:
-        tv = TvRenamr(working, options.debug, options.dry, options.cache)
-
-        _file = File(**tv.extract_details_from_file(filename, user_regex=options.regex))
-        # TODO: Warn setting season & episode will override *all* episodes
-        _file.user_overrides(options.show_name, options.season, options.episode)
-        _file.safety_check()
-
-        config = get_config(options.config)
-
-        for episode in _file.episodes:
-            canonical = config.get(
-                'canonical',
-                _file.show_name,
-                default=episode._file.show_name,
-                override=options.canonical
-            )
-
-            episode.title = tv.retrieve_episode_title(episode, canonical=canonical)
-
-        show = config.get_output(_file.show_name, override=options.show_override)
-        the = config.get('the', show=_file.show_name, override=options.the)
-        _file.show_name = tv.format_show_name(show, the=the)
-
-        _file.set_output_format(config.get(
-            'format',
-            _file.show_name,
-            default=_file.output_format,
-            override=options.output_format
-        ))
-
-        organise = config.get(
-            'organise',
-            _file.show_name,
-            default=False,
-            override=options.organise
-        )
-        rename_dir = config.get(
-            'renamed',
-            _file.show_name,
-            default=working,
-            override=options.rename_dir
-        )
-        specials_folder = config.get(
-            'specials_folder',
-            _file.show_name,
-            default='Season 0',
-            override=options.specials_folder
-        )
-        path = tv.build_path(
-            _file,
-            rename_dir=rename_dir,
-            organise=organise,
-            specials_folder=specials_folder,
-        )
-
-        tv.rename(filename, path)
-    except KeyboardInterrupt:
-        sys.exit()
-    except (errors.NoMoreLibrariesException,
-            errors.NoNetworkConnectionException):
-        if options.dry or options.debug:
-            stop_dry_run()
-        sys.exit(1)
-    except (AttributeError,
-            errors.EmptyEpisodeTitleException,
-            errors.EpisodeAlreadyExistsInDirectoryException,
-            errors.EpisodeNotFoundException,
-            errors.IncorrectCustomRegularExpressionSyntaxException,
-            errors.InvalidXMLException,
-            errors.MissingInformationException,
-            errors.OutputFormatMissingSyntaxException,
-            errors.ShowNotFoundException,
-            errors.UnexpectedFormatException) as e:
-        for msg in e.args:
-            log.critical(e)
-        pass
-    except Exception as e:
-        if options.debug:
-            # In debug mode, show the full traceback.
-            raise
-        for msg in e.args:
-            log.critical('Error: {0}'.format(msg))
-        sys.exit(1)
-
-
 @click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@logfile_option
+def history(log_file):
+    """Display a list of shows renamed using the system pager."""
+    log_file = get_log_file(log_file)
+
+    if not os.path.getsize(log_file):
+        log.critical('No log file found, exiting.')
+        sys.exit(1)
+
+    with open(log_file, 'r') as f:
+        logs = f.readlines()
+
+    shows = list(filter(lambda x: 'Renamed:' in x, logs))
+
+    def show_len(show):
+        return len(show.split('Renamed: ')[1].split(' - ')[0]) - 1
+
+    longest = max(map(show_len, shows))
+
+    sanitise = functools.partial(sanitise_log, longest=longest)
+
+    shows = map(sanitise, shows)
+    return pydoc.pager('\n'.join(shows))
+
+
+@cli.command()
 @click.option('--config', type=click.Path(), help='Select a location for your config file. If the path is invalid the default locations will be used.')
 @click.option('-c', '--canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
 @click.option('--debug', is_flag=True)
@@ -168,7 +62,7 @@ def rename(path, options):
 @click.option('--library', default='thetvdb', help='Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.')
 @click.option('-n', '--name', help="Set the episode's name.")
 @click.option('--no-cache', is_flag=True, help='Force all renames to ignore the cache.')
-@click.option('-o', '--output', help='Set the output format for the episodes being renamed.')
+@click.option('-o', '--output-format', help='Set the output format for the episodes being renamed.')
 @click.option('--organise/--no-organise', default=True, help='Organise renamed files into folders based on their show name and season number. Can be explicitly disabled.')
 @click.option('-p', '--partial', is_flag=True, help='Allow partial regex matching of the filename.')
 @click.option('-q', '--quiet', is_flag=True, help="Don't output logs to the command line")
@@ -181,35 +75,109 @@ def rename(path, options):
 @click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")
-@click.argument('files', nargs=3, required=False, type=click.Path(exists=True))
-def cli(config, canonical, debug, dry_run, episode, ignore_filelist,
-        ignore_recursive, log_level, library, name, no_cache, output, organise,
-        partial, quiet, recursive, rename_dir, regex, season, show, show_override,
-        specials, the, files):
+@click.argument('paths', nargs=3, required=False, type=click.Path(exists=True))
+def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
+           ignore_recursive, log_file, log_level, library, name, no_cache,
+           output_format, organise, partial, quiet, recursive, rename_dir,
+           no_rename_dir, regex, season, show, show_override, specials, the,
+           paths):
+
     if debug:
         log_level = 10
     start_logging(log_file, log_level, quiet)
     logger = functools.partial(log.log, level=26)
 
-    import pdb;pdb.set_trace()
-
-    try:
-        files = build_file_list(files, recursive, ignore_filelist)
-    except IOError as e:
-        click.error("'{0}' is not a file or directory.".format(e))
-
-    if dry or debug:
+    if dry_run or debug:
         start_dry_run(logger)
 
-    # kick off a rename for each file in the list
-    for path in files:
-        rename(path, options)
+    for current_dir, filename in build_file_list(paths, recursive, ignore_filelist):
+        try:
+            tv = TvRenamr(current_dir, debug, dry_run, no_cache)
+
+            _file = File(**tv.extract_details_from_file(filename, user_regex=regex))
+            # TODO: Warn setting season & episode will override *all* episodes
+            _file.user_overrides(show, season, episode)
+            _file.safety_check()
+
+            config = get_config(config)
+
+            for episode in _file.episodes:
+                canonical = config.get(
+                    'canonical',
+                    _file.show_name,
+                    default=episode._file.show_name,
+                    override=options.canonical
+                )
+
+                episode.title = tv.retrieve_episode_title(episode, canonical=canonical)
+
+            show = config.get_output(_file.show_name, override=options.show_override)
+            the = config.get('the', show=_file.show_name, override=options.the)
+            _file.show_name = tv.format_show_name(show, the=the)
+
+            _file.set_output_format(config.get(
+                'format',
+                _file.show_name,
+                default=_file.output_format,
+                override=options.output_format
+            ))
+
+            organise = config.get(
+                'organise',
+                _file.show_name,
+                default=False,
+                override=options.organise
+            )
+            rename_dir = config.get(
+                'renamed',
+                _file.show_name,
+                default=working,
+                override=options.rename_dir
+            )
+            specials_folder = config.get(
+                'specials_folder',
+                _file.show_name,
+                default='Season 0',
+                override=options.specials_folder
+            )
+            path = tv.build_path(
+                _file,
+                rename_dir=rename_dir,
+                organise=organise,
+                specials_folder=specials_folder,
+            )
+
+            tv.rename(filename, path)
+        # except KeyboardInterrupt:
+        #     sys.exit(0)
+        except errors.NoNetworkConnectionException:
+            if dry_run or debug:
+                stop_dry_run()
+            sys.exit(1)
+        except (AttributeError,
+                errors.EmptyEpisodeTitleException,
+                errors.EpisodeAlreadyExistsInDirectoryException,
+                errors.EpisodeNotFoundException,
+                errors.IncorrectCustomRegularExpressionSyntaxException,
+                errors.InvalidXMLException,
+                errors.MissingInformationException,
+                errors.OutputFormatMissingSyntaxException,
+                errors.ShowNotFoundException,
+                errors.UnexpectedFormatException) as e:
+            continue
+        except Exception as e:
+            if debug:
+                # In debug mode, show the full traceback.
+                raise
+            for msg in e.args:
+                log.critical('Error: {0}'.format(msg))
+            sys.exit(1)
 
         # if we're not doing a dry run add a blank line for clarity
-        if not (debug and dry):
+        if not (debug and dry_run):
             log.info('')
 
-    if dry or debug:
+    if dry_run or debug:
         stop_dry_run(logger)
 
 
