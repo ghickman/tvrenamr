@@ -41,7 +41,6 @@ Tv Renamr accepts the following options which take precedent over any options se
 --ignore-recursive  Only use files from the root of a given directory, not entering any sub-directories.
 --log-file          Set the log file location.
 -l, --log-level     Set the log level. Options: short, minimal, info and debug.
---library           Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.
 -n, --name          Set the episode's name.
 --no-cache          Force all renames to ignore the cache.
 -o, --output        Set the output format for the episodes being renamed.
