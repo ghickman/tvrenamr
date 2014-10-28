@@ -44,25 +44,6 @@ def invalid_xml(url, **kwargs):
 
 
 @cache_folder_check
-def initially_bad_xml(url, **kwargs):
-    """
-    Mock requests.get and return invalid xml from thetvdb to simulate one library
-    falling over.
-    """
-    def get_file(filename):
-        path = os.path.join(test_dir, 'mocked_xml', '{0}.xml'.format(filename))
-        return MockResponse(path)
-
-    if 'thetvdb' in url:
-        return get_file('invalid')
-
-    if 'tvrage' in url:
-        if 'search' in url:
-            return get_file('show_id')
-        return get_file('episode')
-
-
-@cache_folder_check
 def mock_get(url, **kwargs):
     """
     Mock requests.get with the contents of a local file. If the file doesn't

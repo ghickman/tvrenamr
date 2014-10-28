@@ -21,7 +21,6 @@ class OptionParser(OptParser):
         self.add_option('--ignore-recursive', action='store_true', dest='ignore_recursive', help='Only use files from the root of a given directory, not entering any sub-directories.')
         self.add_option('--log-file', dest='log_file', help='Set the log file location.')
         self.add_option('-l', '--log-level', dest='log_level', help='Set the log level. Options: short, minimal, info and debug.')
-        self.add_option('--library', dest='library', default='thetvdb', help='Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.')
         self.add_option('-n', '--name', dest='name', help='Set the episode\'s name.')
         self.add_option('--no-cache', action='store_true', dest='cache', help='Force all renames to ignore the cache.')
         self.add_option('-o', '--output', dest='output_format', help='Set the output format for the episodes being renamed.')
