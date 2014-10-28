@@ -76,7 +76,7 @@ def rename(path, options):
         _file.user_overrides(options.show_name, options.season, options.episode)
         _file.safety_check()
 
-        config = get_config(options.config, _file.show_name)
+        config = get_config(options.config)
 
         for episode in _file.episodes:
             canonical = config.get('canonical',
