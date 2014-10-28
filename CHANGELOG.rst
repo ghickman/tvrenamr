@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.6.1
+------
+
+- Fix incorrect usage of `get_config`
+
+
 v3.6.0
 ------
 

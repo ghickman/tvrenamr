@@ -3,6 +3,39 @@
 Changelog
 =========
 
+v3.6.1
+------
+
+- Fix incorrect usage of `get_config`
+
+
+v3.6.0
+------
+
+- Vendor dependencies
+- Harden XML with defusedxml
+- Switch to py.test for testing
+- Rework frontend code for easier testing
+
+
+v3.5.0
+------
+
+- Remove requirement on config
+
+
+v3.4.11
+-------
+
+- Fix bug when logging episode number that had been overridden
+
+
+v3.4.10
+-------
+
+- Fix bug with organise directory when no config is present
+
+
 v3.4.9
 ------
 
