@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.6.2
+------
+
+- Fix incorrect usage of `config.get` left over from previous fixes
+
+
 v3.6.1
 ------
 
