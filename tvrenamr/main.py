@@ -400,6 +400,7 @@ class TvRenamr(object):
             return show_name
         log.debug("Moving leading 'The' to end of: {0}".format(show_name))
         return show_name[4:] + ', The'
+
     def _santise_filename(self, filename):
         """
         Remove bits of the filename that cause a problem.

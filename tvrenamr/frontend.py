@@ -41,7 +41,7 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
             for root, dirs, files in os.walk(glob):
                 for fname in files:
                     file_path = os.path.join(root, fname)
-                    if not file_path in ignore_filelist:
+                    if file_path not in ignore_filelist:
                         file_list.append(file_path)
 
                 if not recursive:
