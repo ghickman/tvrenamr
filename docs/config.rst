@@ -158,3 +158,11 @@ The output format to use when writing the new filename.
     v 2009:
       canonical: V (2009)
       output: V
+
+Spaces
+~~~~~~
+any space will be replace for a dot when this option is false
+
+.. code-block:: yaml
+
+    spaces: false

@@ -54,6 +54,7 @@ class File(object):
         self.season = season
         self.episodes = [Episode(_file=self, number=i) for i in episodes]
         self.extension = extension
+        self.spaces = True
 
     def __repr__(self):
         return self.name
@@ -83,6 +84,8 @@ class File(object):
         filename = self.get_season_output(filename)
         filename = self.get_episode_output(filename)
 
+        if not self.spaces:
+            filename = filename.replace(' ', self.spaces_replace)
         return filename
 
     @property
@@ -117,6 +120,10 @@ class File(object):
 
     def set_output_format(self, user_format):
         self.output_format = user_format
+
+    def set_replace_spaces(self, value='.'):
+        self.spaces = False
+        self.spaces_replace = value
 
     def user_overrides(self, show_name, season, episode):
         if show_name:
