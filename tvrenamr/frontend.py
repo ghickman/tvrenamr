@@ -78,6 +78,10 @@ def rename(path, options):
 
         config = get_config(options.config)
 
+        if not config.get('spaces', show=_file.show_name, default=True,
+            override=options.spaces):
+            _file.set_replace_spaces()
+
         for episode in _file.episodes:
             canonical = config.get('canonical', show=_file.show_name,
                 default=episode._file.show_name, override=options.canonical)

@@ -58,6 +58,7 @@ Tv Renamr accepts the following options which take precedent over any options se
 --show-override     Override the show's name (only replaces the show's name in the final file).
 --specials          Set the show's specials folder (defaults to "Season 0").
 -t, --the'          Set the position of 'The' in a show's name to the end of the show name.
+--no-spaces         Replace any space with a dot on the filename.
 
 Examples
 ~~~~~~~~
