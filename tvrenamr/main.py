@@ -10,7 +10,7 @@ except ImportError:  # python 2
     from tvrenamr.vendor.ordereddict import OrderedDict
 
 from . import errors
-from .libraries import TheTvDb, TvRage
+from .libraries import TheTvDb
 
 
 log = logging.getLogger('Core')
@@ -183,30 +183,14 @@ class TvRenamr(object):
         The series name, season and episode numbers must be specified to get
         the episode's title. The library specified by the user will be used
         first but will fall back to the other library if an error occurs.
-
-        The first library defaults to The Tv DB.
-
         """
-        libraries = self._get_libraries(library)
-
         if canonical is not None:
             episode._file.show_name = canonical
 
         log.debug('Show Name: {0}'.format(episode._file.show_name))
 
-        # loop the libraries until one works
-        for lib in libraries:
-            try:
-                log.debug('Using {0}'.format(lib.__name__))
-                args = (episode._file.show_name, episode._file.season, episode.number, self.cache)
-                self.lookup = lib(*args)  # assign to self for use in format_show_name
-                break  # first library worked - nothing to see here
-            except (errors.EmptyEpisodeTitleException, errors.EpisodeNotFoundException,
-                    errors.InvalidXMLException, errors.NoNetworkConnectionException,
-                    errors.ShowNotFoundException) as e:
-                if lib == libraries[-1]:
-                    raise errors.NoMoreLibrariesException(lib, e)
-                continue
+        args = (episode._file.show_name, episode._file.season, episode.number, self.cache)
+        self.lookup = TheTvDb(*args)  # assign to self for use in format_show_name
 
         log.info('Episode: {0}'.format(self.lookup.title))
         return self.lookup.title
@@ -376,19 +360,6 @@ class TvRenamr(object):
             log.debug('Default episode regex set: {0}'.format(regex))
 
         return regex
-
-    def _get_libraries(self, library):
-        lookup = OrderedDict({
-            'thetvdb': TheTvDb,
-            'tvrage': TvRage,
-        })
-        libraries = list()
-        try:
-            libraries.append(lookup[library])
-        except KeyError:
-            libraries = list(lookup.values())
-
-        return libraries
 
     def _move_leading_the_to_trailing_the(self, show_name):
         """Moves the leading 'The' of a show name to a trailing 'The'.

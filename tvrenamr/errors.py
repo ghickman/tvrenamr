@@ -89,15 +89,6 @@ class MissingInformationException(Exception):
         log.error('{0} is required to rename files.'.format(err))
 
 
-class NoMoreLibrariesException(Exception):
-    """
-    All libraries have returned invalid XML.
-    """
-    def __init__(self, lib, lib_err):
-        # TODO: display the error of the last lib
-        log.error('No libraries left to fall back to.')
-
-
 class OutputFormatMissingSyntaxException(Exception):
     """
     The output format string is missing syntax.

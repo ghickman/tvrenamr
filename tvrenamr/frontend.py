@@ -7,6 +7,7 @@ import sys
 from .config import Config
 from .errors import *
 from .history import parse_history
+from .libraries import TheTvDb
 from .logs import start_logging
 from .main import File, TvRenamr
 from .options import OptionParser
@@ -82,7 +83,7 @@ def rename(path, options):
             canonical = config.get('canonical', show=_file.show_name,
                 default=episode._file.show_name, override=options.canonical)
 
-            ep_kwargs = {'library': options.library, 'canonical': canonical}
+            ep_kwargs = {'library': TheTvDb, 'canonical': canonical}
             episode.title = tv.retrieve_episode_title(episode, **ep_kwargs)
 
         show = config.get_output(_file.show_name, override=options.show_override)

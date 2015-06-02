@@ -32,14 +32,6 @@ The output format for files to be renamed to.
     The extension part includes the period ``(.)`` part of the file's
     extension and is also optional.
 
-Library
-~~~~~~~
-The online database to use for episode names. Options are: thetvdb or tvrage
-
-.. code-block:: yaml
-
-    library: thetvdb
-
 Organise
 ~~~~~~~~
 Organise your files within the renamed directory.
@@ -85,8 +77,8 @@ Canonical
 ~~~~~~~~~
 The name used by the online database(s) for a show.
 
-Since The TVDb and Tv Rage both list CSI as *CSI: Crime Scene Investigation*
-the ``canonical`` option is used.
+Since The TVDb lists CSI as *CSI: Crime Scene Investigation* the ``canonical``
+option is used.
 
 .. code-block:: yaml
 
@@ -128,7 +120,6 @@ The output format to use when writing the new filename.
 
     defaults:
       format: '%n - %s%e - %t%x'
-      library: thetvdb
       organise: yes
       renamed: /Volumes/Media/TV/
       the: true
