@@ -7,7 +7,7 @@ import shutil
 try:
     from collections import OrderedDict
 except ImportError:  # python 2
-    from tvrenamr.vendor.ordereddict import OrderedDict
+    from tvrenamr.vendor.ordereddict import OrderedDict  # noqa
 
 from . import errors
 from .libraries import TheTvDb
@@ -371,6 +371,7 @@ class TvRenamr(object):
             return show_name
         log.debug("Moving leading 'The' to end of: {0}".format(show_name))
         return show_name[4:] + ', The'
+
     def _sanitise_filename(self, filename):
         """
         Remove bits of the filename that cause a problem.

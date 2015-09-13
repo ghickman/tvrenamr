@@ -34,4 +34,3 @@ class TestConfig(object):
         # get_canonical(csi)
         # get_canonical(chuck)
         pass
-

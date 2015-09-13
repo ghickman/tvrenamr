@@ -78,4 +78,4 @@ class TestFrontEnd(BaseTest):
     def test_ignoring_files(self):
         ignore = self.random_files(self.files)
         file_list = frontend.build_file_list([self.files], ignore_filelist=ignore)
-        assert all(not fn in file_list for fn in ignore)
+        assert all(fn not in file_list for fn in ignore)

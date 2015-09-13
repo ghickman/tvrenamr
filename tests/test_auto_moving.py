@@ -33,8 +33,8 @@ class TestAutoMoving(BaseTest):
         filename = self._file.episodes[0].title + self._file.extension
         assert filename_base == filename
 
-    def test_moving_the_leading_the_to_the_end_of_a_show_name_causes_the_show_folder_name_to_follow_suit_when_using_organise(self):
-        show_name =  'Big Bang Theory, The'
+    def test_moving_leading_the_and_organise_correctly_change_show_folder_name(self):
+        show_name = 'Big Bang Theory, The'
         self._file.show_name = show_name
         path = self.tv.build_path(self._file, organise=self.organise, rename_dir=self.organised)
         show_dir = path.split('/')[-3:][0]

@@ -4,10 +4,9 @@ import logging
 import os
 import sys
 
+from . import errors
 from .config import Config
-from .errors import *
 from .history import parse_history
-from .libraries import TheTvDb
 from .logs import start_logging
 from .main import File, TvRenamr
 from .options import OptionParser
@@ -128,21 +127,21 @@ def rename(path, options):
         tv.rename(filename, path)
     except KeyboardInterrupt:
         sys.exit()
-    except (NoMoreLibrariesException,
-            NoNetworkConnectionException):
+    except (errors.NoMoreLibrariesException,
+            errors.NoNetworkConnectionException):
         if options.dry or options.debug:
             stop_dry_run()
         sys.exit(1)
     except (AttributeError,
-            EmptyEpisodeTitleException,
-            EpisodeAlreadyExistsInDirectoryException,
-            EpisodeNotFoundException,
-            IncorrectCustomRegularExpressionSyntaxException,
-            InvalidXMLException,
-            MissingInformationException,
-            OutputFormatMissingSyntaxException,
-            ShowNotFoundException,
-            UnexpectedFormatException) as e:
+            errors.EmptyEpisodeTitleException,
+            errors.EpisodeAlreadyExistsInDirectoryException,
+            errors.EpisodeNotFoundException,
+            errors.IncorrectCustomRegularExpressionSyntaxException,
+            errors.InvalidXMLException,
+            errors.MissingInformationException,
+            errors.OutputFormatMissingSyntaxException,
+            errors.ShowNotFoundException,
+            errors.UnexpectedFormatException) as e:
         for msg in e.args:
             log.critical(e)
         pass

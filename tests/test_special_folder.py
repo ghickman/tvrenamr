@@ -18,6 +18,7 @@ class TestSpecialFolder(BaseTest):
 
     def test_setting_specials_folder_when_build_path(self):
         self.tv.debug = True
+
         class File(object):
             name = 'Chuck'
             show_name = 'Chuck'

@@ -134,4 +134,3 @@ class TheTvDb(object):
         self.show_id, self.show = self.get_show_id_from_xml(tree)
         self.log.debug('Retrieved show id: {0}'.format(self.show_id))
         self.log.debug('Retrieved canonical show name: {0}'.format(self.show))
-

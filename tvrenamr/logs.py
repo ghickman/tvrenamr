@@ -15,7 +15,7 @@ def convert_log_level(level=26):
         level = 26
 
     levels = {'notset': 0, 'debug': 10, 'info': 20, 'minimal': 22,
-                'short': 26, 'warning': 30, 'error': 40, 'critical': 50}
+              'short': 26, 'warning': 30, 'error': 40, 'critical': 50}
 
     if isinstance(level, str):
         level = levels.get(level)

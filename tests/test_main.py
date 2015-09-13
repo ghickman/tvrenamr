@@ -18,7 +18,7 @@ class TestMain(BaseTest):
         path = self.tv.build_path(_file, rename_dir=self.files, organise=False)
         assert os.path.split(path.split('-')[0].strip())[1] == show_name
 
-    def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):
+    def test_passing_in_a_season_number_to_retrieve_episode_name_returns_the_correct_episode_name_from_that_season(self):  # noqa
         _file = File('chuck', '1', ['08'], 'mp4')
         _file.season = '2'
         _file.episodes[0].title = ''
@@ -130,22 +130,22 @@ class TestMain(BaseTest):
         details = self.tv.extract_details_from_file('chuck.2005.avi')
         assert details['episodes'][0] == '5'
 
-    def test_extracting_season_with_custom_regular_expression_passing_in_season_and_episode_digit_lengths_from_file_format_000(self):
+    def test_extracting_season_with_custom_regular_expression_passing_in_season_and_episode_digit_lengths_from_file_format_000(self):  # noqa
         regex = '%n.%s{2}%e{1}'
         details = self.tv.extract_details_from_file('chuck.025', user_regex=regex)
         assert details['season'] == '2'
 
-    def test_extracting_episode_with_custom_regular_expression_passing_in_season_and_episode_digit_lengths_from_file_format_000(self):
+    def test_extracting_episode_with_custom_regular_expression_passing_in_season_and_episode_digit_lengths_from_file_format_000(self):  # noqa
         regex = '%n.%s{2}%e{1}'
         details = self.tv.extract_details_from_file('chuck.025', user_regex=regex)
         assert details['episodes'][0] == '5'
 
-    def test_extracting_season_with_custom_regular_expression_passing_in_season_digit_lengths_from_file_format_000(self):
+    def test_extracting_season_with_custom_regular_expression_passing_in_season_digit_lengths_from_file_format_000(self):  # noqa
         regex = '%n.%s{2}%e'
         details = self.tv.extract_details_from_file('chuck.0250', user_regex=regex)
         assert details['season'] == '2'
 
-    def test_extracting_season_with_custom_regular_expression_passing_in_episode_digit_lengths_from_file_format_000(self):
+    def test_extracting_season_with_custom_regular_expression_passing_in_episode_digit_lengths_from_file_format_000(self):  # noqa
         regex = '%n.%s%e{1}'
         details = self.tv.extract_details_from_file('chuck.025', user_regex=regex)
         assert details['season'] == '2'
@@ -223,8 +223,9 @@ class TestMain(BaseTest):
         assert details['episodes'][0] == '3'
 
     def test_no_organise_in_config(self):
+        filename = 'The Big Bang Theory - 301 - The Electric Can Opener Fluctuation.mp4'
         path = self.tv.build_path(self._file, rename_dir=self.files)
-        expected = os.path.join(self.files, 'The Big Bang Theory - 301 - The Electric Can Opener Fluctuation.mp4')
+        expected = os.path.join(self.files, filename)
         assert path == expected
 
     def test_unicode_in_filename(self):
