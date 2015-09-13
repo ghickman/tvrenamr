@@ -15,7 +15,10 @@ from .vendor import requests
 from .vendor.defusedxml.ElementTree import fromstring
 
 
-class BaseLibrary(object):
+class TheTvDb(object):
+    log = logging.getLogger('The Tv DB')
+    url_base = 'http://www.thetvdb.com/api/'
+
     def __init__(self, show, season, episode, cache):
         self.cache = cache
         self.show = show
@@ -28,10 +31,13 @@ class BaseLibrary(object):
         self.set_episode_title(self.build_episode_url())
 
     def build_episode_url(self):
-        raise NotImplementedError
+        apikey = 'C4C424B4E9137AFD'
+        args = (self.url_base, apikey, self.show_id, self.season, self.episode)
+        return '{0}{1}/series/{2}/default/{3}/{4}/en.xml'.format(*args)
 
     def build_id_url(self, quoted_show):
-        raise NotImplementedError
+        url_series = 'GetSeries.php?seriesname='
+        return '{0}{1}{2}'.format(self.url_base, url_series, quoted_show)
 
     def get_cache_dir(self, show):
         show = show.lower().replace(' ', '_')  # sanitise show name
@@ -43,10 +49,19 @@ class BaseLibrary(object):
         return cache_dir
 
     def get_episode_title_from_xml(self, xml):
-        raise NotImplementedError
+        episode = xml.find('Episode').findtext('EpisodeName')
+        if not episode:
+            raise errors.EmptyEpisodeTitleException
+        return episode
 
     def get_show_id_from_xml(self, xml):
-        raise NotImplementedError
+        for name in xml.findall('Series'):
+            show = name.findtext('SeriesName')
+            if show.lower() != self.show.lower():
+                raise errors.ShowNotFoundException(self.log.name, self.show)
+
+            self.log.debug('Series chosen: {0}'.format(show))
+            return name.findtext('seriesid'), show
 
     def request_show_id(self, show, cache):
         try:
@@ -119,33 +134,4 @@ class BaseLibrary(object):
         self.show_id, self.show = self.get_show_id_from_xml(tree)
         self.log.debug('Retrieved show id: {0}'.format(self.show_id))
         self.log.debug('Retrieved canonical show name: {0}'.format(self.show))
-
-
-class TheTvDb(BaseLibrary):
-    log = logging.getLogger('The Tv DB')
-    url_base = 'http://www.thetvdb.com/api/'
-
-    def build_episode_url(self):
-        apikey = 'C4C424B4E9137AFD'
-        args = (self.url_base, apikey, self.show_id, self.season, self.episode)
-        return '{0}{1}/series/{2}/default/{3}/{4}/en.xml'.format(*args)
-
-    def build_id_url(self, quoted_show):
-        url_series = 'GetSeries.php?seriesname='
-        return '{0}{1}{2}'.format(self.url_base, url_series, quoted_show)
-
-    def get_episode_title_from_xml(self, xml):
-        episode = xml.find('Episode').findtext('EpisodeName')
-        if not episode:
-            raise errors.EmptyEpisodeTitleException
-        return episode
-
-    def get_show_id_from_xml(self, xml):
-        for name in xml.findall('Series'):
-            show = name.findtext('SeriesName')
-            if show.lower() != self.show.lower():
-                raise errors.ShowNotFoundException(self.log.name, self.show)
-
-            self.log.debug('Series chosen: {0}'.format(show))
-            return name.findtext('seriesid'), show
 
