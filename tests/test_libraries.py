@@ -38,9 +38,15 @@ class TestLibraries(BaseTest):
         assert method(the=True) == 'Big Bang Theory, The'
 
     # def test_unicode_character_in_episode_name(self):
-    #     This is horrible but the libraries are horrendous atm
+    # #     This is horrible but the libraries are horrendous atm
     #     from tvrenamr.errors import EmptyEpisodeTitleException
-    #     xml = fromstring('<Data><Episode><EpisodeName>¡Viva los Muertos!</EpisodeName></Episode></Data>')
+    #     xml = fromstring("""
+    #     <Data>
+    #         <Episode>
+    #             <EpisodeName>¡Viva los Muertos!</EpisodeName>
+    #         </Episode>
+    #     </Data>
+    #     """)
     #     episode = xml.find('Episode').findtext('EpisodeName').encode('utf-8')
     #     if not episode:
     #         raise EmptyEpisodeTitleException
