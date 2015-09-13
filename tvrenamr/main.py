@@ -16,18 +16,6 @@ from .libraries import TheTvDb, TvRage
 log = logging.getLogger('Core')
 
 
-def clean_name(filename, before=':', after=','):
-    """
-    Cleans the string passed in.
-
-    A wrapper of Python's str.replace() with the idea of making the string
-    safe for all file systems, but not using the horrible \ character.
-    Also allows the user to specify the new characters to be used.
-
-    """
-    return filename.replace(before, after)
-
-
 class Episode(object):
 
     def __init__(self, _file, number):

@@ -25,7 +25,7 @@ def convert_log_level(level=26):
 
 def get_log_file(filename=None):
     # make sure the log directory exists and place the log file there
-    if filename == None:
+    if filename is None:
         filename = os.path.join(
             os.path.expanduser('~'),
             '.tvrenamr',

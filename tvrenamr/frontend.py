@@ -41,7 +41,7 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
             for root, dirs, files in os.walk(glob):
                 for fname in files:
                     file_path = os.path.join(root, fname)
-                    if not file_path in ignore_filelist:
+                    if file_path not in ignore_filelist:
                         file_list.append(file_path)
 
                 if not recursive:
@@ -76,27 +76,27 @@ def rename(path, options):
         _file.user_overrides(options.show_name, options.season, options.episode)
         _file.safety_check()
 
-        config = get_config(options.config, _file.show_name)
+        config = get_config(options.config)
 
         for episode in _file.episodes:
-            canonical = config.get('canonical',
+            canonical = config.get('canonical', show=_file.show_name,
                 default=episode._file.show_name, override=options.canonical)
 
             ep_kwargs = {'library': options.library, 'canonical': canonical}
             episode.title = tv.retrieve_episode_title(episode, **ep_kwargs)
 
         show = config.get_output(_file.show_name, override=options.show_override)
-        the = config.get('the', override=options.the)
+        the = config.get('the', show=_file.show_name, override=options.the)
         _file.show_name = tv.format_show_name(show, the=the)
 
-        _file.set_output_format(config.get('format',
+        _file.set_output_format(config.get('format', show=_file.show_name,
             default=_file.output_format, override=options.output_format))
 
-        organise = config.get('organise',
+        organise = config.get('organise', show=_file.show_name,
             default=False, override=options.organise)
-        rename_dir = config.get('renamed',
+        rename_dir = config.get('renamed', show=_file.show_name,
             default=working, override=options.rename_dir)
-        specials_folder = config.get('specials_folder',
+        specials_folder = config.get('specials_folder', show=_file.show_name,
             default='Season 0', override=options.specials_folder)
         path = tv.build_path(
             _file,
