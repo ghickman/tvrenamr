@@ -83,8 +83,7 @@ def rename(path, options):
             canonical = config.get('canonical', show=_file.show_name,
                 default=episode._file.show_name, override=options.canonical)
 
-            ep_kwargs = {'library': TheTvDb, 'canonical': canonical}
-            episode.title = tv.retrieve_episode_title(episode, **ep_kwargs)
+            episode.title = tv.retrieve_episode_title(episode, canonical=canonical)
 
         show = config.get_output(_file.show_name, override=options.show_override)
         the = config.get('the', show=_file.show_name, override=options.the)

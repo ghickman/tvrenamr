@@ -177,7 +177,7 @@ class TvRenamr(object):
 
         return self._build_credentials(fn, matches)
 
-    def retrieve_episode_title(self, episode, library=None, canonical=None):
+    def retrieve_episode_title(self, episode, canonical=None):
         """Retrieves the title of a given episode.
 
         The series name, season and episode numbers must be specified to get
