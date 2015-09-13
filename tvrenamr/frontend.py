@@ -80,8 +80,12 @@ def rename(path, options):
         config = get_config(options.config)
 
         for episode in _file.episodes:
-            canonical = config.get('canonical', show=_file.show_name,
-                default=episode._file.show_name, override=options.canonical)
+            canonical = config.get(
+                'canonical',
+                _file.show_name,
+                default=episode._file.show_name,
+                override=options.canonical
+            )
 
             episode.title = tv.retrieve_episode_title(episode, canonical=canonical)
 
@@ -89,15 +93,31 @@ def rename(path, options):
         the = config.get('the', show=_file.show_name, override=options.the)
         _file.show_name = tv.format_show_name(show, the=the)
 
-        _file.set_output_format(config.get('format', show=_file.show_name,
-            default=_file.output_format, override=options.output_format))
+        _file.set_output_format(config.get(
+            'format',
+            _file.show_name,
+            default=_file.output_format,
+            override=options.output_format
+        ))
 
-        organise = config.get('organise', show=_file.show_name,
-            default=False, override=options.organise)
-        rename_dir = config.get('renamed', show=_file.show_name,
-            default=working, override=options.rename_dir)
-        specials_folder = config.get('specials_folder', show=_file.show_name,
-            default='Season 0', override=options.specials_folder)
+        organise = config.get(
+            'organise',
+            _file.show_name,
+            default=False,
+            override=options.organise
+        )
+        rename_dir = config.get(
+            'renamed',
+            _file.show_name,
+            default=working,
+            override=options.rename_dir
+        )
+        specials_folder = config.get(
+            'specials_folder',
+            _file.show_name,
+            default='Season 0',
+            override=options.specials_folder
+        )
         path = tv.build_path(
             _file,
             rename_dir=rename_dir,
