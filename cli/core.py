@@ -114,8 +114,6 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
             )
 
             tv.rename(filename, path)
-        # except KeyboardInterrupt:
-        #     sys.exit(0)
         except errors.NoNetworkConnectionException:
             if dry_run or debug:
                 stop_dry_run()
