@@ -72,39 +72,39 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
                     'canonical',
                     _file.show_name,
                     default=episode._file.show_name,
-                    override=options.canonical
+                    override=canonical
                 )
 
                 episode.title = tv.retrieve_episode_title(episode, canonical=canonical)
 
-            show = config.get_output(_file.show_name, override=options.show_override)
-            the = config.get('the', show=_file.show_name, override=options.the)
+            show = config.get_output(_file.show_name, override=show_override)
+            the = config.get('the', show=_file.show_name, override=the)
             _file.show_name = tv.format_show_name(show, the=the)
 
             _file.set_output_format(config.get(
                 'format',
                 _file.show_name,
                 default=_file.output_format,
-                override=options.output_format
+                override=output_format
             ))
 
             organise = config.get(
                 'organise',
                 _file.show_name,
                 default=False,
-                override=options.organise
+                override=organise
             )
             rename_dir = config.get(
                 'renamed',
                 _file.show_name,
-                default=working,
-                override=options.rename_dir
+                default=current_dir,
+                override=rename_dir
             )
             specials_folder = config.get(
                 'specials_folder',
                 _file.show_name,
                 default='Season 0',
-                override=options.specials_folder
+                override=specials,
             )
             path = tv.build_path(
                 _file,
