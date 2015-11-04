@@ -25,6 +25,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['docs', 'tests']),
     entry_points={'console_scripts': ['tvr=cli.core:cli']},
+    install_requires=['click'],
     classifiers=[
         'Development Status :: 6 - Mature',
         'Environment :: Console',
