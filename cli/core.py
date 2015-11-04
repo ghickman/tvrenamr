@@ -120,12 +120,12 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
             sys.exit(1)
         except (AttributeError,
                 errors.EmptyEpisodeTitleException,
-                errors.EpisodeAlreadyExistsInDirectoryException,
                 errors.EpisodeNotFoundException,
                 errors.IncorrectCustomRegularExpressionSyntaxException,
                 errors.InvalidXMLException,
                 errors.MissingInformationException,
                 errors.OutputFormatMissingSyntaxException,
+                errors.PathExistsException,
                 errors.ShowNotFoundException,
                 errors.UnexpectedFormatException) as e:
             continue

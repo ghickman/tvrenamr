@@ -244,7 +244,7 @@ class TvRenamr(object):
 
         """
         if os.path.exists(destination_filepath):
-            raise errors.EpisodeAlreadyExistsInDirectoryException(destination_filepath)
+            raise errors.PathExistsException(destination_filepath)
 
         log.debug(os.path.join(self.working_dir, current_filepath))
         log.debug(destination_filepath)
