@@ -2,54 +2,20 @@
 
 import functools
 import logging
-import os
-import pydoc
 import sys
 
 import click
-from tvrenamr import errors
-from tvrenamr.logs import get_log_file, start_logging
-from tvrenamr.main import File, TvRenamr
 
-from .decorators import logfile_option
-from .helpers import (build_file_list, get_config, sanitise_log, start_dry_run,
-                      stop_dry_run)
+from cli.helpers import (build_file_list, get_config, start_dry_run,
+                         stop_dry_run)
+from tvrenamr import errors
+from tvrenamr.logs import start_logging
+from tvrenamr.main import File, TvRenamr
 
 log = logging.getLogger('CLI')
 
 
-@click.group()
-def cli():
-    pass
-
-
-@cli.command()
-@logfile_option
-def history(log_file):
-    """Display a list of shows renamed using the system pager."""
-    log_file = get_log_file(log_file)
-
-    if not os.path.getsize(log_file):
-        log.critical('No log file found, exiting.')
-        sys.exit(1)
-
-    with open(log_file, 'r') as f:
-        logs = f.readlines()
-
-    shows = list(filter(lambda x: 'Renamed:' in x, logs))
-
-    def show_len(show):
-        return len(show.split('Renamed: ')[1].split(' - ')[0]) - 1
-
-    longest = max(map(show_len, shows))
-
-    sanitise = functools.partial(sanitise_log, longest=longest)
-
-    shows = map(sanitise, shows)
-    return pydoc.pager('\n'.join(shows))
-
-
-@cli.command()
+@click.command()
 @click.option('--config', type=click.Path(), help='Select a location for your config file. If the path is invalid the default locations will be used.')
 @click.option('-c', '--canonical', help='Set the show\'s canonical name to use when performing the online lookup.')
 @click.option('--debug', is_flag=True)
@@ -57,7 +23,7 @@ def history(log_file):
 @click.option('-e', '--episode', type=int, help='Set the episode number. Currently this will cause errors when working with more than one file.')
 @click.option('--ignore-filelist', default=())
 @click.option('--ignore-recursive', is_flag=True, help='Only use files from the root of a given directory, not entering any sub-directories.')
-@logfile_option
+@click.option('--log-file', type=click.Path(exists=True), help='Set the log file location.')
 @click.option('-l', '--log-level', help='Set the log level. Options: short, minimal, info and debug.')
 @click.option('--library', default='thetvdb', help='Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.')
 @click.option('-n', '--name', help="Set the episode's name.")
@@ -182,4 +148,4 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
 
 
 if __name__ == "__main__":
-    cli()
+    rename()
