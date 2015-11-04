@@ -41,7 +41,7 @@ log = logging.getLogger('CLI')
 @click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")
-@click.argument('paths', nargs=3, required=False, type=click.Path(exists=True))
+@click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
 def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
            ignore_recursive, log_file, log_level, library, name, no_cache,
            output_format, organise, partial, quiet, recursive, rename_dir,
