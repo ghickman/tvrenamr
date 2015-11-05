@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
+
 import functools
 import logging
 import sys
 
 import click
 
-from cli.helpers import (build_file_list, get_config, start_dry_run,
-                         stop_dry_run)
 from tvrenamr import errors
+from tvrenamr.cli.helpers import (build_file_list, get_config, start_dry_run,
+                                  stop_dry_run)
 from tvrenamr.logs import start_logging
 from tvrenamr.main import File, TvRenamr
 
