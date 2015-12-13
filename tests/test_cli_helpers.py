@@ -3,7 +3,7 @@ import random
 
 import pytest
 
-from cli.helpers import build_file_list, get_config
+from tvrenamr.cli.helpers import build_file_list, get_config
 
 
 def build_path(path):
