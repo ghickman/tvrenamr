@@ -1,31 +1,8 @@
 import os
 import random
 
-import pytest
-
 from tvrenamr.cli.helpers import build_file_list, get_config
-
-
-def build_path(path):
-    if not os.path.exists(path):
-        os.mkdir(path)
-
-    return path
-
-
-def join_path(path):
-    _path = os.path.abspath(os.path.dirname(__file__))
-    return os.path.join(_path, path)
-
-
-@pytest.fixture
-def files():
-    return build_path(join_path('files'))
-
-
-def random_files(files):
-    for choice in range(3):
-        yield os.path.join(files, random.choice(os.listdir(files)))
+from .utils import build_path, full_path, join_path, files, random_files
 
 
 def test_build_file_list_from_a_folder_path():
