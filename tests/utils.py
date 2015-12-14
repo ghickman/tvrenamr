@@ -32,4 +32,4 @@ def files():
 
 def random_files(path):
     for i in range(3):
-        yield os.path.join(files(), random.choice(os.listdir(path)))
+        yield os.path.join(path, random.choice(os.listdir(path)))
