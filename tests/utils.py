@@ -1,8 +1,6 @@
 import os
 import random
 
-import pytest
-
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,11 +21,6 @@ def full_path(path):
 
 def join_path(path):
     return os.path.join(PATH, path)
-
-
-@pytest.fixture
-def files():
-    return build_path(join_path('files'))
 
 
 def random_files(path):
