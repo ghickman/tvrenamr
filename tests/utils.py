@@ -12,13 +12,6 @@ def build_path(path):
     return path
 
 
-def full_path(path):
-    paths = []
-    for p in os.listdir(path):
-        paths.append(os.path.join(files(), p))
-    return paths
-
-
 def join_path(path):
     return os.path.join(PATH, path)
 
