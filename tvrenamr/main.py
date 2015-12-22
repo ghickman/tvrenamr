@@ -22,7 +22,7 @@ class Episode(object):
             msg = 'Missing episode: Set it with --episode or use %e in your --regex string'
             raise AttributeError(msg)
 
-        msg = "'{0}' object has no attribute '{1}'".format(self.__class__.__name__, name)
+        msg = "'{}' object has no attribute '{}'".format(self.__class__.__name__, name)
         raise AttributeError(msg)
 
     def __getattribute__(self, item):
@@ -31,14 +31,14 @@ class Episode(object):
         it with a leading zero.
         """
         if item is 'episode_2':
-            return '0{0}'.format(self.number)
+            return '0{}'.format(self.number)
         return object.__getattribute__(self, item)
 
     def __repr__(self):
-        return 'Episode: {0} (season {1})'.format(self.number, self._file.season)
+        return 'Episode: {} (season {})'.format(self.number, self._file.season)
 
     def __str__(self):
-        return '{0} - {1}'.format(self.number, self.title)
+        return '{} - {}'.format(self.number, self.title)
 
 
 class File(object):
@@ -85,7 +85,7 @@ class File(object):
         titles = [e.title for e in self.episodes]
 
         # Check the titles aren't all the same with different (x) parts
-        suffixes = tuple('({0})'.format(i+1) for i in range(len(titles)))
+        suffixes = tuple('({})'.format(i + 1) for i in range(len(titles)))
         if any([t.endswith(suffixes) for t in titles]):
             stripped_titles = set([t[:-4] for t in titles])
             if len(stripped_titles) is 1:
@@ -161,14 +161,14 @@ class TvRenamr(object):
             pass
 
         fn = self._sanitise_filename(fn)
-        log.log(22, 'Renaming: {0}'.format(fn))
+        log.log(22, 'Renaming: %s', fn)
 
         regex = self._build_regex(user_regex)
         matches = re.match(regex, fn)
         if not matches:
             raise errors.UnexpectedFormatException(fn)
 
-        log.debug('Renaming using: {0}'.format(regex))
+        log.debug('Renaming using: %s', regex)
 
         return self._build_credentials(fn, matches)
 
@@ -182,26 +182,25 @@ class TvRenamr(object):
         if canonical is not None:
             episode._file.show_name = canonical
 
-        log.debug('Show Name: {0}'.format(episode._file.show_name))
+        log.debug('Show Name: %s', episode._file.show_name)
 
         args = (episode._file.show_name, episode._file.season, episode.number, self.cache)
         self.lookup = TheTvDb(*args)  # assign to self for use in format_show_name
 
-        log.info('Episode: {0}'.format(self.lookup.title))
+        log.info('Episode: %s', self.lookup.title)
         return self.lookup.title
 
     def format_show_name(self, show_name, the=False):
         if show_name is None:
             show_name = self.lookup.show
-            msg = 'Using the formatted show name retrieved by the library: {0}'
-            log.debug(msg.format(show_name))
+            log.debug('Using the formatted show name retrieved by the library: %s', show_name)
         else:
-            log.debug('Using config output name: {0}'.format(show_name))
+            log.debug('Using config output name: %s', show_name)
 
         if the is True:
             show_name = self._move_leading_the_to_trailing_the(show_name)
 
-        log.debug('Final show name: {0}'.format(show_name))
+        log.debug('Final show name: %s', show_name)
 
         return show_name
 
@@ -223,10 +222,10 @@ class TvRenamr(object):
             args = [rename_dir, _file.show_name, _file.season, specials_folder]
             rename_dir = self._build_organise_path(*args)
 
-        log.log(22, 'Directory: {0}'.format(rename_dir))
+        log.log(22, 'Directory: %s', rename_dir)
 
         path = os.path.join(rename_dir, _file.name)
-        log.debug('Full path: {0}'.format(path))
+        log.debug('Full path: %s', path)
 
         return path
 
@@ -247,7 +246,7 @@ class TvRenamr(object):
             source_filepath = os.path.join(self.working_dir, current_filepath)
             shutil.move(source_filepath, destination_filepath)
         destination_file = os.path.split(destination_filepath)[1]
-        log.log(26, 'Renamed: "{0}"'.format(destination_file))
+        log.log(26, 'Renamed: "%s"', destination_file)
         return destination_filepath
 
     def _build_credentials(self, fn, matches):
@@ -275,8 +274,8 @@ class TvRenamr(object):
             'extension': os.path.splitext(fn)[1]
         })
 
-        msg = ', '.join('{0}: {1}'.format(key, value) for key, value in details.items())
-        log.debug('Filename yielded: {0}'.format(msg))
+        msg = ', '.join('{}: {}'.format(key, value) for key, value in details.items())
+        log.debug('Filename yielded: %s', msg)
         return details
 
     def _build_organise_path(self, start_path, show_name, season_number, specials=None):
@@ -285,7 +284,7 @@ class TvRenamr(object):
 
         Show name and season number of an episode dictate the folder structure.
         """
-        season = 'Season {0}'.format(season_number)
+        season = 'Season {}'.format(season_number)
         if season_number is 0 and specials is not None:  # specials folder
             season = specials
 
@@ -329,30 +328,30 @@ class TvRenamr(object):
         if '%s{' in regex:
             log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
-            log.debug('Specified {0} season digits'.format(r))
+            log.debug('Specified % season digits', r)
             s = season.replace('1,2', r)
             regex = regex.replace('%s{' + r + '}', s)
-            log.debug('Season regex set: {0}'.format(s))
+            log.debug('Season regex set: %s', s)
 
         # %s
         if '%s' in regex:
             regex = regex.replace('%s', season)
-            log.debug('Default season regex set: {0}'.format(regex))
+            log.debug('Default season regex set: %s', regex)
 
         # episode number
         # %e{n}
         if '%e{' in regex:
             log.debug('User set episode digit number found')
             r = regex.split('%e{')[1][:1]
-            log.debug('User specified {0} episode digits'.format(r))
+            log.debug('User specified %s episode digits', r)
             e = episode.replace('2', r)
             regex = regex.replace('%e{' + r + '}', e)
-            log.debug('Episode regex set: {0}'.format(e))
+            log.debug('Episode regex set: %s', e)
 
         # %e
         if '%e' in regex:
             regex = regex.replace('%e', episode)
-            log.debug('Default episode regex set: {0}'.format(regex))
+            log.debug('Default episode regex set: %s', regex)
 
         return regex
 
@@ -364,7 +363,7 @@ class TvRenamr(object):
         """
         if not(show_name.startswith('The ')):
             return show_name
-        log.debug("Moving leading 'The' to end of: {0}".format(show_name))
+        log.debug("Moving leading 'The' to end of: %s", show_name)
         return show_name[4:] + ', The'
 
     def _sanitise_filename(self, filename):

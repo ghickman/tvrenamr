@@ -15,8 +15,8 @@ class EmptyEpisodeTitleException(Exception):
     aren't fully known
     """
     def __init__(self, library):
-        log.error('The episode name was not found. The record on {0} is likely '
-                  'incomplete.'.format(library))
+        msg = 'The episode name was not found. The record on %s is likely incomplete.'
+        log.error(msg, library)
 
 
 class EpisodeNotFoundException(Exception):
@@ -30,8 +30,8 @@ class EpisodeNotFoundException(Exception):
     :param episode: The episode number that was searched for.
     """
     def __init__(self, library, show, season, episode):
-        args = (show, season, episode, library)
-        log.error('"{0} - {1}{2}" could not be found on {3}'.format(*args))
+        msg = '"%s - %s%s" could not be found on %s'
+        log.error(msg, show, season, episode, library)
 
 
 class IncorrectRegExpException(Exception):
@@ -53,8 +53,8 @@ class InvalidXMLException(Exception):
     :param show: The show name.
     """
     def __init__(self, library, show):
-        log.error('The XML file retrieved from {0} was empty or invalid while '
-                  'looking for {1}.'.format(library, show))
+        msg = 'The XML file retrieved from %s was empty or invalid while looking for %s.'
+        log.error(msg, library, show)
         log.error('This could be indicative of a Show or Episode not being found.')
 
 
@@ -63,7 +63,7 @@ class MissingInformationException(Exception):
     Not enough information to rename a file
     """
     def __init__(self, err):
-        log.error('{0} is required to rename files.'.format(err))
+        log.error('%s is required to rename files.', err)
 
 
 class NetworkException(Exception):
@@ -74,8 +74,8 @@ class NetworkException(Exception):
     is down.
     """
     def __init__(self, library):
-        log.error('{0}TV Renamr could not connect to {1}. Please check your '
-                  'internet connection and try again.'.format(error, library))
+        msg = '%sTV Renamr could not connect to %s. Please check your internet connection and try again.'
+        log.error(msg, error, library)
 
 
 class OutputFormatMissingSyntaxException(Exception):
@@ -85,13 +85,9 @@ class OutputFormatMissingSyntaxException(Exception):
     :param syntax: The syntax string required.
     """
     def __init__(self, syntax):
-        if len(syntax) > 1:
-            t = ', '
-            errors = t.join(syntax)
-        else:
-            errors = syntax[0]
-        log.error('The output format is missing the following format elements: '
-                  '{0}'.format(errors))
+        errors = ', '.join(syntax)
+        msg = 'The output format is missing the following format elements: %s'
+        log.error(msg, errors)
 
 
 class PathExistsException(Exception):
@@ -103,7 +99,7 @@ class PathExistsException(Exception):
     :param dest: The destination directory.
     """
     def __init__(self, destination_path):
-        log.error('File already exists: {0}'.format(destination_path))
+        log.error('File already exists: %s', destination_path)
 
 
 class ShowNotFoundException(Exception):
@@ -114,7 +110,7 @@ class ShowNotFoundException(Exception):
     :param show: The show name searched for.
     """
     def __init__(self, library, show):
-        log.error('"{0}" could not be found on {1}'.format(show, library))
+        log.error('"%s" could not be found on %s', show, library)
 
 
 class ShowNotInExceptionsList(Exception):
@@ -124,7 +120,7 @@ class ShowNotInExceptionsList(Exception):
     :param show: The show name not found.
     """
     def __init__(self, show):
-        log.warning('{0} is not in the Exceptions list'.format(show))
+        log.warning('%s is not in the Exceptions list', show)
 
 
 class UnexpectedFormatException(Exception):
@@ -134,4 +130,4 @@ class UnexpectedFormatException(Exception):
     :param fn: The file name that was in an unexpected format.
     """
     def __init__(self, fn):
-        log.error('File in an unexpected format: {0}'.format(fn))
+        log.error('File in an unexpected format: %s', fn)

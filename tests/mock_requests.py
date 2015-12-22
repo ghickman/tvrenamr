@@ -48,7 +48,7 @@ def mock_get(url, **kwargs):
     exist, make the request and save to the file.
     """
     key = hashlib.md5(url.encode('utf-8')).hexdigest()
-    file_path = os.path.join(test_dir, 'cache', '{0}.xml'.format(key))
+    file_path = os.path.join(test_dir, 'cache', '{}.xml'.format(key))
     try:
         return MockResponse(file_path)
     except IOError:

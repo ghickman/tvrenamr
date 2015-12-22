@@ -5,14 +5,9 @@ import os
 import urllib
 
 import requests
-from defusedxml.ElementTree import fromstring
+from defusedxml.ElementTree import ParseError, fromstring
 
 from . import errors
-
-try:
-    from defusedxml.ElementTree import ParseError
-except ImportError:  # python 2
-    from xml.etree.ElementTree import ParseError
 
 
 class TheTvDb(object):
@@ -25,7 +20,7 @@ class TheTvDb(object):
         self.season = str(season).lstrip('0')
         self.episode = str(episode).lstrip('0')
 
-        self.log.info('Searching: {0}'.format(self.show))
+        self.log.info('Searching: %s', self.show)
         self.set_show_id()
 
         self.set_episode_title(self.build_episode_url())
@@ -33,11 +28,11 @@ class TheTvDb(object):
     def build_episode_url(self):
         apikey = 'C4C424B4E9137AFD'
         args = (self.url_base, apikey, self.show_id, self.season, self.episode)
-        return '{0}{1}/series/{2}/default/{3}/{4}/en.xml'.format(*args)
+        return '{}{}/series/{}/default/{}/{}/en.xml'.format(*args)
 
     def build_id_url(self, quoted_show):
         url_series = 'GetSeries.php?seriesname='
-        return '{0}{1}{2}'.format(self.url_base, url_series, quoted_show)
+        return '{}{}{}'.format(self.url_base, url_series, quoted_show)
 
     def get_cache_dir(self, show):
         show = show.lower().replace(' ', '_')  # sanitise show name
@@ -60,7 +55,7 @@ class TheTvDb(object):
             if show.lower() != self.show.lower():
                 raise errors.ShowNotFoundException(self.log.name, self.show)
 
-            self.log.debug('Series chosen: {0}'.format(show))
+            self.log.debug('Series chosen: %s', show)
             return name.findtext('seriesid'), show
 
     def request_show_id(self, show, cache):
@@ -70,7 +65,7 @@ class TheTvDb(object):
             quoted_show = urllib.quote(self.show)
 
         url = self.build_id_url(quoted_show)
-        self.log.debug('Series url: {0}'.format(url))
+        self.log.debug('Series url: %s', url)
 
         req = requests.get(url)
         if not req.ok:
@@ -81,7 +76,7 @@ class TheTvDb(object):
         return req.text
 
     def set_episode_title(self, url):
-        self.log.debug('Episode URL: {0}'.format(url))
+        self.log.debug('Episode URL: %s', url)
 
         self.log.debug('Attempting to retrieve episode title')
         req = requests.get(url)
@@ -98,15 +93,15 @@ class TheTvDb(object):
         if tree is None:
             raise errors.InvalidXMLException(self.log.name, self.show)
         args = (self.show, self.season, str(self.episode).zfill(2))
-        self.log.debug('XML: Episode document retrived for {0} - {1}{2}'.format(*args))
+        self.log.debug('XML: Episode document retrived for %s - %s%s', *args)
 
         self.log.debug('XML: Attempting to find the episode title')
         self.title = self.get_episode_title_from_xml(tree)
 
-        self.log.debug('Retrieved episode title: {0}'.format(self.title))
+        self.log.debug('Retrieved episode title: %s', self.title)
 
     def set_show_id(self):
-        self.log.debug('Retrieving series id for {0}'.format(self.show))
+        self.log.debug('Retrieving series id for %s', self.show)
 
         cache = os.path.join(self.get_cache_dir(self.show), 'show_id')
         try:
@@ -132,5 +127,5 @@ class TheTvDb(object):
         self.log.debug('XML: Parsed')
 
         self.show_id, self.show = self.get_show_id_from_xml(tree)
-        self.log.debug('Retrieved show id: {0}'.format(self.show_id))
-        self.log.debug('Retrieved canonical show name: {0}'.format(self.show))
+        self.log.debug('Retrieved show id: %s', self.show_id)
+        self.log.debug('Retrieved canonical show name: %s', self.show)

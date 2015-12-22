@@ -25,7 +25,7 @@ class TestAutoMoving(BaseTest):
     def test_using_organise_uses_the_correct_season_folder_in_the_path(self):
         path = self.tv.build_path(self._file, organise=self.organise, rename_dir=self.organised)
         season_dir = path.split('/')[-2:][0]
-        assert season_dir == 'Season {0}'.format(self._file.season)
+        assert season_dir == 'Season {}'.format(self._file.season)
 
     def test_using_organise_uses_the_correct_filename(self):
         path = self.tv.build_path(self._file, organise=self.organise, rename_dir=self.organised)

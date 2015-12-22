@@ -44,7 +44,7 @@ def sanitise_log(log, longest):
     name = (name.replace(show, show.lstrip('"').strip().ljust(longest), 1)
                 .replace(number, number.ljust(4), 1)
                 .replace(' - ', ' | '))
-    return '{0} | {1}'.format(dt, name.rstrip('"\n'))
+    return '{} | {}'.format(dt, name.rstrip('"\n'))
 
 
 def start_dry_run(logger):

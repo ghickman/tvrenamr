@@ -88,17 +88,17 @@ class Config(object):
             print(" o If text contains any of :[]{}% characters it must be single-quoted ('')\n")
             lines = 0
             if hasattr(e, 'problem') and e.problem is not None:
-                print(' Reason: {0}\n'.format(e.problem))
+                print(' Reason: {}\n'.format(e.problem))
                 if e.problem == 'mapping values are not allowed here':
                     print(' ----> MOST LIKELY REASON: Missing : from end of the line!')
                     print('')
             if hasattr(e, 'context_mark') and e.context_mark is not None:
                 args = (e.context_mark.line, e.context_mark.column)
-                print(' Check configuration near line {0}, column {1}'.format(*args))
+                print(' Check configuration near line {}, column {}'.format(*args))
                 lines += 1
             if hasattr(e, 'problem_mark') and e.problem_mark is not None:
                 args = (e.problem_mark.line, e.problem_mark.column)
-                print(' Check configuration near line {0}, column {1}'.format(*args))
+                print(' Check configuration near line {}, column {}'.format(*args))
                 lines += 1
             if lines:
                 print('')

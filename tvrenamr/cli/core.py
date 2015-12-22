@@ -137,7 +137,7 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
                 # In debug mode, show the full traceback.
                 raise
             for msg in e.args:
-                log.critical('Error: {0}'.format(msg))
+                log.critical('Error: %s', msg)
             sys.exit(1)
 
         # if we're not doing a dry run add a blank line for clarity
