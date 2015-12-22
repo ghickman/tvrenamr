@@ -6,12 +6,8 @@ Installation
 Requirements
 ------------
 
-* Python 2.6+
-* PyYaml
-* `Requests`_
+* Python 2.7+, Python 3.3+
 * The Interwebs
-
-.. _Requests: http://docs.python-requests.org/en/latest/index.html
 
 
 Python Package Index
