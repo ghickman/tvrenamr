@@ -2,10 +2,7 @@ import collections
 import logging
 import sys
 
-if sys.version_info[0] == 3:
-    from .vendor import yaml
-else:
-    from .vendor import yaml2 as yaml
+import yaml
 
 
 class Config(object):

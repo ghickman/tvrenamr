@@ -1,17 +1,12 @@
 from __future__ import unicode_literals
+
 import logging
 import os
 import re
 import shutil
 
-try:
-    from collections import OrderedDict
-except ImportError:  # python 2
-    from tvrenamr.vendor.ordereddict import OrderedDict  # noqa
-
 from . import errors
 from .libraries import TheTvDb
-
 
 log = logging.getLogger('Core')
 

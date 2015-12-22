@@ -1,18 +1,18 @@
 from __future__ import unicode_literals
+
 import logging
 import os
 import urllib
-try:
-    from .vendor.defusedxml.ElementTree import ParseError
-except ImportError:  # python 2
-    try:
-        from xml.etree.ElementTree import ParseError
-    except ImportError:  # python 2.6
-        from xml.parsers.expat import ExpatError as ParseError
+
+import requests
+from defusedxml.ElementTree import fromstring
 
 from . import errors
-from .vendor import requests
-from .vendor.defusedxml.ElementTree import fromstring
+
+try:
+    from defusedxml.ElementTree import ParseError
+except ImportError:  # python 2
+    from xml.etree.ElementTree import ParseError
 
 
 class TheTvDb(object):

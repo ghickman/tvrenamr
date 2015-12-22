@@ -14,6 +14,13 @@ def long_desc():
     return readme + '\n\n' + changelog
 
 
+requires = [
+    'click',
+    'defusedxml',
+    'pyyaml',
+    'requests',
+]
+
 setup(
     name=tvrenamr.__title__,
     version=tvrenamr.__version__,
@@ -25,7 +32,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['docs', 'tests']),
     entry_points={'console_scripts': ['tvr=tvrenamr.cli.core:rename']},
-    install_requires=['click'],
+    install_requires=requires,
     classifiers=[
         'Development Status :: 6 - Mature',
         'Environment :: Console',
