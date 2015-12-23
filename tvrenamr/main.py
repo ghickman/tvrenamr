@@ -6,7 +6,7 @@ import re
 import shutil
 
 from . import errors
-from .libraries import TheTvDb
+from .tvdb import TVDB
 
 log = logging.getLogger('Core')
 
@@ -184,7 +184,7 @@ class TvRenamr(object):
         log.debug('Show Name: %s', episode._file.show_name)
 
         args = (episode._file.show_name, episode._file.season, episode.number, self.cache)
-        self.lookup = TheTvDb(*args)  # assign to self for use in format_show_name
+        self.lookup = TVDB(*args)  # assign to self for use in format_show_name
 
         log.info('Episode: %s', self.lookup.title)
         return self.lookup.title

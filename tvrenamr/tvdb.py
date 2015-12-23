@@ -10,7 +10,7 @@ from defusedxml.ElementTree import ParseError, fromstring
 from . import errors
 
 
-class TheTvDb(object):
+class TVDB(object):
     log = logging.getLogger('The Tv DB')
     url_base = 'http://www.thetvdb.com/api/'
 

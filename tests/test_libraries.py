@@ -2,7 +2,6 @@
 from functools import partial
 
 from pytest import raises
-
 from tvrenamr.errors import EpisodeNotFoundException, ShowNotFoundException
 from tvrenamr.main import File
 
