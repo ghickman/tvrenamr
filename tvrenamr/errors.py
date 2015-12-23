@@ -14,24 +14,22 @@ class EmptyEpisodeTitleException(Exception):
     This is usually seen when a season is new enough that the episode names
     aren't fully known
     """
-    def __init__(self, library):
-        msg = 'The episode name was not found. The record on %s is likely incomplete.'
-        log.error(msg, library)
+    def __init__(self):
+        msg = 'The episode name was not found. The record on The TVDB is likely incomplete.'
+        log.error(msg)
 
 
 class EpisodeNotFoundException(Exception):
     """
-    Exception raised when an episode cannot be found in the database of
-    whichever library was used.
+    Exception raised when an episode cannot be found on The TVDB.
 
-    :param library: The library where the episode could't be found.
     :param show: The show name that was searched for.
     :param season: The season number that was searched for.
     :param episode: The episode number that was searched for.
     """
-    def __init__(self, library, show, season, episode):
-        msg = '"%s - %s%s" could not be found on %s'
-        log.error(msg, show, season, episode, library)
+    def __init__(self, show, season, episode):
+        msg = '"%s - %s%s" could not be found on TvDb'
+        log.error(msg, show, season, episode)
 
 
 class IncorrectRegExpException(Exception):
@@ -47,14 +45,13 @@ class IncorrectRegExpException(Exception):
 
 class InvalidXMLException(Exception):
     """
-    Raised when the XML document retrieved from a library is empty.
+    Raised when the XML document retrieved from The TVDB is empty.
 
-    :param library: The library the exception was raised in.
     :param show: The show name.
     """
-    def __init__(self, library, show):
-        msg = 'The XML file retrieved from %s was empty or invalid while looking for %s.'
-        log.error(msg, library, show)
+    def __init__(self, show):
+        msg = 'The XML file retrieved from The TVDB was empty or invalid while looking for %s.'
+        log.error(msg, show)
         log.error('This could be indicative of a Show or Episode not being found.')
 
 
@@ -68,14 +65,15 @@ class MissingInformationException(Exception):
 
 class NetworkException(Exception):
     """
-    Raised when no connection to the desired library is detected
+    Raised when no connection to The TVDB is detected
 
-    This will be raised if either the library or the internet connection itself
+    This will be raised if either The TVDB or the internet connection itself
     is down.
     """
-    def __init__(self, library):
-        msg = '%sTV Renamr could not connect to %s. Please check your internet connection and try again.'
-        log.error(msg, error, library)
+    def __init__(self):
+        msg = '%sTV Renamr could not connect to The TVDB. ' + \
+        'Please check your internet connection and try again.'
+        log.error(msg, error)
 
 
 class OutputFormatMissingSyntaxException(Exception):
@@ -104,13 +102,12 @@ class PathExistsException(Exception):
 
 class ShowNotFoundException(Exception):
     """
-    Raised when a show cannot be found by the specified library.
+    Raised when a show cannot be found on The TVDB.
 
-    :param library: The library that was searched.
     :param show: The show name searched for.
     """
-    def __init__(self, library, show):
-        log.error('"%s" could not be found on %s', show, library)
+    def __init__(self, show):
+        log.error('"%s" could not be found on The TVDB', show)
 
 
 class ShowNotInExceptionsList(Exception):

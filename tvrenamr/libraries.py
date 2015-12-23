@@ -53,7 +53,7 @@ class TheTvDb(object):
         for name in xml.findall('Series'):
             show = name.findtext('SeriesName')
             if show.lower() != self.show.lower():
-                raise errors.ShowNotFoundException(self.log.name, self.show)
+                raise errors.ShowNotFoundException('The TV DB', self.show)
 
             self.log.debug('Series chosen: %s', show)
             return name.findtext('seriesid'), show
@@ -81,7 +81,7 @@ class TheTvDb(object):
         self.log.debug('Attempting to retrieve episode title')
         req = requests.get(url)
         if not req.ok:
-            args = (self.log.name, self.show, self.season, self.episode)
+            args = (self.show, self.season, self.episode)
             raise errors.EpisodeNotFoundException(*args)
         self.log.debug('XML: Retreived')
 
@@ -89,9 +89,9 @@ class TheTvDb(object):
         try:
             tree = fromstring(req.content)
         except ParseError:
-            raise errors.InvalidXMLException(self.log.name, self.show)
+            raise errors.InvalidXMLException(self.show)
         if tree is None:
-            raise errors.InvalidXMLException(self.log.name, self.show)
+            raise errors.InvalidXMLException(self.show)
         args = (self.show, self.season, str(self.episode).zfill(2))
         self.log.debug('XML: Episode document retrived for %s - %s%s', *args)
 
@@ -121,9 +121,9 @@ class TheTvDb(object):
         try:
             tree = fromstring(xml)
         except ParseError:
-            raise errors.InvalidXMLException(self.log.name, self.show)
+            raise errors.InvalidXMLException(self.show)
         if tree is None or len(tree) is 0:
-            raise errors.InvalidXMLException(self.log.name, self.show)
+            raise errors.InvalidXMLException(self.show)
         self.log.debug('XML: Parsed')
 
         self.show_id, self.show = self.get_show_id_from_xml(tree)

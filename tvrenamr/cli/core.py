@@ -27,7 +27,6 @@ log = logging.getLogger('CLI')
 @click.option('--ignore-recursive', is_flag=True, help='Only use files from the root of a given directory, not entering any sub-directories.')   # noqa
 @click.option('--log-file', type=click.Path(exists=True), help='Set the log file location.')
 @click.option('-l', '--log-level', help='Set the log level. Options: short, minimal, info and debug.')   # noqa
-@click.option('--library', default='thetvdb', help='Set the library to use for retrieving episode titles. Options: thetvdb & tvrage.')   # noqa
 @click.option('--log-file', type=click.Path(exists=True), help='Set the log file location.')
 @click.option('-n', '--name', help="Set the episode's name.")
 @click.option('--no-cache', is_flag=True, help='Force all renames to ignore the cache.')
@@ -46,7 +45,7 @@ log = logging.getLogger('CLI')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
 def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
-           ignore_recursive, log_file, log_level, library, name, no_cache,
+           ignore_recursive, log_file, log_level, name, no_cache,
            output_format, organise, partial, quiet, recursive, rename_dir,
            no_rename_dir, regex, season, show, show_override, specials, the,
            paths):

@@ -176,8 +176,7 @@ class TvRenamr(object):
         """Retrieves the title of a given episode.
 
         The series name, season and episode numbers must be specified to get
-        the episode's title. The library specified by the user will be used
-        first but will fall back to the other library if an error occurs.
+        the episode's title.
         """
         if canonical is not None:
             episode._file.show_name = canonical
@@ -193,7 +192,7 @@ class TvRenamr(object):
     def format_show_name(self, show_name, the=False):
         if show_name is None:
             show_name = self.lookup.show
-            log.debug('Using the formatted show name retrieved by the library: %s', show_name)
+            log.debug('Using the formatted show name retrieved from The TvDb')
         else:
             log.debug('Using config output name: %s', show_name)
 
