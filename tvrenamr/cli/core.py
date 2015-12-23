@@ -146,7 +146,3 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
 
     if dry_run or debug:
         stop_dry_run(logger)
-
-
-if __name__ == "__main__":
-    rename()
