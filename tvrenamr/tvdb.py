@@ -69,7 +69,7 @@ class TVDB(object):
 
         req = requests.get(url)
         if not req.ok:
-            raise errors.NetworkException('thetvdb.com')
+            raise errors.NetworkException()
         if self.cache:
             with open(cache, 'w') as f:
                 f.write(req.text)
