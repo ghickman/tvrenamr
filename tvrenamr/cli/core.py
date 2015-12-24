@@ -35,7 +35,6 @@ log = logging.getLogger('CLI')
 @click.option('-q', '--quiet', is_flag=True, help="Don't output logs to the command line")
 @click.option('-r', '--recursive', is_flag=True, help='Recursively lookup files in a given directory')   # noqa
 @click.option('--rename-dir', type=click.Path(), help='The directory to move renamed files to, if not specified the working directory is used.')   # noqa
-@click.option('--no-rename-dir', is_flag=True, default=False, help='Explicity tell Tv Renamr not to move renamed files. Used to override the config.')   # noqa
 @click.option('--regex', help='The regular expression to use when extracting information from files.')   # noqa
 @click.option('-s', '--season', help='Set the season number.')
 @click.option('--show', help="Set the show's name (will search for this name).")
@@ -46,9 +45,8 @@ log = logging.getLogger('CLI')
 def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=too-many-arguments
            ignore_filelist, log_file, log_level, name,  # pylint: disable-msg=too-many-arguments
            no_cache, output_format, organise, partial,  # pylint: disable-msg=too-many-arguments
-           quiet, recursive, rename_dir, no_rename_dir,  # pylint: disable-msg=too-many-arguments
-           regex, season, show, show_override, specials,  # pylint: disable-msg=too-many-arguments
-           the, paths):  # pylint: disable-msg=too-many-arguments
+           quiet, recursive, rename_dir, regex, season,  # pylint: disable-msg=too-many-arguments
+           show, show_override, specials, the, paths):  # pylint: disable-msg=too-many-arguments
 
     if debug:
         log_level = 10
