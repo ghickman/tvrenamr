@@ -72,7 +72,7 @@ class NetworkException(Exception):
     """
     def __init__(self):
         msg = '%sTV Renamr could not connect to The TVDB. ' + \
-        'Please check your internet connection and try again.'
+              'Please check your internet connection and try again.'
         log.error(msg, error)
 
 
