@@ -172,7 +172,7 @@ class TvRenamr(object):
 
         return self._build_credentials(fn, matches)
 
-    def retrieve_episode_title(self, episode, canonical=None):
+    def retrieve_episode_title(self, episode, canonical=None, override=None):
         """Retrieves the title of a given episode.
 
         The series name, season and episode numbers must be specified to get
@@ -187,7 +187,7 @@ class TvRenamr(object):
         self.lookup = TVDB(*args)  # assign to self for use in format_show_name
 
         log.info('Episode: %s', self.lookup.title)
-        return self.lookup.title
+        return override or self.lookup.title
 
     def format_show_name(self, show_name, the=False):
         if show_name is None:
