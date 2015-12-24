@@ -58,7 +58,7 @@ class TVDB(object):
             self.log.debug('Series chosen: %s', show)
             return name.findtext('seriesid'), show
 
-    def request_show_id(self, show, cache):
+    def request_show_id(self, cache):
         try:
             quoted_show = urllib.parse.quote(self.show)
         except AttributeError:  # python 2
