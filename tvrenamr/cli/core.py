@@ -81,6 +81,7 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,  # pylin
                     override=canonical
                 )
 
+                # TODO: Warn setting name will override *all* episodes
                 episode.title = tv.retrieve_episode_title(episode, canonical=canonical, override=name)
 
             show = config.get_output(_file.show_name, override=show_override)
