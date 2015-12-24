@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 
+import mock
+import pytest
 from tvrenamr.config import Config
 from tvrenamr.main import File, TvRenamr
-import pytest
+
+from .mock_requests import mock_get
 
 
 def test_instantiate_core():
@@ -50,7 +53,8 @@ class TestWithBigBang:
         assert path.split('-')[1].strip()[-2:] == '03'
 
     def test_setting_the_position_of_a_shows_leading_the_to_the_end_of_the_file_name(self, files, tv):
-        tv.retrieve_episode_title(self._file.episodes[0])
+        with mock.patch('requests.get', mock_get):
+            tv.retrieve_episode_title(self._file.episodes[0])
         self._file.show_name = tv.format_show_name(self._file.show_name, the=True)
         assert self._file.show_name == 'Big Bang Theory, The'
 
