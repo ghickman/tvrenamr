@@ -16,10 +16,11 @@ def files(request):
     with open(os.path.join(PATH, 'file_list'), 'r') as f:
         paths = f.readlines()
 
+    if not os.path.exists(FILES):
+        os.makedirs(FILES)
     full_paths = list(map(lambda p: os.path.join(FILES, p.strip()), paths))
     for path in full_paths:
-        with open(path, 'w') as f:
-            f.write('')
+        open(path, 'a').close()
 
     # TODO: write the same files to subfolder
 

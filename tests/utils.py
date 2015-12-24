@@ -7,7 +7,7 @@ PATH = os.path.abspath(os.path.dirname(__file__))
 
 def build_path(path):
     if not os.path.exists(path):
-        os.mkdir(path)
+        os.makedirs(path)
 
     return path
 
