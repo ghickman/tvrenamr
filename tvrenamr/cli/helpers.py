@@ -11,7 +11,7 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
             yield os.path.split(path)
 
         if os.path.isdir(path):
-            for root, dirs, files in os.walk(path):
+            for root, _, files in os.walk(path):
                 for fname in files:
                     path = os.path.join(root, fname)
                     if path not in ignore_filelist:
@@ -40,7 +40,7 @@ def get_config(path=None):
 def sanitise_log(log, longest):
     dt, name = log.split('Renamed: ')
     dt = dt.split(' ')[0].replace('T', ' ')
-    show, number, title = name.split(' - ')
+    show, number, _ = name.split(' - ')
     name = (name.replace(show, show.lstrip('"').strip().ljust(longest), 1)
                 .replace(number, number.ljust(4), 1)
                 .replace(' - ', ' | '))
