@@ -110,7 +110,7 @@ class TVDB(object):
             with open(cache, 'r') as f:
                 xml = f.read()
         except IOError:
-            xml = self.request_show_id(self.show, cache)
+            xml = self.request_show_id(cache)
 
         try:
             xml = xml.encode('utf-8')  # deal with py2 faff
