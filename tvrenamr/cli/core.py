@@ -71,7 +71,7 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
 
             config = get_config(config)
 
-            for episode in _file.episodes:
+            for episode in file_.episodes:
                 canonical = config.get(
                     'canonical',
                     _file.show_name,

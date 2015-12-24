@@ -13,8 +13,8 @@ log = logging.getLogger('Core')
 
 class Episode(object):
 
-    def __init__(self, _file, number):
-        self._file = _file  # cache reverse reference to parent object
+    def __init__(self, file_, number):
+        self.file_ = file_  # cache reverse reference to parent object
         self.number = number
 
     def __getattr__(self, name):
@@ -35,7 +35,7 @@ class Episode(object):
         return object.__getattribute__(self, item)
 
     def __repr__(self):
-        return 'Episode: {} (season {})'.format(self.number, self._file.season)
+        return 'Episode: {} (season {})'.format(self.number, self.file_.season)
 
     def __str__(self):
         return '{} - {}'.format(self.number, self.title)
@@ -47,7 +47,7 @@ class File(object):
     def __init__(self, show_name=None, season=None, episodes=(), extension=''):
         self.show_name = show_name
         self.season = season
-        self.episodes = [Episode(_file=self, number=i) for i in episodes]
+        self.episodes = [Episode(file_=self, number=i) for i in episodes]
         self.extension = extension
 
     def __repr__(self):
@@ -125,7 +125,7 @@ class File(object):
                 for e in self.episodes:
                     e.number = int(episode)
             else:
-                self.episodes = [Episode(_file=self, number=episode)]
+                self.episodes = [Episode(file_=self, number=episode)]
 
 
 class TvRenamr(object):
@@ -179,11 +179,11 @@ class TvRenamr(object):
         the episode's title.
         """
         if canonical is not None:
-            episode._file.show_name = canonical
+            episode.file_.show_name = canonical
 
-        log.debug('Show Name: %s', episode._file.show_name)
+        log.debug('Show Name: %s', episode.file_.show_name)
 
-        args = (episode._file.show_name, episode._file.season, episode.number, self.cache)
+        args = (episode.file_.show_name, episode.file_.season, episode.number, self.cache)
         self.lookup = TVDB(*args)  # assign to self for use in format_show_name
 
         log.info('Episode: %s', self.lookup.title)
