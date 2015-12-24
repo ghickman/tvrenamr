@@ -43,10 +43,12 @@ log = logging.getLogger('CLI')
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
-def rename(config, canonical, debug, dry_run, episode, ignore_filelist,  # pylint: disable-msg=too-many-arguments
-           log_file, log_level, name, no_cache, output_format, organise,  # pylint: disable-msg=too-many-arguments
-           partial, quiet, recursive, rename_dir, no_rename_dir, regex,  # pylint: disable-msg=too-many-arguments
-           season, show, show_override, specials, the, paths):  # pylint: disable-msg=too-many-arguments
+def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=too-many-arguments
+           ignore_filelist, log_file, log_level, name,  # pylint: disable-msg=too-many-arguments
+           no_cache, output_format, organise, partial,  # pylint: disable-msg=too-many-arguments
+           quiet, recursive, rename_dir, no_rename_dir,  # pylint: disable-msg=too-many-arguments
+           regex, season, show, show_override, specials,  # pylint: disable-msg=too-many-arguments
+           the, paths):  # pylint: disable-msg=too-many-arguments
 
     if debug:
         log_level = 10
