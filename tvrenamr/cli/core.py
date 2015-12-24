@@ -24,7 +24,6 @@ log = logging.getLogger('CLI')
 @click.option('-d', '--dry-run', is_flag=True, help='Dry run your renaming.')
 @click.option('-e', '--episode', type=int, help='Set the episode number. Currently this will cause errors when working with more than one file.')  # noqa
 @click.option('--ignore-filelist', type=tuple, default=())
-@click.option('--ignore-recursive', is_flag=True, help='Only use files from the root of a given directory, not entering any sub-directories.')   # noqa
 @click.option('--log-file', type=click.Path(exists=True), help='Set the log file location.')
 @click.option('-l', '--log-level', help='Set the log level. Options: short, minimal, info and debug.')   # noqa
 @click.option('--log-file', type=click.Path(exists=True), help='Set the log file location.')
@@ -45,10 +44,9 @@ log = logging.getLogger('CLI')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
 def rename(config, canonical, debug, dry_run, episode, ignore_filelist,  # pylint: disable-msg=too-many-arguments
-           ignore_recursive, log_file, log_level, name, no_cache,  # pylint: disable-msg=too-many-arguments
-           output_format, organise, partial, quiet, recursive, rename_dir,  # pylint: disable-msg=too-many-arguments
-           no_rename_dir, regex, season, show, show_override, specials, the,  # pylint: disable-msg=too-many-arguments
-           paths):
+           log_file, log_level, name, no_cache, output_format, organise,  # pylint: disable-msg=too-many-arguments
+           partial, quiet, recursive, rename_dir, no_rename_dir, regex,  # pylint: disable-msg=too-many-arguments
+           season, show, show_override, specials, the, paths):  # pylint: disable-msg=too-many-arguments
 
     if debug:
         log_level = 10
