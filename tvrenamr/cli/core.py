@@ -118,7 +118,7 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,
             tv.rename(filename, path)
         except errors.NoNetworkConnectionException:
             if dry_run or debug:
-                stop_dry_run()
+                stop_dry_run(logger)
             sys.exit(1)
         except (AttributeError,
                 errors.EmptyEpisodeTitleException,
