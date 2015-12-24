@@ -40,7 +40,7 @@ class IncorrectRegExpException(Exception):
     """
     def __init__(self, regex):
         log.error('The regular expression provided does not contain the '
-                  'required custom syntax.')
+                  'required custom syntax: %s', regex)
 
 
 class InvalidXMLException(Exception):
