@@ -145,7 +145,7 @@ class TvRenamr(object):
         log.debug('Removing Part from episode name')
         return show_name.replace('(Part ', '(')
 
-    def extract_details_from_file(self, fn, user_regex=None):
+    def extract_details_from_file(self, fn, user_regex=None, partial=False):
         """Using a regular expression extract information from the filename passed in.
 
         Looks at the file given and extracts from it the show title, it's
@@ -163,7 +163,7 @@ class TvRenamr(object):
         fn = self._sanitise_filename(fn)
         log.log(22, 'Renaming: %s', fn)
 
-        regex = self._build_regex(user_regex)
+        regex = self._build_regex(user_regex, partial=partial)
         matches = re.match(regex, fn)
         if not matches:
             raise errors.UnexpectedFormatException(fn)

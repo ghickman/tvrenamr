@@ -62,7 +62,11 @@ def rename(config, canonical, debug, dry_run, episode, ignore_filelist,  # pylin
         try:
             tv = TvRenamr(current_dir, debug, dry_run, no_cache)
 
-            _file = File(**tv.extract_details_from_file(filename, user_regex=regex))
+            _file = File(**tv.extract_details_from_file(
+                filename,
+                user_regex=regex,
+                partial=partial,
+            ))
             # TODO: Warn setting season & episode will override *all* episodes
             _file.user_overrides(show, season, episode)
             _file.safety_check()
