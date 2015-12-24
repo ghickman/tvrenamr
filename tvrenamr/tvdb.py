@@ -53,7 +53,7 @@ class TVDB(object):
         for name in xml.findall('Series'):
             show = name.findtext('SeriesName')
             if show.lower() != self.show.lower():
-                raise errors.ShowNotFoundException('The TV DB', self.show)
+                raise errors.ShowNotFoundException(self.show)
 
             self.log.debug('Series chosen: %s', show)
             return name.findtext('seriesid'), show
