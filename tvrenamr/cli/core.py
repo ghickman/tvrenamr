@@ -123,14 +123,14 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
             )
 
             tv.rename(filename, path)
-        except errors.NoNetworkConnectionException:
+        except errors.NetworkException:
             if dry_run or debug:
                 stop_dry_run(logger)
             sys.exit(1)
         except (AttributeError,
                 errors.EmptyEpisodeTitleException,
                 errors.EpisodeNotFoundException,
-                errors.IncorrectCustomRegularExpressionSyntaxException,
+                errors.IncorrectRegExpException,
                 errors.InvalidXMLException,
                 errors.MissingInformationException,
                 errors.OutputFormatMissingSyntaxException,
