@@ -40,6 +40,9 @@ class Episode(object):
     def __str__(self):
         return '{} - {}'.format(self.number, self.title)
 
+    def __int__(self):
+        return int(self.number)
+
 
 class File(object):
     output_format = '%n - %s%e - %t%x'
