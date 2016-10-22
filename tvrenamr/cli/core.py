@@ -51,7 +51,7 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
     if debug:
         log_level = 10
     start_logging(log_file, log_level, quiet)
-    logger = functools.partial(log.log, level=26)
+    logger = functools.partial(log.log, 26)
 
     if dry_run or debug:
         start_dry_run(logger)
