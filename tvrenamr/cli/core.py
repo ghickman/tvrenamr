@@ -69,10 +69,10 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
             _file.user_overrides(show, season, episode)
             _file.safety_check()
 
-            config = get_config(config)
+            configObject = get_config(config)
 
             for episode in _file.episodes:
-                canonical = config.get(
+                canonical = configObject.get(
                     'canonical',
                     _file.show_name,
                     default=episode.file_.show_name,
@@ -86,30 +86,30 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
                     override=name,
                 )
 
-            show = config.get_output(_file.show_name, override=show_override)
-            the = config.get('the', show=_file.show_name, override=the)
+            show = configObject.get_output(_file.show_name, override=show_override)
+            the = configObject.get('the', show=_file.show_name, override=the)
             _file.show_name = tv.format_show_name(show, the=the)
 
-            _file.set_output_format(config.get(
+            _file.set_output_format(configObject.get(
                 'format',
                 _file.show_name,
                 default=_file.output_format,
                 override=output_format
             ))
 
-            organise = config.get(
+            organise = configObject.get(
                 'organise',
                 _file.show_name,
                 default=False,
                 override=organise
             )
-            rename_dir = config.get(
+            rename_dir = configObject.get(
                 'renamed',
                 _file.show_name,
                 default=current_dir,
                 override=rename_dir
             )
-            specials_folder = config.get(
+            specials_folder = configObject.get(
                 'specials_folder',
                 _file.show_name,
                 default='Season 0',
