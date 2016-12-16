@@ -166,6 +166,8 @@ class TvRenamr(object):
         fn = self._sanitise_filename(fn)
         log.log(22, 'Renaming: %s', fn)
 
+        # If we sanitise the filename we shall sanitise the regex too
+        user_regex = self._sanitise_filename(user_regex)
         regex = self._build_regex(user_regex, partial=partial)
         matches = re.match(regex, fn)
         if not matches:
@@ -376,6 +378,7 @@ class TvRenamr(object):
         in filenames by appearing before or after the season/episode block.
         """
         items = (
+            ('[', '.'),
             ('_', '.'),
             (' ', '.'),
             ('.720p', ''),
