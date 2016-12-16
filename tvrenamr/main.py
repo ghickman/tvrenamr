@@ -167,7 +167,8 @@ class TvRenamr(object):
         log.log(22, 'Renaming: %s', fn)
 
         # If we sanitise the filename we shall sanitise the regex too
-        user_regex = self._sanitise_filename(user_regex)
+        if user_regex is not None:
+            user_regex = self._sanitise_filename(user_regex)
         regex = self._build_regex(user_regex, partial=partial)
         matches = re.match(regex, fn)
         if not matches:
