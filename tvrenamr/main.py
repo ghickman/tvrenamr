@@ -169,12 +169,13 @@ class TvRenamr(object):
         # If we sanitise the filename we shall sanitise the regex too
         if user_regex is not None:
             user_regex = self._sanitise_filename(user_regex)
+
         regex = self._build_regex(user_regex, partial=partial)
+        log.debug('Attempting rename with: {}'.format(regex))
+
         matches = re.match(regex, fn)
         if not matches:
             raise errors.UnexpectedFormatException(fn)
-
-        log.debug('Renaming using: %s', regex)
 
         return self._build_credentials(fn, matches)
 
