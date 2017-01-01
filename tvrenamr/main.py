@@ -314,7 +314,7 @@ class TvRenamr(object):
         %e - \d{2} - The episode number.
 
         """
-        series = r"(?P<show_name>[\w\s.',_-]+)"
+        series = r"(?P<show_name>[\w\s\(\).',_-]+)"
         season = r"(?P<season>\d{1,2})"
         episode = r"(?P<episode>\d{2})"
         second_episode = r".E?(?P<episode2>\d{2})*"
