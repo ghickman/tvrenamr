@@ -86,6 +86,9 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
                     override=name,
                 )
 
+                # TODO: make this a sanitisation method on ep?
+                ep.title = ep.title.replace('/', '-')
+
             show = conf.get_output(_file.show_name, override=show_override)
             the = conf.get('the', show=_file.show_name, override=the)
             _file.show_name = tv.format_show_name(show, the=the)
