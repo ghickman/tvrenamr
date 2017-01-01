@@ -40,6 +40,9 @@ class Episode(object):
     def __str__(self):
         return '{} - {}'.format(self.number, self.title)
 
+    def __int__(self):
+        return int(self.number)
+
 
 class File(object):
     output_format = '%n - %s%e - %t%x'
@@ -163,6 +166,9 @@ class TvRenamr(object):
         fn = self._sanitise_filename(fn)
         log.log(22, 'Renaming: %s', fn)
 
+        # If we sanitise the filename we shall sanitise the regex too
+        if user_regex is not None:
+            user_regex = self._sanitise_filename(user_regex)
         regex = self._build_regex(user_regex, partial=partial)
         matches = re.match(regex, fn)
         if not matches:
@@ -373,6 +379,7 @@ class TvRenamr(object):
         in filenames by appearing before or after the season/episode block.
         """
         items = (
+            ('[', '.'),
             ('_', '.'),
             (' ', '.'),
             ('.720p', ''),

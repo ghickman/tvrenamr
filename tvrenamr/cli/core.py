@@ -51,7 +51,7 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
     if debug:
         log_level = 10
     start_logging(log_file, log_level, quiet)
-    logger = functools.partial(log.log, level=26)
+    logger = functools.partial(log.log, 26)
 
     if dry_run or debug:
         start_dry_run(logger)
@@ -69,47 +69,47 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
             _file.user_overrides(show, season, episode)
             _file.safety_check()
 
-            config = get_config(config)
+            conf = get_config(config)
 
-            for episode in _file.episodes:
-                canonical = config.get(
+            for ep in _file.episodes:
+                canonical = conf.get(
                     'canonical',
                     _file.show_name,
-                    default=episode.file_.show_name,
+                    default=ep.file_.show_name,
                     override=canonical
                 )
 
                 # TODO: Warn setting name will override *all* episodes
-                episode.title = tv.retrieve_episode_title(
-                    episode,
+                ep.title = tv.retrieve_episode_title(
+                    ep,
                     canonical=canonical,
                     override=name,
                 )
 
-            show = config.get_output(_file.show_name, override=show_override)
-            the = config.get('the', show=_file.show_name, override=the)
+            show = conf.get_output(_file.show_name, override=show_override)
+            the = conf.get('the', show=_file.show_name, override=the)
             _file.show_name = tv.format_show_name(show, the=the)
 
-            _file.set_output_format(config.get(
+            _file.set_output_format(conf.get(
                 'format',
                 _file.show_name,
                 default=_file.output_format,
                 override=output_format
             ))
 
-            organise = config.get(
+            organise = conf.get(
                 'organise',
                 _file.show_name,
                 default=False,
                 override=organise
             )
-            rename_dir = config.get(
+            rename_dir = conf.get(
                 'renamed',
                 _file.show_name,
                 default=current_dir,
                 override=rename_dir
             )
-            specials_folder = config.get(
+            specials_folder = conf.get(
                 'specials_folder',
                 _file.show_name,
                 default='Season 0',
@@ -123,14 +123,14 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
             )
 
             tv.rename(filename, path)
-        except errors.NoNetworkConnectionException:
+        except errors.NetworkException:
             if dry_run or debug:
                 stop_dry_run(logger)
             sys.exit(1)
         except (AttributeError,
                 errors.EmptyEpisodeTitleException,
                 errors.EpisodeNotFoundException,
-                errors.IncorrectCustomRegularExpressionSyntaxException,
+                errors.IncorrectRegExpException,
                 errors.InvalidXMLException,
                 errors.MissingInformationException,
                 errors.OutputFormatMissingSyntaxException,
