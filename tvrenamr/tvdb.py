@@ -17,8 +17,11 @@ class TVDB(object):
     def __init__(self, show, season, episode, cache):
         self.cache = cache
         self.show = show
-        self.season = str(season).lstrip('0')
         self.episode = str(episode).lstrip('0')
+
+        self.season = str(season)
+        if self.season != '0':
+            self.season = self.season.lstrip('0')
 
         self.log.info('Searching: %s', self.show)
         self.set_show_id()
