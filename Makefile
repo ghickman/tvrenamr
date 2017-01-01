@@ -7,7 +7,9 @@ help:
 	@echo "    make test    -- run the tests"
 
 release:
-	python setup.py register sdist bdist_wheel upload
+	rm -rf dist/*
+	python setup.py register bdist_wheel sdist
+	twine upload dist/*
 
 setup:
 	pip install -e .
