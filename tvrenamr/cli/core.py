@@ -8,13 +8,21 @@ import sys
 
 import click
 
-from tvrenamr import errors
+from tvrenamr import errors, __version__
 from tvrenamr.cli.helpers import (build_file_list, get_config, start_dry_run,
                                   stop_dry_run)
 from tvrenamr.logs import start_logging
 from tvrenamr.main import File, TvRenamr
 
 log = logging.getLogger('CLI')
+
+
+def print_version(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+
+    click.echo(__version__)
+    ctx.exit()
 
 
 @click.command()
@@ -41,6 +49,7 @@ log = logging.getLogger('CLI')
 @click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")   # noqa
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
+@click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
 def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=too-many-arguments
            ignore_filelist, log_file, log_level, name,  # pylint: disable-msg=too-many-arguments
