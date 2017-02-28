@@ -132,11 +132,12 @@ class File(object):
 
 
 class TvRenamr(object):
-    def __init__(self, working_dir, debug=False, dry=False, cache=True):
+    def __init__(self, working_dir, debug=False, dry=False, symlink=False, cache=True):
         self.cache = cache
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
+        self.symlink = symlink
 
     def remove_part_from_multiple_episodes(self, show_name):
         """Remove the string "Part " from a filename.
@@ -250,7 +251,10 @@ class TvRenamr(object):
         log.debug(destination_filepath)
         if not self.dry and not self.debug:
             source_filepath = os.path.join(self.working_dir, current_filepath)
-            shutil.move(source_filepath, destination_filepath)
+            if self.symlink:
+                os.symlink(source_filepath, destination_filepath)
+            else:
+                shutil.move(source_filepath, destination_filepath)
         destination_file = os.path.split(destination_filepath)[1]
         log.log(26, 'Renamed: "%s"', destination_file)
         return destination_filepath
