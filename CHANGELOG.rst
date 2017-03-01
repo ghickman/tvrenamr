@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v4.1.0
+------
+
+- Add symlink support thanks to @ata2001
+
+
 v3.6.2
 ------
 
