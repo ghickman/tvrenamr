@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import logging
+import sys
 import os
 import re
 import shutil
@@ -252,7 +253,14 @@ class TvRenamr(object):
         if not self.dry and not self.debug:
             source_filepath = os.path.join(self.working_dir, current_filepath)
             if self.symlink:
-                os.symlink(source_filepath, destination_filepath)
+                # os.symlink doesn't work on windows with python < 3.3
+                if os.name == 'posix' or sys.version_info >= (3, 3):
+                    os.symlink(source_filepath, destination_filepath)
+                elif os.name == 'nt':
+                    import ctypes
+                    kernel_dll = ctypes.windll.LoadLibrary("kernel32.dll")
+                    kernel_dll.CreateSymbolicLinkA(source_filepath,
+                                                   destination_filepath, 0)
             else:
                 shutil.move(source_filepath, destination_filepath)
         destination_file = os.path.split(destination_filepath)[1]
