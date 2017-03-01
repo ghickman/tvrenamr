@@ -57,7 +57,8 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
            ignore_filelist, log_file, log_level, name,  # pylint: disable-msg=too-many-arguments
            no_cache, output_format, organise, partial,  # pylint: disable-msg=too-many-arguments
            quiet, recursive, rename_dir, regex, season,  # pylint: disable-msg=too-many-arguments
-           show, show_override, specials, symlink, the, paths):  # pylint: disable-msg=too-many-arguments
+           show, show_override, specials, symlink, the,  # pylint: disable-msg=too-many-arguments
+           paths):  # pylint: disable-msg=too-many-arguments
 
     if debug:
         log_level = 10
