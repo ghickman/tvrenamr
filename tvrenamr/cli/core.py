@@ -49,6 +49,7 @@ def print_version(ctx, param, value):
 @click.option('--show', help="Set the show's name (will search for this name).")
 @click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")   # noqa
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
+@click.option('--symlink', is_flag=True, help='Create symlinks instead moving the files.')
 @click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
@@ -56,7 +57,8 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
            ignore_filelist, log_file, log_level, name,  # pylint: disable-msg=too-many-arguments
            no_cache, output_format, organise, partial,  # pylint: disable-msg=too-many-arguments
            quiet, recursive, rename_dir, regex, season,  # pylint: disable-msg=too-many-arguments
-           show, show_override, specials, the, paths):  # pylint: disable-msg=too-many-arguments
+           show, show_override, specials, symlink, the,  # pylint: disable-msg=too-many-arguments
+           paths):  # pylint: disable-msg=too-many-arguments
 
     if debug:
         log_level = 10
@@ -66,12 +68,15 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
     if dry_run or debug:
         start_dry_run(logger)
 
+    if symlink and not rename_dir:
+        raise click.UsageError("No symlink destination.")
+
     if not paths:
-        paths = [os.curdir]
+        paths = [os.getcwd()]
 
     for current_dir, filename in build_file_list(paths, recursive, ignore_filelist):
         try:
-            tv = TvRenamr(current_dir, debug, dry_run, no_cache)
+            tv = TvRenamr(current_dir, debug, dry_run, symlink, no_cache)
 
             _file = File(**tv.extract_details_from_file(
                 filename,
