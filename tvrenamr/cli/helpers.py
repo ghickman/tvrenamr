@@ -8,6 +8,7 @@ def build_file_list(paths, recursive=False, ignore_filelist=()):
     """Finds files from a list of paths"""
     for path in paths:
         if os.path.isfile(path):
+            path = os.path.realpath(path)
             yield os.path.split(path)
 
         if os.path.isdir(path):
