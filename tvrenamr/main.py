@@ -260,7 +260,7 @@ class TvRenamr(object):
                     import ctypes
                     source_filepath = source_filepath.decode('UTF-8')
                     kernel_dll = ctypes.windll.LoadLibrary("kernel32.dll")
-                    kernel_dll.CreateSymbolicLinkA(destination_filepath,
+                    kernel_dll.CreateSymbolicLinkW(destination_filepath,
                                                    source_filepath, 0)
             else:
                 shutil.move(source_filepath, destination_filepath)
