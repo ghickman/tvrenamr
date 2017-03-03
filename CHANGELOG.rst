@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v4.2.1
+------
+
+- Symlink bugfix for Windows thanks to @ata2001
+
+
 v4.2.0
 ------
 
