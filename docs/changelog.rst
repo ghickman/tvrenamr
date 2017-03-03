@@ -3,6 +3,18 @@
 Changelog
 =========
 
+v4.2.0
+------
+
+- Symlink support fixes for Windows & Python 2 thanks to @ata2001
+
+
+v4.1.0
+------
+
+- Add symlink support thanks to @ata2001
+
+
 v3.6.2
 ------
 
