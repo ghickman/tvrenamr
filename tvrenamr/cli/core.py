@@ -49,7 +49,7 @@ def print_version(ctx, param, value):
 @click.option('--show', help="Set the show's name (will search for this name).")
 @click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")   # noqa
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
-@click.option('--symlink', is_flag=True, default=None, help="Create symbolic links instead of moving the files. Requires '--rename-dir'.") # noqa
+@click.option('--symlink/--no-symlink', is_flag=True, default=None, help="Create symbolic links instead of moving the files. Requires '--rename-dir'.") # noqa
 @click.option('-t', '--the', is_flag=True, default=None, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
