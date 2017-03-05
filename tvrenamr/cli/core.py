@@ -68,9 +68,6 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
     if dry_run or debug:
         start_dry_run(logger)
 
-    if symlink and not rename_dir:
-        raise click.UsageError("No symlink destination.")
-
     if not paths:
         paths = [os.getcwd()]
 
