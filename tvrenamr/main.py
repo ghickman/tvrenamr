@@ -236,7 +236,7 @@ class TvRenamr(object):
 
         return path
 
-    def rename(self, current_filepath, destination_filepath, symlink):
+    def rename(self, current_filepath, destination_filepath, symlink=False):
         """Renames a file.
 
         This is more akin to the UNIX `mv` operation as the destination filepath

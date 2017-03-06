@@ -21,7 +21,7 @@ class TestExceptionsAreRaised(BaseTest):
         existing_path = os.path.join(self.files, filename)
         with open(existing_path, 'w'):
             with raises(PathExistsException):
-                self.tv.rename(fn, existing_path, symlink=False)
+                self.tv.rename(fn, existing_path)
 
     def test_custom_syntax_snippets_missing_raises_exception(self):
         with raises(IncorrectRegExpException):
