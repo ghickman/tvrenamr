@@ -48,6 +48,16 @@ The directory to move your renamed files to.
 
     renamed: /Volumes/Media/TV/
 
+Symlink
+~~~~~~~
+Create symbolic links instead of moving the files.
+
+Boolean.
+
+.. code-block:: yaml
+
+        symlink: true
+
 The
 ~~~
 If a show has a leading 'The', such as 'The Big Bang Theory', move it to the
