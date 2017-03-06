@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v4.3.0
+------
+
+- Add symlink option support to the config thanks to @ata2001
+- Fix --[no-]organise & --the arg parsing support thanks to @ata2001
+
+
 v4.2.1
 ------
 
