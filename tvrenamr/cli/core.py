@@ -39,7 +39,7 @@ def print_version(ctx, param, value):
 @click.option('-n', '--name', help="Set the episode's name.")
 @click.option('--no-cache', is_flag=True, help='Force all renames to ignore the cache.')
 @click.option('-o', '--output-format', help='Set the output format for the episodes being renamed.')
-@click.option('--organise/--no-organise', default=True, help='Organise renamed files into folders based on their show name and season number. Can be explicitly disabled.')   # noqa
+@click.option('--organise/--no-organise', default=None, help='Organise renamed files into folders based on their show name and season number. Can be explicitly disabled.')   # noqa
 @click.option('-p', '--partial', is_flag=True, help='Allow partial regex matching of the filename.')
 @click.option('-q', '--quiet', is_flag=True, help="Don't output logs to the command line")
 @click.option('-r', '--recursive', is_flag=True, help='Recursively lookup files in a given directory')   # noqa
@@ -49,8 +49,8 @@ def print_version(ctx, param, value):
 @click.option('--show', help="Set the show's name (will search for this name).")
 @click.option('--show-override', help="Override the show's name (only replaces the show's name in the final file)")   # noqa
 @click.option('--specials', help='Set the show\'s specials folder (defaults to "Season 0")')
-@click.option('--symlink', is_flag=True, help="Create symbolic links instead of moving the files. Requires '--rename-dir'.") # noqa
-@click.option('-t', '--the', is_flag=True, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
+@click.option('--symlink/--no-symlink', is_flag=True, default=None, help="Create symbolic links instead of moving the files. Requires '--rename-dir'.") # noqa
+@click.option('-t', '--the', is_flag=True, default=None, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
 def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=too-many-arguments
@@ -68,15 +68,12 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
     if dry_run or debug:
         start_dry_run(logger)
 
-    if symlink and not rename_dir:
-        raise click.UsageError("No symlink destination.")
-
     if not paths:
         paths = [os.getcwd()]
 
     for current_dir, filename in build_file_list(paths, recursive, ignore_filelist):
         try:
-            tv = TvRenamr(current_dir, debug, dry_run, symlink, no_cache)
+            tv = TvRenamr(current_dir, debug, dry_run, no_cache)
 
             _file = File(**tv.extract_details_from_file(
                 filename,
@@ -121,7 +118,7 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
             organise = conf.get(
                 'organise',
                 _file.show_name,
-                default=False,
+                default=True,
                 override=organise
             )
             rename_dir = conf.get(
@@ -136,6 +133,12 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
                 default='Season 0',
                 override=specials,
             )
+            symlink = conf.get(
+                'symlink',
+                _file.show_name,
+                default=False,
+                override=symlink
+            )
             path = tv.build_path(
                 _file,
                 rename_dir=rename_dir,
@@ -143,7 +146,7 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
                 specials_folder=specials_folder,
             )
 
-            tv.rename(filename, path)
+            tv.rename(filename, path, symlink)
         except errors.NetworkException:
             if dry_run or debug:
                 stop_dry_run(logger)

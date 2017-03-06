@@ -133,12 +133,11 @@ class File(object):
 
 
 class TvRenamr(object):
-    def __init__(self, working_dir, debug=False, dry=False, symlink=False, cache=True):
+    def __init__(self, working_dir, debug=False, dry=False, cache=True):
         self.cache = cache
         self.working_dir = working_dir
         self.dry = dry
         self.debug = debug
-        self.symlink = symlink
 
     def remove_part_from_multiple_episodes(self, show_name):
         """Remove the string "Part " from a filename.
@@ -237,7 +236,7 @@ class TvRenamr(object):
 
         return path
 
-    def rename(self, current_filepath, destination_filepath):
+    def rename(self, current_filepath, destination_filepath, symlink=False):
         """Renames a file.
 
         This is more akin to the UNIX `mv` operation as the destination filepath
@@ -252,7 +251,7 @@ class TvRenamr(object):
         log.debug(destination_filepath)
         if not self.dry and not self.debug:
             source_filepath = os.path.join(self.working_dir, current_filepath)
-            if self.symlink:
+            if symlink:
                 # os.symlink doesn't work on windows with python < 3.3
                 if os.name == 'posix' or sys.version_info >= (3, 3):
                     os.symlink(source_filepath, destination_filepath)
