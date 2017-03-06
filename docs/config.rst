@@ -132,6 +132,7 @@ The output format to use when writing the new filename.
       format: '%n - %s%e - %t%x'
       organise: yes
       renamed: /Volumes/Media/TV/
+      symlink: true
       the: true
 
     '24':
