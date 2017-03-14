@@ -346,7 +346,7 @@ class TvRenamr(object):
         if '%s{' in regex:
             log.debug('Season digit number found')
             r = regex.split('%s{')[1][:1]
-            log.debug('Specified % season digits', r)
+            log.debug('Specified %s season digits', r)
             s = season.replace('1,2', r)
             regex = regex.replace('%s{' + r + '}', s)
             log.debug('Season regex set: %s', s)
