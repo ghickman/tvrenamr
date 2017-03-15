@@ -3,6 +3,12 @@
 Changelog
 =========
 
+v4.3.1
+------
+
+- Fix debug logging thanks to @ymage
+
+
 v4.3.0
 ------
 
