@@ -236,7 +236,7 @@ class TvRenamr(object):
 
         return path
 
-    def rename(self, current_filepath, destination_filepath, symlink=False):
+    def rename(self, current_filepath, destination_filepath, copy=False, symlink=False):
         """Renames a file.
 
         This is more akin to the UNIX `mv` operation as the destination filepath
@@ -251,7 +251,9 @@ class TvRenamr(object):
         log.debug(destination_filepath)
         if not self.dry and not self.debug:
             source_filepath = os.path.join(self.working_dir, current_filepath)
-            if symlink:
+            if copy:
+                shutil.copy(source_filepath, destination_filepath)
+            elif symlink:
                 # os.symlink doesn't work on windows with python < 3.3
                 if os.name == 'posix' or sys.version_info >= (3, 3):
                     os.symlink(source_filepath, destination_filepath)

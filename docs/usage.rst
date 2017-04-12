@@ -34,6 +34,8 @@ Options
 Tv Renamr accepts the following options which take precedent over any options set in the :ref:`config`.
 
 --config            Select a location for your config file. If the path is invalid the default locations will be used.
+--copy              Copy instead of moving the files.
+--no-copy           Explicity tell Tv Renamr not to copy instead of moving the files. Used to override the config.
 -c, --canonical     Set the show's canonical name to use when performing the online lookup.
 -d, --dry-run       Dry run your renaming.
 -e, --episode       Set the episode number. Currently this will cause errors when working with more than one file.
