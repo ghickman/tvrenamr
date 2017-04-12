@@ -58,7 +58,8 @@ Tv Renamr accepts the following options which take precedent over any options se
 --show              Set the show's name (will search for this name).
 --show-override     Override the show's name (only replaces the show's name in the final file).
 --specials          Set the show's specials folder (defaults to "Season 0").
---symlink           Create symbolic links instead of moving the files. Requires '--rename-dir'.
+--symlink           Create symbolic links instead of moving the files.
+--no-symlink        Explicity tell Tv Renamr not to create symlinks. Used to override the config.
 -t, --the           Set the position of 'The' in a show's name to the end of the show name.
 
 Examples
