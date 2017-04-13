@@ -3,6 +3,12 @@
 Changelog
 =========
 
+v4.4.0
+------
+
+- Add option to copy files to destination thanks to @ata2001
+
+
 v4.3.1
 ------
 
