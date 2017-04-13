@@ -28,6 +28,7 @@ def print_version(ctx, param, value):
 
 @click.command()
 @click.option('--config', type=click.Path(), help='Select a location for your config file. If the path is invalid the default locations will be used.')  # noqa
+@click.option('--copy/--no-copy', is_flag=True, default=None, help="Copy instead of moving the files.") # noqa
 @click.option('-c', '--canonical', help='Set the show\'s canonical name to use when performing the online lookup.')   # noqa
 @click.option('--debug', is_flag=True)
 @click.option('-d', '--dry-run', is_flag=True, help='Dry run your renaming.')
@@ -53,11 +54,12 @@ def print_version(ctx, param, value):
 @click.option('-t', '--the', is_flag=True, default=None, help="Set the position of 'The' in a show's name to the end of the show name")   # noqa
 @click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.argument('paths', nargs=-1, required=False, type=click.Path(exists=True))
-def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=too-many-arguments
-           ignore_filelist, log_file, log_level, name,  # pylint: disable-msg=too-many-arguments
-           no_cache, output_format, organise, partial,  # pylint: disable-msg=too-many-arguments
-           quiet, recursive, rename_dir, regex, season,  # pylint: disable-msg=too-many-arguments
-           show, show_override, specials, symlink, the,  # pylint: disable-msg=too-many-arguments
+def rename(config, copy, canonical, debug, dry_run,  # pylint: disable-msg=too-many-arguments
+           episode, ignore_filelist, log_file,  # pylint: disable-msg=too-many-arguments
+           log_level, name, no_cache, output_format,  # pylint: disable-msg=too-many-arguments
+           organise, partial, quiet, recursive,  # pylint: disable-msg=too-many-arguments
+           rename_dir, regex, season, show,  # pylint: disable-msg=too-many-arguments
+           show_override, specials, symlink, the,  # pylint: disable-msg=too-many-arguments
            paths):  # pylint: disable-msg=too-many-arguments
 
     if debug:
@@ -67,6 +69,9 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
 
     if dry_run or debug:
         start_dry_run(logger)
+
+    if copy and symlink:
+        raise click.UsageError("You can't use --copy and --symlink at the same time.")
 
     if not paths:
         paths = [os.getcwd()]
@@ -115,6 +120,12 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
                 override=output_format
             ))
 
+            copy = conf.get(
+                'copy',
+                _file.show_name,
+                default=False,
+                override=copy
+            )
             organise = conf.get(
                 'organise',
                 _file.show_name,
@@ -146,7 +157,7 @@ def rename(config, canonical, debug, dry_run, episode,  # pylint: disable-msg=to
                 specials_folder=specials_folder,
             )
 
-            tv.rename(filename, path, symlink)
+            tv.rename(filename, path, copy, symlink)
         except errors.NetworkException:
             if dry_run or debug:
                 stop_dry_run(logger)
