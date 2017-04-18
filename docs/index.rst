@@ -16,7 +16,7 @@ Contents
     logging
     custom-regexs
     output-formats
-    bash-complete
+    bash-completion
     known-issues
     changelog
 
