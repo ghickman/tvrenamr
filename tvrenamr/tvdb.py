@@ -56,10 +56,12 @@ class TVDB(object):
         for name in xml.findall('Series'):
             show = name.findtext('SeriesName')
             if show.lower() != self.show.lower():
-                raise errors.ShowNotFoundException(self.show)
+                continue
 
             self.log.debug('Series chosen: %s', show)
             return name.findtext('seriesid'), show
+
+        raise errors.ShowNotFoundException(self.show)
 
     def request_show_id(self, cache):
         try:
